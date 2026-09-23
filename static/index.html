@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Analyzer — Global Job Discovery & Remote Job Platform</title>
+  <meta name="description" content="Discover, filter, and apply to top opportunities from Bangladesh and major international job markets worldwide with intelligent remote and candidate eligibility detection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-group">
+        <div class="logo-badge">JA</div>
+        <div class="app-title">
+          <h1>Job Analyzer</h1>
+          <p>Global Job Discovery & Remote Job Platform</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-show-bookmarklet" class="btn btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          1-Click Bookmarklet
+        </button>
+        <button id="btn-import-linkedin" class="btn btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          Paste LinkedIn Job
+        </button>
+        <button id="btn-export-csv" class="btn btn-secondary">Export CSV</button>
+        <button id="btn-refresh" class="btn btn-primary">Refresh Live Jobs</button>
+      </div>
+    </header>
+
+    <!-- Global Hero Section -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <h2 class="hero-title">Find Jobs Anywhere. Work From Anywhere.</h2>
+        <p class="hero-subtitle">Discover opportunities across Bangladesh, USA, Germany, India, Singapore, and worldwide remote companies with intelligent candidate eligibility verification.</p>
+        
+        <div class="hero-search-box">
+          <div class="search-field-group main-input">
+            <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="global-search-input" placeholder="Search job title, skills (e.g. Remote C++, Python, Java), companies...">
+          </div>
+
+          <div class="search-field-group select-group">
+            <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
+            <select id="filter-country">
+              <option value="Worldwide">Worldwide / All Countries</option>
+              <option value="Bangladesh">Bangladesh</option>
+              <option value="United States">United States</option>
+              <option value="Germany">Germany</option>
+              <option value="India">India</option>
+              <option value="Singapore">Singapore</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Japan">Japan</option>
+              <option value="Canada">Canada</option>
+              <option value="Australia">Australia</option>
+              <option value="United Arab Emirates">United Arab Emirates</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="Ireland">Ireland</option>
+            </select>
+          </div>
+
+          <div class="search-field-group select-group">
+            <select id="filter-workplace">
+              <option value="All">All Work Modes</option>
+              <option value="Remote">Remote Only</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="On-site">On-site</option>
+            </select>
+          </div>
+
+          <button id="btn-global-search" class="btn btn-primary search-btn">
+            Find Opportunities
+          </button>
+        </div>
+
+        <!-- Quick filter tags -->
+        <div class="quick-filter-chips">
+          <span class="quick-label">Trending:</span>
+          <button class="quick-chip" data-query="Remote Software Engineer worldwide">🌍 Remote Worldwide</button>
+          <button class="quick-chip" data-query="Remote C++ Developer">⚡ Remote C++</button>
+          <button class="quick-chip" data-query="Java Internship">🎓 Java Internship</button>
+          <button class="quick-chip" data-query="Cybersecurity Analyst">🛡️ Cybersecurity</button>
+          <button class="quick-chip" data-query="Machine Learning Engineer">🤖 Machine Learning</button>
+          <button class="quick-chip" data-query="Software Engineer Bangladesh">🇧🇩 Software BD</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="main-nav-tabs">
+      <button id="nav-tab-explorer" class="nav-tab active">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        Global Search & Explorer
+      </button>
+      <button id="nav-tab-remote" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        Remote-First Hub
+      </button>
+      <button id="nav-tab-country" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Country Explorer
+      </button>
+      <button id="nav-tab-recommended" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+        Recommended For You
+      </button>
+      <button id="nav-tab-tracker" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Application Tracker (<span id="tracker-count">0</span>)
+      </button>
+      <button id="nav-tab-alerts" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        Job Alerts (<span id="alerts-count">0</span>)
+      </button>
+      <button id="nav-tab-analytics" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Market & Currencies
+      </button>
+    </nav>
+
+    <!-- VIEW 1: GLOBAL JOB SEARCH & EXPLORER -->
+    <div id="view-explorer" class="view-panel active">
+      <div class="control-grid">
+        <!-- Candidate Profile Card (Exact Screenshot Alignment) -->
+        <aside class="glass-card">
+          <div class="section-title">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            CANDIDATE PROFILE
+          </div>
+
+          <div class="form-group" style="position: relative;">
+            <label for="input-skills">Target Skills (comma-separated)</label>
+            <input type="text" id="input-skills" class="form-input" placeholder="e.g. C++ Developer, Python Developer" value="">
+          </div>
+
+          <div class="form-group">
+            <label for="input-experience">Years of Experience</label>
+            <div class="slider-container">
+              <input type="range" id="input-experience" min="0" max="15" step="0.5" value="5.5">
+              <span id="label-experience" class="slider-value">5.5y</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="check-partners" checked style="accent-color: var(--accent-indigo); margin-right: 6px;">
+              Include Partner Portals (Skill.jobs, Chakri)
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="candidate-origin">Candidate Origin (for Eligibility)</label>
+            <select id="candidate-origin" class="form-select">
+              <option value="Bangladesh" selected>Bangladesh 🇧🇩</option>
+              <option value="India">India 🇮🇳</option>
+              <option value="United States">United States 🇺🇸</option>
+              <option value="Germany">Germany 🇩🇪</option>
+              <option value="United Kingdom">United Kingdom 🇬🇧</option>
+              <option value="Singapore">Singapore 🇸🇬</option>
+              <option value="Other">Other Country 🌍</option>
+            </select>
+          </div>
+
+          <!-- Advanced Filters Accordion -->
+          <div class="weights-panel">
+            <div class="weights-title">International & Career Filters</div>
+            <div class="filter-check-row">
+              <label><input type="checkbox" id="filter-visa-only"> Visa Sponsorship Available</label>
+            </div>
+            <div class="filter-check-row">
+              <label><input type="checkbox" id="filter-intl-only"> International Applicants Accepted</label>
+            </div>
+            <div class="filter-check-row">
+              <label><input type="checkbox" id="filter-eligible-only" checked> Only Eligible Jobs for My Origin</label>
+            </div>
+          </div>
+
+          <!-- Formula Weights Panel -->
+          <div class="weights-panel" style="margin-top: 12px;">
+            <div class="weights-title">Scoring Formula Weights ($\sum w_i = 1.0$)</div>
+            <div class="weight-row">
+              <span>Recency ($w_1$)</span>
+              <span id="val-w-rec">20%</span>
+            </div>
+            <div class="weight-row">
+              <span>Salary Transparency ($w_2$)</span>
+              <span id="val-w-sal">30%</span>
+            </div>
+            <div class="weight-row">
+              <span>Profile Match ($w_3$)</span>
+              <span id="val-w-prof">35%</span>
+            </div>
+            <div class="weight-row">
+              <span>Employer Tier ($w_4$)</span>
+              <span id="val-w-emp">15%</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Category & Worldwide Taxonomy Card -->
+        <section class="glass-card">
+          <div class="section-title">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"></path></svg>
+            Job Taxonomy & Industry Sectors (64 Categories + Global Feeds)
+          </div>
+
+          <div class="category-tabs">
+            <button id="tab-functional" class="tab-btn active">Functional Roles (31)</button>
+            <button id="tab-special" class="tab-btn">Special Skilled (33)</button>
+            <button id="tab-global-sources" class="tab-btn">Global Connectors (8)</button>
+            <input type="text" id="category-search" class="form-input" placeholder="Search categories..." style="width: 200px; padding: 4px 10px; margin-left: auto;">
+          </div>
+
+          <div id="category-chips-container" class="category-chips">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Ranked Results Feed -->
+      <main class="glass-card">
+        <div class="results-header">
+          <div class="results-stats">
+            Market Scope: <strong id="current-scope-label">Worldwide & Bangladesh</strong> | 
+            Evaluated Openings: <strong id="total-jobs-count">0</strong>
+          </div>
+          <div class="view-options">
+            <span class="currency-indicator">Showing in USD & BDT equivalent</span>
+          </div>
+        </div>
+
+        <div class="jobs-table-container">
+          <table class="jobs-table" id="jobs-table">
+            <thead>
+              <tr>
+                <th>Job & Role</th>
+                <th>Company & Tier</th>
+                <th>Location / Mode</th>
+                <th>Eligibility</th>
+                <th>Salary</th>
+                <th>Score</th>
+                <th>Apply Direct</th>
+                <th>Track</th>
+              </tr>
+            </thead>
+            <tbody id="jobs-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- VIEW 2: REMOTE-FIRST HUB -->
+    <div id="view-remote" class="view-panel">
+      <div class="glass-card">
+        <div class="section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          Remote-First Opportunities (Aggregated from RemoteOK, WWR, Remotive, Himalayas & Global Sources)
+        </div>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+          Filter remote positions by regional and international applicant eligibility. Never get tricked by country-restricted postings.
+        </p>
+
+        <div class="remote-regions-bar">
+          <button class="region-btn active" data-region="Worldwide">🌍 Worldwide Remote</button>
+          <button class="region-btn" data-region="Bangladesh Eligible">🇧🇩 Bangladesh Eligible</button>
+          <button class="region-btn" data-region="Asia-Pacific">🌏 Asia-Pacific</button>
+          <button class="region-btn" data-region="Europe">🇪🇺 Europe</button>
+          <button class="region-btn" data-region="North America">🇺🇸 North America</button>
+          <button class="region-btn" data-region="All">All Remote</button>
+        </div>
+
+        <div id="remote-jobs-container" class="cards-grid">
+          <!-- Remote job cards injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: COUNTRY EXPLORER -->
+    <div id="view-country" class="view-panel">
+      <div class="glass-card">
+        <div class="section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Country Explorer — Worldwide Job Markets
+        </div>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+          Select any country to explore available job volumes, remote ratios, top employers, and visa sponsorship rates.
+        </p>
+
+        <div id="country-cards-grid" class="country-grid">
+          <!-- Injected via country explorer API -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: RECOMMENDED FOR YOU -->
+    <div id="view-recommended" class="view-panel">
+      <div class="glass-card">
+        <div class="section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+          Personalized Career Recommendations
+        </div>
+        <div class="profile-summary-bar" id="recommendation-profile-bar">
+          <!-- Summary chips -->
+        </div>
+        <div id="recommended-jobs-container" class="cards-grid">
+          <!-- Recommended cards -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: APPLICATION TRACKER (8 STAGES) -->
+    <div id="view-tracker" class="view-panel">
+      <div class="glass-card">
+        <div class="section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          8-Stage Application Lifecycle Tracker
+        </div>
+
+        <div class="tracker-pipeline-board">
+          <div class="pipeline-column" data-status="Saved">
+            <div class="pipeline-header">Saved <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-saved"></div>
+          </div>
+          <div class="pipeline-column" data-status="Planning to Apply">
+            <div class="pipeline-header">Planning to Apply <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-planning"></div>
+          </div>
+          <div class="pipeline-column" data-status="Applied">
+            <div class="pipeline-header">Applied <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-applied"></div>
+          </div>
+          <div class="pipeline-column" data-status="Interview">
+            <div class="pipeline-header">Interview <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-interview"></div>
+          </div>
+          <div class="pipeline-column" data-status="Technical Test">
+            <div class="pipeline-header">Technical Test <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-test"></div>
+          </div>
+          <div class="pipeline-column" data-status="Offer">
+            <div class="pipeline-header">Offer 🎉 <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-offer"></div>
+          </div>
+          <div class="pipeline-column" data-status="Rejected">
+            <div class="pipeline-header">Rejected <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-rejected"></div>
+          </div>
+          <div class="pipeline-column" data-status="Withdrawn">
+            <div class="pipeline-header">Withdrawn <span class="pipe-count">0</span></div>
+            <div class="pipeline-items" id="pipe-withdrawn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 6: JOB ALERTS -->
+    <div id="view-alerts" class="view-panel">
+      <div class="glass-card">
+        <div class="section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+          Active Job Alerts & Automated Notification Watcher
+        </div>
+        <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+          <input type="text" id="new-alert-query" class="form-input" placeholder="e.g. Remote C++ Developer, Worldwide Python..." style="max-width: 320px;">
+          <select id="new-alert-country" class="form-select" style="max-width: 200px;">
+            <option value="Worldwide">Worldwide Remote</option>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="Germany">Germany</option>
+            <option value="United States">United States</option>
+            <option value="India">India</option>
+          </select>
+          <button id="btn-create-alert" class="btn btn-primary">+ Create New Alert</button>
+        </div>
+
+        <div id="alerts-list-container" class="alerts-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 7: MARKET & CURRENCIES -->
+    <div id="view-analytics" class="view-panel">
+      <div class="analytics-grid">
+        <div class="glass-card stat-metric-card">
+          <div class="metric-title">Catalog Openings</div>
+          <div class="metric-value" id="stat-total-jobs">0</div>
+        </div>
+        <div class="glass-card stat-metric-card">
+          <div class="metric-title">Salary Transparency Rate</div>
+          <div class="metric-value" id="stat-transparency">0%</div>
+        </div>
+        <div class="glass-card stat-metric-card">
+          <div class="metric-title">Median Disclosed Salary</div>
+          <div class="metric-value" id="stat-median-salary">0 BDT</div>
+        </div>
+        <div class="glass-card stat-metric-card">
+          <div class="metric-title">USD / BDT Exchange Rate</div>
+          <div class="metric-value">1 USD = 120 BDT</div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="margin-top: 20px;">
+        <div class="section-title">Multi-Currency Conversion Table</div>
+        <table class="jobs-table">
+          <thead>
+            <tr><th>Currency</th><th>Code</th><th>Rate to USD</th><th>Equivalent for $100K Annual</th><th>BDT Equivalent</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>US Dollar</td><td>USD ($)</td><td>1.00</td><td>$100,000</td><td>12,000,000 BDT</td></tr>
+            <tr><td>Euro</td><td>EUR (€)</td><td>1.08</td><td>€92,592</td><td>12,000,000 BDT</td></tr>
+            <tr><td>British Pound</td><td>GBP (£)</td><td>1.28</td><td>£78,125</td><td>12,000,000 BDT</td></tr>
+            <tr><td>Singapore Dollar</td><td>SGD (S$)</td><td>0.76</td><td>S$131,578</td><td>12,000,000 BDT</td></tr>
+            <tr><td>Indian Rupee</td><td>INR (₹)</td><td>0.012</td><td>₹8,400,000 (~84 LPA)</td><td>12,000,000 BDT</td></tr>
+            <tr><td>UAE Dirham</td><td>AED</td><td>0.272</td><td>AED 367,647</td><td>12,000,000 BDT</td></tr>
+            <tr><td>Bangladeshi Taka</td><td>BDT (Tk.)</td><td>0.0083</td><td>Tk. 12,000,000 (~1 Crore BDT)</td><td>12,000,000 BDT</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Bookmarklet Modal -->
+    <div id="bookmarklet-modal" class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>1-Click LinkedIn Ingestion Bookmarklet</h3>
+          <button id="btn-close-bookmarklet" class="close-btn">&times;</button>
+        </div>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">
+          To ingest any LinkedIn job opening with a single click, drag the button below onto your browser's Bookmarks bar:
+        </p>
+        <div style="text-align: center; margin: 20px 0;">
+          <a id="draggable-bookmarklet" href="#" class="btn btn-primary" style="padding: 12px 24px; font-size: 14px; cursor: move;">
+            ⭐ Save to Job Analyzer
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LinkedIn Ingest Modal -->
+    <div id="linkedin-modal" class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>Paste LinkedIn Job Posting</h3>
+          <button id="btn-close-modal" class="close-btn">&times;</button>
+        </div>
+        <textarea id="linkedin-paste-text" class="paste-textarea" placeholder="Paste job title, company name, location, and description here..."></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button id="btn-cancel-paste" class="btn btn-secondary">Cancel</button>
+          <button id="btn-submit-paste" class="btn btn-primary">Score & Ingest Job</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track Job Modal -->
+    <div id="track-modal" class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="track-modal-title">Update Application Status</h3>
+          <button id="btn-close-track-modal" class="close-btn">&times;</button>
+        </div>
+        <input type="hidden" id="track-modal-job-id">
+        <div class="form-group">
+          <label>Stage</label>
+          <select id="track-modal-status" class="form-select">
+            <option value="Saved">Saved</option>
+            <option value="Planning to Apply">Planning to Apply</option>
+            <option value="Applied">Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Technical Test">Technical Test</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Recruiter / Contact</label>
+          <input type="text" id="track-modal-recruiter" class="form-input" placeholder="e.g. Jane Doe (Tech Recruiter)">
+        </div>
+        <div class="form-group">
+          <label>Notes & Follow-up</label>
+          <textarea id="track-modal-notes" class="paste-textarea" style="height: 80px;" placeholder="Add interview feedback, salary discussed, follow-up dates..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button id="btn-cancel-track" class="btn btn-secondary">Cancel</button>
+          <button id="btn-save-track" class="btn btn-primary">Save Stage</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/autocomplete.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

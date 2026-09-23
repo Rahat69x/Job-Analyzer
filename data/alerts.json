@@ -1,0 +1,46 @@
+[
+  {
+    "timestamp": "2026-09-23 18:43:52 UTC",
+    "job_id": "chakri-802",
+    "title": "React Native Mobile Developer",
+    "company": "Sheba.xyz",
+    "category": "IT/Telecommunication",
+    "score": 0.831,
+    "explanation": "Freshly posted; Transparent salary (Tk. 75,000 - 100,000)",
+    "salary": "Tk. 75,000 - 100,000",
+    "apply_url": "https://chakri.com/job/sheba-react-native"
+  },
+  {
+    "timestamp": "2026-09-23 18:43:52 UTC",
+    "job_id": "bdjobs-1536338",
+    "title": ".NET Developer",
+    "company": "Careberry Software Ltd",
+    "category": "IT/Telecommunication",
+    "score": 0.803,
+    "explanation": "Freshly posted; Transparent salary (Tk. 90000 - 140000 (Monthly))",
+    "salary": "Tk. 90000 - 140000 (Monthly)",
+    "apply_url": "https://jobs.bdjobs.com/jobdetails.asp?id=1536338"
+  },
+  {
+    "timestamp": "2026-09-23 18:43:52 UTC",
+    "job_id": "skilljobs-801",
+    "title": "Senior DevOps & Infrastructure Engineer",
+    "company": "Therap (BD) Ltd.",
+    "category": "IT/Telecommunication",
+    "score": 0.793,
+    "explanation": "Transparent salary (Tk. 110,000 - 150,000); Top tier employer (MNC)",
+    "salary": "Tk. 110,000 - 150,000",
+    "apply_url": "https://skill.jobs/job/therap-devops"
+  },
+  {
+    "timestamp": "2026-09-23 18:43:52 UTC",
+    "job_id": "bdjobs-1537069",
+    "title": "Audit & Inventory Manager",
+    "company": "ASMI Super shop",
+    "category": "Accounting/Finance",
+    "score": 0.798,
+    "explanation": "Freshly posted; Transparent salary (Tk. 30000 - 50000 (Monthly))",
+    "salary": "Tk. 30000 - 50000 (Monthly)",
+    "apply_url": "https://jobs.bdjobs.com/jobdetails.asp?id=1537069"
+  }
+]

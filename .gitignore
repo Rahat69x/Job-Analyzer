@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# SQLite databases (generated at runtime)
+data/jobs.db
+jobs.db
+*.db
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Scratch / temp files
+scratch/
+
+# Gemini / Antigravity IDE artifacts
+.gemini/
+.agents/
+.planning/
+
+# Logs
+*.log

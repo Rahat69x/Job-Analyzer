@@ -1,0 +1,1391 @@
+[
+  {
+    "title": "C++ Developer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 95,
+    "keywords": [
+      "c",
+      "c++",
+      "c#"
+    ]
+  },
+  {
+    "title": "C Developer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 94,
+    "keywords": [
+      "c",
+      "c++",
+      "c#"
+    ]
+  },
+  {
+    "title": "C# Developer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 93,
+    "keywords": [
+      "c",
+      "c++",
+      "c#"
+    ]
+  },
+  {
+    "title": "C# .NET Developer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Computer Programmer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 90,
+    "keywords": [
+      "c",
+      "computer",
+      "programming"
+    ]
+  },
+  {
+    "title": "Computer Science Intern",
+    "type": "role",
+    "category": "Internships",
+    "weight": 89,
+    "keywords": [
+      "c",
+      "computer",
+      "programming"
+    ]
+  },
+  {
+    "title": "Cybersecurity Analyst",
+    "type": "role",
+    "category": "Cybersecurity",
+    "weight": 88,
+    "keywords": [
+      "c",
+      "security",
+      "cloud",
+      "infrastructure"
+    ]
+  },
+  {
+    "title": "Cloud Engineer",
+    "type": "role",
+    "category": "Cloud Computing",
+    "weight": 87,
+    "keywords": [
+      "c",
+      "security",
+      "cloud",
+      "infrastructure"
+    ]
+  },
+  {
+    "title": "Cloud Architect",
+    "type": "role",
+    "category": "Cloud Computing",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Cloud Security Engineer",
+    "type": "role",
+    "category": "Cloud Computing",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "Java Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 98,
+    "keywords": []
+  },
+  {
+    "title": "Java Software Engineer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 96,
+    "keywords": []
+  },
+  {
+    "title": "Java Backend Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 95,
+    "keywords": [
+      "node",
+      "express",
+      "api",
+      "backend"
+    ]
+  },
+  {
+    "title": "Java Full Stack Developer",
+    "type": "role",
+    "category": "Full Stack Development",
+    "weight": 94,
+    "keywords": [
+      "java",
+      "spring",
+      "full stack",
+      "react"
+    ]
+  },
+  {
+    "title": "Java Developer Intern",
+    "type": "role",
+    "category": "Internships",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Java Spring Boot Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "JavaScript Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Python Developer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 99,
+    "keywords": []
+  },
+  {
+    "title": "Python Backend Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 96,
+    "keywords": [
+      "node",
+      "express",
+      "api",
+      "backend"
+    ]
+  },
+  {
+    "title": "Python Software Engineer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 95,
+    "keywords": []
+  },
+  {
+    "title": "Python Developer Intern",
+    "type": "role",
+    "category": "Internships",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Data Scientist",
+    "type": "role",
+    "category": "Data Science",
+    "weight": 94,
+    "keywords": [
+      "python",
+      "r",
+      "machine learning",
+      "sql",
+      "statistics"
+    ]
+  },
+  {
+    "title": "Machine Learning Engineer",
+    "type": "role",
+    "category": "Machine Learning",
+    "weight": 93,
+    "keywords": [
+      "python",
+      "ai",
+      "tensorflow",
+      "pytorch",
+      "machine learning"
+    ]
+  },
+  {
+    "title": "Django Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "FastAPI Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Software Engineer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 100,
+    "keywords": []
+  },
+  {
+    "title": "Software Developer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 99,
+    "keywords": []
+  },
+  {
+    "title": "Senior Software Engineer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 98,
+    "keywords": [
+      "software",
+      "engineering"
+    ]
+  },
+  {
+    "title": "Software Engineer Intern",
+    "type": "role",
+    "category": "Internships",
+    "weight": 95,
+    "keywords": [
+      "software",
+      "intern"
+    ]
+  },
+  {
+    "title": "Full Stack Software Engineer",
+    "type": "role",
+    "category": "Full Stack Development",
+    "weight": 94,
+    "keywords": [
+      "software",
+      "full stack",
+      "web",
+      "javascript"
+    ]
+  },
+  {
+    "title": "Lead Software Engineer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "Principal Software Engineer",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Software Architect",
+    "type": "role",
+    "category": "Software Engineering",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Software QA Engineer",
+    "type": "role",
+    "category": "QA / Testing",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Frontend Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 96,
+    "keywords": [
+      "react",
+      "javascript",
+      "typescript",
+      "html",
+      "css"
+    ]
+  },
+  {
+    "title": "Frontend Engineer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 95,
+    "keywords": []
+  },
+  {
+    "title": "React Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 94,
+    "keywords": [
+      "react",
+      "javascript",
+      "typescript",
+      "html",
+      "css"
+    ]
+  },
+  {
+    "title": "Next.js Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Angular Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Vue.js Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "UI Developer",
+    "type": "role",
+    "category": "Frontend Development",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Backend Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 96,
+    "keywords": [
+      "node",
+      "express",
+      "api",
+      "backend"
+    ]
+  },
+  {
+    "title": "Backend Engineer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 95,
+    "keywords": []
+  },
+  {
+    "title": "Node.js Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 93,
+    "keywords": [
+      "node",
+      "express",
+      "api",
+      "backend"
+    ]
+  },
+  {
+    "title": "Golang Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Go Engineer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "PHP Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Laravel Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Ruby on Rails Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 82,
+    "keywords": []
+  },
+  {
+    "title": "Rust Developer",
+    "type": "role",
+    "category": "Backend Development",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "Full Stack Developer",
+    "type": "role",
+    "category": "Full Stack Development",
+    "weight": 98,
+    "keywords": []
+  },
+  {
+    "title": "Full Stack Engineer",
+    "type": "role",
+    "category": "Full Stack Development",
+    "weight": 96,
+    "keywords": []
+  },
+  {
+    "title": "MERN Stack Developer",
+    "type": "role",
+    "category": "Full Stack Development",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Web Developer",
+    "type": "role",
+    "category": "Web Development",
+    "weight": 95,
+    "keywords": []
+  },
+  {
+    "title": "Web Designer",
+    "type": "role",
+    "category": "Web Development",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "WordPress Developer",
+    "type": "role",
+    "category": "Web Development",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Mobile App Developer",
+    "type": "role",
+    "category": "Mobile Development",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "iOS Developer",
+    "type": "role",
+    "category": "Mobile Development",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Android Developer",
+    "type": "role",
+    "category": "Mobile Development",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Flutter Developer",
+    "type": "role",
+    "category": "Mobile Development",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "React Native Developer",
+    "type": "role",
+    "category": "Mobile Development",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Data Analyst",
+    "type": "role",
+    "category": "Data Science",
+    "weight": 96,
+    "keywords": []
+  },
+  {
+    "title": "Data Engineer",
+    "type": "role",
+    "category": "Data Science",
+    "weight": 94,
+    "keywords": []
+  },
+  {
+    "title": "Senior Data Scientist",
+    "type": "role",
+    "category": "Data Science",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Data Science Intern",
+    "type": "role",
+    "category": "Internships",
+    "weight": 88,
+    "keywords": [
+      "python",
+      "r",
+      "machine learning",
+      "sql",
+      "statistics"
+    ]
+  },
+  {
+    "title": "Business Intelligence Analyst",
+    "type": "role",
+    "category": "Data Science",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "BI Developer",
+    "type": "role",
+    "category": "Data Science",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Database Administrator",
+    "type": "role",
+    "category": "Database",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "SQL Developer",
+    "type": "role",
+    "category": "Database",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "PostgreSQL Specialist",
+    "type": "role",
+    "category": "Database",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "AI Engineer",
+    "type": "role",
+    "category": "Artificial Intelligence",
+    "weight": 94,
+    "keywords": [
+      "python",
+      "ai",
+      "machine learning",
+      "nlp"
+    ]
+  },
+  {
+    "title": "AI Researcher",
+    "type": "role",
+    "category": "Artificial Intelligence",
+    "weight": 88,
+    "keywords": [
+      "python",
+      "ai",
+      "machine learning",
+      "nlp"
+    ]
+  },
+  {
+    "title": "NLP Engineer",
+    "type": "role",
+    "category": "Artificial Intelligence",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Computer Vision Engineer",
+    "type": "role",
+    "category": "Artificial Intelligence",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "MLOps Engineer",
+    "type": "role",
+    "category": "Machine Learning",
+    "weight": 89,
+    "keywords": [
+      "python",
+      "ai",
+      "tensorflow",
+      "pytorch",
+      "machine learning"
+    ]
+  },
+  {
+    "title": "Deep Learning Engineer",
+    "type": "role",
+    "category": "Machine Learning",
+    "weight": 88,
+    "keywords": [
+      "python",
+      "ai",
+      "tensorflow",
+      "pytorch",
+      "machine learning"
+    ]
+  },
+  {
+    "title": "DevOps Engineer",
+    "type": "role",
+    "category": "DevOps",
+    "weight": 96,
+    "keywords": [
+      "docker",
+      "kubernetes",
+      "aws",
+      "ci/cd",
+      "linux"
+    ]
+  },
+  {
+    "title": "Senior DevOps Engineer",
+    "type": "role",
+    "category": "DevOps",
+    "weight": 93,
+    "keywords": [
+      "docker",
+      "kubernetes",
+      "aws",
+      "ci/cd",
+      "linux"
+    ]
+  },
+  {
+    "title": "Site Reliability Engineer (SRE)",
+    "type": "role",
+    "category": "DevOps",
+    "weight": 92,
+    "keywords": [
+      "docker",
+      "kubernetes",
+      "aws",
+      "ci/cd",
+      "linux"
+    ]
+  },
+  {
+    "title": "Platform Engineer",
+    "type": "role",
+    "category": "DevOps",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Build & Release Engineer",
+    "type": "role",
+    "category": "DevOps",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "Kubernetes Administrator",
+    "type": "role",
+    "category": "DevOps",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Security Analyst",
+    "type": "role",
+    "category": "Cybersecurity",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Security Engineer",
+    "type": "role",
+    "category": "Cybersecurity",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "SOC Analyst",
+    "type": "role",
+    "category": "Cybersecurity",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Penetration Tester",
+    "type": "role",
+    "category": "Cybersecurity",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Information Security Officer",
+    "type": "role",
+    "category": "Cybersecurity",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "Network Engineer",
+    "type": "role",
+    "category": "Networking",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Network Administrator",
+    "type": "role",
+    "category": "Networking",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "System Administrator",
+    "type": "role",
+    "category": "Networking",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "QA Engineer",
+    "type": "role",
+    "category": "QA / Testing",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "SQA Engineer",
+    "type": "role",
+    "category": "QA / Testing",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "QA Automation Engineer",
+    "type": "role",
+    "category": "QA / Testing",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Manual QA Tester",
+    "type": "role",
+    "category": "QA / Testing",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Performance Test Engineer",
+    "type": "role",
+    "category": "QA / Testing",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "UI/UX Designer",
+    "type": "role",
+    "category": "UI/UX",
+    "weight": 95,
+    "keywords": []
+  },
+  {
+    "title": "Product Designer",
+    "type": "role",
+    "category": "UI/UX",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "UX Researcher",
+    "type": "role",
+    "category": "UI/UX",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Interaction Designer",
+    "type": "role",
+    "category": "UI/UX",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Graphic Designer",
+    "type": "role",
+    "category": "Design",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Visual Designer",
+    "type": "role",
+    "category": "Design",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Motion Graphics Designer",
+    "type": "role",
+    "category": "Design",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Product Manager",
+    "type": "role",
+    "category": "Product Management",
+    "weight": 94,
+    "keywords": []
+  },
+  {
+    "title": "Associate Product Manager",
+    "type": "role",
+    "category": "Product Management",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Technical Product Manager",
+    "type": "role",
+    "category": "Product Management",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Project Manager",
+    "type": "role",
+    "category": "Project Management",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "IT Project Manager",
+    "type": "role",
+    "category": "Project Management",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Scrum Master",
+    "type": "role",
+    "category": "Project Management",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Agile Coach",
+    "type": "role",
+    "category": "Project Management",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Business Analyst",
+    "type": "role",
+    "category": "Business Analysis",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "IT Business Analyst",
+    "type": "role",
+    "category": "Business Analysis",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Accountant",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 94,
+    "keywords": []
+  },
+  {
+    "title": "Accounts Officer",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "Senior Accountant",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Internal Auditor",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Tax Consultant",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Cost Accountant",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 86,
+    "keywords": []
+  },
+  {
+    "title": "Financial Analyst",
+    "type": "role",
+    "category": "Finance",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "Finance Manager",
+    "type": "role",
+    "category": "Finance",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Credit Risk Analyst",
+    "type": "role",
+    "category": "Finance",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Investment Banking Analyst",
+    "type": "role",
+    "category": "Finance",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Chartered Accountant (CA)",
+    "type": "role",
+    "category": "Accounting",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Marketing Executive",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 94,
+    "keywords": []
+  },
+  {
+    "title": "Digital Marketing Specialist",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "SEO Specialist",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Social Media Manager",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Growth Marketer",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Content Strategist",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Brand Manager",
+    "type": "role",
+    "category": "Marketing",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Sales Executive",
+    "type": "role",
+    "category": "Sales",
+    "weight": 95,
+    "keywords": []
+  },
+  {
+    "title": "Area Sales Manager",
+    "type": "role",
+    "category": "Sales",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Key Account Manager",
+    "type": "role",
+    "category": "Sales",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Business Development Executive",
+    "type": "role",
+    "category": "Sales",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Corporate Sales Manager",
+    "type": "role",
+    "category": "Sales",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Sales Representative",
+    "type": "role",
+    "category": "Sales",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "HR Executive",
+    "type": "role",
+    "category": "Human Resources",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "HR Generalist",
+    "type": "role",
+    "category": "Human Resources",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Talent Acquisition Specialist",
+    "type": "role",
+    "category": "Human Resources",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "HR Business Partner (HRBP)",
+    "type": "role",
+    "category": "Human Resources",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Recruitment Specialist",
+    "type": "role",
+    "category": "Human Resources",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "HR Intern",
+    "type": "role",
+    "category": "Internships",
+    "weight": 85,
+    "keywords": []
+  },
+  {
+    "title": "Supply Chain Coordinator",
+    "type": "role",
+    "category": "Operations",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Procurement Officer",
+    "type": "role",
+    "category": "Operations",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Logistics Specialist",
+    "type": "role",
+    "category": "Operations",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Operations Manager",
+    "type": "role",
+    "category": "Operations",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Commercial Executive",
+    "type": "role",
+    "category": "Operations",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Civil Engineer",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Electrical Engineer (EEE)",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Mechanical Engineer",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Textile Engineer",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 91,
+    "keywords": []
+  },
+  {
+    "title": "Industrial Engineer",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Merchandiser",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 92,
+    "keywords": []
+  },
+  {
+    "title": "Senior Merchandiser",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Structural Engineer",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 89,
+    "keywords": []
+  },
+  {
+    "title": "Architect",
+    "type": "role",
+    "category": "Engineering",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Research Associate",
+    "type": "role",
+    "category": "Research",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Market Research Analyst",
+    "type": "role",
+    "category": "Research",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "Management Trainee Officer (MTO)",
+    "type": "role",
+    "category": "Entry-Level Roles",
+    "weight": 93,
+    "keywords": []
+  },
+  {
+    "title": "Graduate Trainee",
+    "type": "role",
+    "category": "Entry-Level Roles",
+    "weight": 90,
+    "keywords": []
+  },
+  {
+    "title": "Customer Service Representative",
+    "type": "role",
+    "category": "Operations",
+    "weight": 88,
+    "keywords": []
+  },
+  {
+    "title": "Call Center Agent",
+    "type": "role",
+    "category": "Operations",
+    "weight": 87,
+    "keywords": []
+  },
+  {
+    "title": "C++",
+    "type": "skill",
+    "category": "Software Engineering",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "C#",
+    "type": "skill",
+    "category": "Software Engineering",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "CSS / CSS3",
+    "type": "skill",
+    "category": "Frontend Development",
+    "weight": 55,
+    "keywords": []
+  },
+  {
+    "title": "C Programming",
+    "type": "skill",
+    "category": "Software Engineering",
+    "weight": 58,
+    "keywords": []
+  },
+  {
+    "title": "Cybersecurity",
+    "type": "skill",
+    "category": "Cybersecurity",
+    "weight": 58,
+    "keywords": []
+  },
+  {
+    "title": "Cloud Architecture",
+    "type": "skill",
+    "category": "Cloud Computing",
+    "weight": 57,
+    "keywords": []
+  },
+  {
+    "title": "Java",
+    "type": "skill",
+    "category": "Backend Development",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "Python",
+    "type": "skill",
+    "category": "Software Engineering",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "Docker",
+    "type": "skill",
+    "category": "DevOps",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "Kubernetes",
+    "type": "skill",
+    "category": "DevOps",
+    "weight": 59,
+    "keywords": []
+  },
+  {
+    "title": "AWS",
+    "type": "skill",
+    "category": "Cloud Computing",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "React",
+    "type": "skill",
+    "category": "Frontend Development",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "Node.js",
+    "type": "skill",
+    "category": "Backend Development",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "SQL",
+    "type": "skill",
+    "category": "Database",
+    "weight": 60,
+    "keywords": []
+  },
+  {
+    "title": "PostgreSQL",
+    "type": "skill",
+    "category": "Database",
+    "weight": 58,
+    "keywords": []
+  },
+  {
+    "title": "Figma",
+    "type": "skill",
+    "category": "UI/UX",
+    "weight": 59,
+    "keywords": []
+  },
+  {
+    "title": "Git",
+    "type": "skill",
+    "category": "DevOps",
+    "weight": 55,
+    "keywords": []
+  },
+  {
+    "title": "Linux",
+    "type": "skill",
+    "category": "DevOps",
+    "weight": 56,
+    "keywords": []
+  }
+]

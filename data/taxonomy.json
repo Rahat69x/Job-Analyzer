@@ -1,0 +1,856 @@
+{
+  "portal": "BDJobs.com",
+  "updated_at": "2026-09-24",
+  "total_categories": 64,
+  "functional_categories_count": 31,
+  "special_skilled_categories_count": 33,
+  "industries_count": 28,
+  "categories": [
+    {
+      "id": 1,
+      "name": "Accounting/Finance",
+      "name_bn": "একাউন্টিং / হিসাব রক্ষন / ফিনান্স",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 463,
+      "total_vacancies": 812,
+      "total_cvs": 647479,
+      "open_to_work": 55495
+    },
+    {
+      "id": 26,
+      "name": "Agro (Plant/Animal/Fisheries)",
+      "name_bn": "কৃষি (চাষাবাদ/পশুপালন/মৎস্য)",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 92,
+      "total_vacancies": 339,
+      "total_cvs": 50592,
+      "open_to_work": 4152
+    },
+    {
+      "id": 2,
+      "name": "Bank/Non-Bank Fin. Institution",
+      "name_bn": "ব্যাংক/ ব্যাংক-বহির্ভূত আর্থিক প্রতিষ্ঠান",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 99,
+      "total_vacancies": 268,
+      "total_cvs": 558873,
+      "open_to_work": 45449
+    },
+    {
+      "id": 21,
+      "name": "Beauty Care/ Health & Fitness",
+      "name_bn": "বিউটি কেয়ার/ স্বাস্থসেবা",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 3,
+      "total_vacancies": 3,
+      "total_cvs": 4598,
+      "open_to_work": 227
+    },
+    {
+      "id": 27,
+      "name": "Commercial",
+      "name_bn": "কমার্শিয়াল",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 77,
+      "total_vacancies": 106,
+      "total_cvs": 21036,
+      "open_to_work": 2281
+    },
+    {
+      "id": 28,
+      "name": "Company Secretary/Regulatory affairs",
+      "name_bn": "কোম্পানি সেক্রেটারি/রেগুলেটরি অ্যাফেয়ার্স",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 5,
+      "total_vacancies": 6,
+      "total_cvs": 6152,
+      "open_to_work": 628
+    },
+    {
+      "id": 16,
+      "name": "Customer Service/Call Centre",
+      "name_bn": "গ্রাহক সেবা/ কল সেন্টার",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 235,
+      "total_vacancies": 2269,
+      "total_cvs": 167447,
+      "open_to_work": 7459
+    },
+    {
+      "id": 15,
+      "name": "Data Entry/Operator/BPO",
+      "name_bn": "ডাটা এন্ট্রি/ অপারেটর/ বিপিও",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 44,
+      "total_vacancies": 1850,
+      "total_cvs": 161497,
+      "open_to_work": 12234
+    },
+    {
+      "id": 18,
+      "name": "Design/Creative",
+      "name_bn": "ডিজাইন/ ক্রিয়েটিভ",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 176,
+      "total_vacancies": 342,
+      "total_cvs": 69144,
+      "open_to_work": 5733
+    },
+    {
+      "id": 25,
+      "name": "Driving/Motor Technician",
+      "name_bn": "ড্রাইভিং/ মোটর টেকনিশিয়ান",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 0,
+      "total_vacancies": 0,
+      "total_cvs": 20053,
+      "open_to_work": 1241
+    },
+    {
+      "id": 30,
+      "name": "E-commerce/ Digital Marketing",
+      "name_bn": "ই-কমার্স/ ডিজিটাল মার্কেটিং",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 217,
+      "total_vacancies": 520,
+      "total_cvs": 6,
+      "open_to_work": null
+    },
+    {
+      "id": 4,
+      "name": "Education/Training",
+      "name_bn": "শিক্ষা/ প্রশিক্ষণ",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 365,
+      "total_vacancies": 1053,
+      "total_cvs": 288301,
+      "open_to_work": 24147
+    },
+    {
+      "id": 23,
+      "name": "Electrician/ Construction/ Repair",
+      "name_bn": "ইলেট্রিশিয়ান/ নির্মাণ/ মেরামত",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 8,
+      "total_vacancies": 49,
+      "total_cvs": 28251,
+      "open_to_work": 1844
+    },
+    {
+      "id": 5,
+      "name": "Engineer/Architect",
+      "name_bn": "প্রকৌশল / স্থাপত্য",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 575,
+      "total_vacancies": 1166,
+      "total_cvs": 565575,
+      "open_to_work": 55759
+    },
+    {
+      "id": 6,
+      "name": "Garments/ Textile",
+      "name_bn": "গার্মেন্টস/ টেক্সটাইল",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 635,
+      "total_vacancies": 982,
+      "total_cvs": 362350,
+      "open_to_work": 28029
+    },
+    {
+      "id": 7,
+      "name": "General Management/Admin",
+      "name_bn": "জেনারেল ম্যানেজমেন্ট/ এডমিন",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 235,
+      "total_vacancies": 411,
+      "total_cvs": 202410,
+      "open_to_work": 18680
+    },
+    {
+      "id": 11,
+      "name": "Healthcare/Medical",
+      "name_bn": "স্বাস্থ্যসেবা/চিকিৎসা",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 288,
+      "total_vacancies": 1011,
+      "total_cvs": 253387,
+      "open_to_work": 20576
+    },
+    {
+      "id": 20,
+      "name": "Hospitality/ Travel/ Tourism",
+      "name_bn": "হসপিটালিটি/ ভ্রমণ/ পর্যটন",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 318,
+      "total_vacancies": 824,
+      "total_cvs": 60008,
+      "open_to_work": 4219
+    },
+    {
+      "id": 17,
+      "name": "HR/Org. Development",
+      "name_bn": "মানব সম্পদ ব্যবস্থাপনা ও উন্নয়ন",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 225,
+      "total_vacancies": 318,
+      "total_cvs": 113313,
+      "open_to_work": 10282
+    },
+    {
+      "id": 8,
+      "name": "IT/Telecommunication",
+      "name_bn": "সফ্টওয়্যার / আইটি / টেলিযোগাযোগ",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 321,
+      "total_vacancies": 644,
+      "total_cvs": 261453,
+      "open_to_work": 29522
+    },
+    {
+      "id": 22,
+      "name": "Law/ Legal",
+      "name_bn": "আইন পেশা",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 41,
+      "total_vacancies": 57,
+      "total_cvs": 29878,
+      "open_to_work": 2835
+    },
+    {
+      "id": 9,
+      "name": "Marketing/Sales",
+      "name_bn": "বিপণন/ বিক্রয়",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 1384,
+      "total_vacancies": 7131,
+      "total_cvs": 462649,
+      "open_to_work": 36819
+    },
+    {
+      "id": 10,
+      "name": "Media/Advertisement/Event Mgt.",
+      "name_bn": "মিডিয়া / এজেন্সি / ইভেন্ট",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 144,
+      "total_vacancies": 423,
+      "total_cvs": 70990,
+      "open_to_work": 4968
+    },
+    {
+      "id": 12,
+      "name": "NGO/Development",
+      "name_bn": "এনজিও/ উন্নয়ন কর্মী",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 249,
+      "total_vacancies": 1988,
+      "total_cvs": 458886,
+      "open_to_work": 33661
+    },
+    {
+      "id": -10,
+      "name": "Others",
+      "name_bn": "অন্যান্য",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 29,
+      "total_vacancies": 72,
+      "total_cvs": 120802,
+      "open_to_work": 8908
+    },
+    {
+      "id": 29,
+      "name": "Pharmaceutical ",
+      "name_bn": "ফার্মাসিউটিক্যাল",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 115,
+      "total_vacancies": 214,
+      "total_cvs": 13361,
+      "open_to_work": 2618
+    },
+    {
+      "id": 19,
+      "name": "Production/Operation",
+      "name_bn": "উৎপাদন / অপারেশন",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 224,
+      "total_vacancies": 356,
+      "total_cvs": 56814,
+      "open_to_work": 5416
+    },
+    {
+      "id": 14,
+      "name": "Receptionist/ PS",
+      "name_bn": "রিসেপশনিস্ট/পিএস",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 91,
+      "total_vacancies": 152,
+      "total_cvs": 59007,
+      "open_to_work": 4034
+    },
+    {
+      "id": 13,
+      "name": "Research/Consultancy",
+      "name_bn": "গবেষণা/ কনসালটেন্সি",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 25,
+      "total_vacancies": 47,
+      "total_cvs": 41359,
+      "open_to_work": 4796
+    },
+    {
+      "id": 24,
+      "name": "Security/Support Service",
+      "name_bn": "নিরাপত্তা/  সহায়তা পরিষেবা",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 65,
+      "total_vacancies": 198,
+      "total_cvs": 19956,
+      "open_to_work": 1407
+    },
+    {
+      "id": 3,
+      "name": "Supply Chain/Procurement",
+      "name_bn": "সাপ্লাই চেইন/ প্রকিউরমেন্ট",
+      "type": "Functional",
+      "type_code": 1,
+      "active_jobs": 204,
+      "total_vacancies": 363,
+      "total_cvs": 96397,
+      "open_to_work": 12201
+    },
+    {
+      "id": 88,
+      "name": "Beautician/ Salon worker",
+      "name_bn": "বিউটিশিয়ান / সেলুন কর্মী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 2,
+      "total_vacancies": 4,
+      "total_cvs": 926,
+      "open_to_work": 16
+    },
+    {
+      "id": 90,
+      "name": "Boiler Operator",
+      "name_bn": "বয়লার অপারেটর",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 1,
+      "total_vacancies": 1,
+      "total_cvs": 512,
+      "open_to_work": 25
+    },
+    {
+      "id": 76,
+      "name": "CAD Operator",
+      "name_bn": "CAD অপারেটর",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 5,
+      "total_vacancies": 7,
+      "total_cvs": 8264,
+      "open_to_work": 234
+    },
+    {
+      "id": 91,
+      "name": "Caregiver/Nanny",
+      "name_bn": "কেয়ারগিভার/ন্যানী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 7,
+      "total_vacancies": 16,
+      "total_cvs": 687,
+      "open_to_work": 39
+    },
+    {
+      "id": 82,
+      "name": "Carpenter",
+      "name_bn": "কার্পেন্টার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 1,
+      "total_vacancies": 2,
+      "total_cvs": 2723,
+      "open_to_work": 16
+    },
+    {
+      "id": 68,
+      "name": "Chef/Cook",
+      "name_bn": "শেফ/বাবুর্চী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 71,
+      "total_vacancies": 132,
+      "total_cvs": 23818,
+      "open_to_work": 497
+    },
+    {
+      "id": 80,
+      "name": "Cleaner",
+      "name_bn": "ক্লিনার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 10,
+      "total_vacancies": 27,
+      "total_cvs": 4300,
+      "open_to_work": 92
+    },
+    {
+      "id": 61,
+      "name": "Data Entry/Computer Operator",
+      "name_bn": "ডাটা এন্ট্রি/ কম্পিউটার অপারেটর",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 32,
+      "total_vacancies": 631,
+      "total_cvs": 137567,
+      "open_to_work": 5308
+    },
+    {
+      "id": 77,
+      "name": "Delivery Man",
+      "name_bn": "ডেলিভারী ম্যান",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 18,
+      "total_vacancies": 149,
+      "total_cvs": 33599,
+      "open_to_work": 380
+    },
+    {
+      "id": 67,
+      "name": "Driver",
+      "name_bn": "ড্রাইভার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 30,
+      "total_vacancies": 66,
+      "total_cvs": 73973,
+      "open_to_work": 2165
+    },
+    {
+      "id": 66,
+      "name": "Electrician/Electronics Technician",
+      "name_bn": "ইলেকট্রিশিয়ান/ইলেকট্রনিকস্ টেকনিশিয়ান",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 26,
+      "total_vacancies": 91,
+      "total_cvs": 88955,
+      "open_to_work": 2489
+    },
+    {
+      "id": 89,
+      "name": "Fire Safety/ Firefighter",
+      "name_bn": "ফায়ার সেফটি/ ফায়ারফাইটার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 12,
+      "total_vacancies": 13,
+      "total_cvs": 2467,
+      "open_to_work": 148
+    },
+    {
+      "id": 81,
+      "name": "Gardener",
+      "name_bn": "মালী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 1,
+      "total_vacancies": 1,
+      "total_cvs": 986,
+      "open_to_work": 13
+    },
+    {
+      "id": 78,
+      "name": "Garments technician/Machine operator",
+      "name_bn": "গার্মেন্টস টেকনিশিয়ান / মেশিন অপারেটর",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 5,
+      "total_vacancies": 6,
+      "total_cvs": 24943,
+      "open_to_work": 398
+    },
+    {
+      "id": 71,
+      "name": "Graphic Designer",
+      "name_bn": "গ্রাফিক ডিজাইনার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 67,
+      "total_vacancies": 116,
+      "total_cvs": 23605,
+      "open_to_work": 945
+    },
+    {
+      "id": 86,
+      "name": "Gym/ Fitness Trainer",
+      "name_bn": "জিম/ ফিটনেস ট্রেইনার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 2,
+      "total_vacancies": 2,
+      "total_cvs": 697,
+      "open_to_work": 23
+    },
+    {
+      "id": 69,
+      "name": "Housekeeper",
+      "name_bn": "হাউজকিপার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 14,
+      "total_vacancies": 18,
+      "total_cvs": 6882,
+      "open_to_work": 141
+    },
+    {
+      "id": 85,
+      "name": "Imam/ Khatib/ Muezzin",
+      "name_bn": "ইমাম/ খতিব/ মুয়াজ্জিন",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 2,
+      "total_vacancies": 2,
+      "total_cvs": 1610,
+      "open_to_work": 69
+    },
+    {
+      "id": 87,
+      "name": "Interpreter",
+      "name_bn": "ইন্টারপ্রিটার/ দোভাষী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 16,
+      "total_vacancies": 32,
+      "total_cvs": 2140,
+      "open_to_work": 91
+    },
+    {
+      "id": 75,
+      "name": "Mason/ Construction worker",
+      "name_bn": "রাজমিস্ত্রি/ নির্মান কর্মী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 6,
+      "total_vacancies": 31,
+      "total_cvs": 15938,
+      "open_to_work": 99
+    },
+    {
+      "id": 62,
+      "name": "Mechanic/Technician",
+      "name_bn": "মেকানিক/ টেকনিশিয়ান",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 55,
+      "total_vacancies": 209,
+      "total_cvs": 80146,
+      "open_to_work": 1572
+    },
+    {
+      "id": 63,
+      "name": "Nurse",
+      "name_bn": "নার্স",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 49,
+      "total_vacancies": 285,
+      "total_cvs": 54059,
+      "open_to_work": 2764
+    },
+    {
+      "id": -11,
+      "name": "Other Special Skilled Jobs",
+      "name_bn": "অন্যান্য স্পেশাল স্কিল্‌ড জব্‌স",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 3,
+      "total_vacancies": 13,
+      "total_cvs": 81242,
+      "open_to_work": 3865
+    },
+    {
+      "id": 65,
+      "name": "Pathologist/ Lab Assistant",
+      "name_bn": "প্যাথলজিষ্ট/ল্যাব সহকারী",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 26,
+      "total_vacancies": 40,
+      "total_cvs": 17263,
+      "open_to_work": 626
+    },
+    {
+      "id": 79,
+      "name": "Peon",
+      "name_bn": "পিয়ন",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 23,
+      "total_vacancies": 34,
+      "total_cvs": 23546,
+      "open_to_work": 676
+    },
+    {
+      "id": 92,
+      "name": "Physiotherapist",
+      "name_bn": "ফিজিওথেরাপিস্ট",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 7,
+      "total_vacancies": 23,
+      "total_cvs": 316,
+      "open_to_work": 33
+    },
+    {
+      "id": 73,
+      "name": "Plumber/Pipe fitting",
+      "name_bn": "প্লাম্বার/পাইপফিটিং",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 2,
+      "total_vacancies": 2,
+      "total_cvs": 5714,
+      "open_to_work": 90
+    },
+    {
+      "id": 84,
+      "name": "Sales Representative (SR)",
+      "name_bn": "সেলস রিপ্রেজেন্টেটিভ/ বিক্রয় প্রতিনিধি",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 46,
+      "total_vacancies": 1902,
+      "total_cvs": 19165,
+      "open_to_work": 844
+    },
+    {
+      "id": 70,
+      "name": "Security Guard",
+      "name_bn": "সিকিউরিটি গার্ড",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 26,
+      "total_vacancies": 145,
+      "total_cvs": 21279,
+      "open_to_work": 452
+    },
+    {
+      "id": 74,
+      "name": "Sewing machine operator",
+      "name_bn": "স্যুইং মেশিন অপারেটর",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 2,
+      "total_vacancies": 8,
+      "total_cvs": 11000,
+      "open_to_work": 35
+    },
+    {
+      "id": 83,
+      "name": "Showroom Assistant/Salesman",
+      "name_bn": "শো-রুম সহকারি/সেলসম্যান",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 39,
+      "total_vacancies": 241,
+      "total_cvs": 83124,
+      "open_to_work": 2063
+    },
+    {
+      "id": 64,
+      "name": "Waiter/Waitress",
+      "name_bn": "ওয়েটার / ওয়েট্রেস",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 9,
+      "total_vacancies": 137,
+      "total_cvs": 24008,
+      "open_to_work": 500
+    },
+    {
+      "id": 72,
+      "name": "Welder",
+      "name_bn": "ওয়েল্ডার",
+      "type": "Special Skilled",
+      "type_code": 2,
+      "active_jobs": 2,
+      "total_vacancies": 10,
+      "total_cvs": 11484,
+      "open_to_work": 141
+    }
+  ],
+  "industries": [
+    {
+      "id": 3,
+      "name": "Agro based Industry",
+      "name_bn": "কৃষি ভিত্তিক শিল্প"
+    },
+    {
+      "id": 21,
+      "name": "Airline/ Travel/ Tourism ",
+      "name_bn": "বিমান/ ভ্রমণ/ পর্যটন"
+    },
+    {
+      "id": 5,
+      "name": "Architecture/ Engineering/ Construction",
+      "name_bn": "স্থাপত্য/ প্রকৌশল/ নির্মান"
+    },
+    {
+      "id": 14,
+      "name": "Automobile/Industrial Machine",
+      "name_bn": "অটোমোবাইল/ ইন্ডাস্ট্রিয়াল মেশিন"
+    },
+    {
+      "id": 1,
+      "name": "Bank/ Non-Bank Fin. Institution",
+      "name_bn": "ব্যাংক/ ব্যাংক-বহির্ভূত আর্থিক প্রতিষ্ঠান"
+    },
+    {
+      "id": 27,
+      "name": "E-commerce/F-commerce",
+      "name_bn": "ই-কমার্স/ এফ- কমার্স"
+    },
+    {
+      "id": 19,
+      "name": "Education",
+      "name_bn": "শিক্ষা"
+    },
+    {
+      "id": 8,
+      "name": "Electronics/ Consumer Durables",
+      "name_bn": "ইলেকট্রনিক্স/ কনজ্যুমার ডুরেবলস"
+    },
+    {
+      "id": 15,
+      "name": "Energy/ Power/ Fuel",
+      "name_bn": "জ্বালানী ও শক্তি"
+    },
+    {
+      "id": 23,
+      "name": "Entertainment/ Recreation",
+      "name_bn": "বিনোদন/ অবকাশ"
+    },
+    {
+      "id": 26,
+      "name": "Fire, Safety & Protection",
+      "name_bn": "অগ্নি নিরাপত্তা ও সুরক্ষা"
+    },
+    {
+      "id": 24,
+      "name": "Food & Beverage Industry",
+      "name_bn": "খাদ্য ও পানীয় শিল্প"
+    },
+    {
+      "id": 2,
+      "name": "Garments/ Textile",
+      "name_bn": "গার্মেন্টস/ টেক্সটাইল"
+    },
+    {
+      "id": 18,
+      "name": "Govt./ Semi-Govt./ Autonomous",
+      "name_bn": "সরকারী/ আধা-সরকারী/ স্বায়ত্বশাসিত"
+    },
+    {
+      "id": 20,
+      "name": "Hospital/ Diagnostic Center ",
+      "name_bn": "হাসপাতাল/ ডায়াগনস্টিক সেন্টার"
+    },
+    {
+      "id": 13,
+      "name": "Hotel/Restaurant",
+      "name_bn": "হোটেল/ রেস্টুরেন্ট"
+    },
+    {
+      "id": 11,
+      "name": "Information Technology (IT)",
+      "name_bn": "তথ্য প্রযুক্তি"
+    },
+    {
+      "id": 16,
+      "name": "Logistics/ Transportation",
+      "name_bn": "লজিস্টিক/ পরিবহন"
+    },
+    {
+      "id": 7,
+      "name": "Manufacturing (Heavy Industry)",
+      "name_bn": "উৎপাদনমুখি (ভারী শিল্প)"
+    },
+    {
+      "id": 22,
+      "name": "Manufacturing (Light Industry) ",
+      "name_bn": "উৎপাদমুখি (হালকা শিল্প)"
+    },
+    {
+      "id": 10,
+      "name": "Media (Satellite/ Print/ Online)/ Advertising/ Event Mgt.",
+      "name_bn": "মিডিয়া (স্যাটেলাইট, প্রিন্ট, অনলাইন)/ বিজ্ঞাপনী/ অনুষ্ঠান"
+    },
+    {
+      "id": 17,
+      "name": "NGO/Development",
+      "name_bn": "এনজিও/ উন্নয়ন"
+    },
+    {
+      "id": -10,
+      "name": "Others",
+      "name_bn": "অন্যান্য"
+    },
+    {
+      "id": 4,
+      "name": "Pharmaceuticals",
+      "name_bn": "ওষুধ শিল্প"
+    },
+    {
+      "id": 6,
+      "name": "Real Estate/ Development",
+      "name_bn": "রিয়েল এস্টেট/ উন্নয়ন"
+    },
+    {
+      "id": 25,
+      "name": "Security Service",
+      "name_bn": "নিরাপত্তা পরিষেবা"
+    },
+    {
+      "id": 12,
+      "name": "Telecommunication",
+      "name_bn": "টেলিযোগাযোগ"
+    },
+    {
+      "id": 9,
+      "name": "Wholesale/ Retail/ Export-Import",
+      "name_bn": "পাইকারী/ খুচরা/ আমাদানি-রপ্তানি"
+    }
+  ]
+}
