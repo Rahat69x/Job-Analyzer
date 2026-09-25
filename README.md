@@ -1,26 +1,29 @@
-# bd-job-analyzer
+# Job Analyzer — Global Job Discovery & Remote Job Platform
 
-> Bangladesh Multi-Portal Job Aggregator and "Best Jobs" Scoring Engine built on top of the verified 64-category BDJobs taxonomy.
+> Real-time global job discovery, remote opportunity aggregator, candidate eligibility engine, and objective scoring platform covering Bangladesh and major international markets.
+>
+> **Live Web Application**: [https://job-analyzer-s3wi.onrender.com](https://job-analyzer-s3wi.onrender.com)
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
-1. **Verified 64-Category Taxonomy**:
-   - Covers all **31 Functional Categories** and **33 Special Skilled Categories** directly mapped to live production BDJobs IDs.
-   - Includes 28 Industry classifications and candidate pool metrics.
-2. **Multi-Portal Ingestion**:
-   - **BDJobs**: Live integration with BDJobs production REST microservice (`https://api.bdjobs.com/Jobs/api/JobSearch/GetJobSearch`).
-   - **LinkedIn**: ToS-compliant structured paste & JSON-LD parser that extracts title, company, experience, and salary without risky scraping.
-   - **Partner Portals**: Cross-portal connectors for public listings (Skill.jobs, Chakri.com).
+1. **Global & Bangladesh Discovery**:
+   - Covers Bangladesh (BDJobs live API, Chakri, Skill.jobs) and major international tech hubs (USA, Germany, UK, India, Singapore, Worldwide Remote).
+   - Real-time country, workplace, and remote eligibility filters with direct application links.
+2. **Strict ToS Compliance for Social & Professional Networks**:
+   - **LinkedIn & Facebook**: Both platforms strictly prohibit automated web scraping in their Terms of Service.
+   - **Compliant Ingestion**: Job Analyzer never runs unauthorized crawlers on either network. It ingests opportunities exclusively via:
+     - **Manual-Paste Ingestion**: Intelligent text & JSON-LD parsing for copied job descriptions, groups, and posts.
+     - **Official APIs**: Official LinkedIn Partner API and Facebook Graph API for managed pages.
+     - **1-Click Bookmarklet**: Client-side single-click capture tool for active browser sessions.
 3. **Objective "Best Jobs" Scoring Engine**:
    - **Recency ($w_1 = 0.20$)**: Half-life exponential decay ($e^{-\Delta t / 7}$).
-   - **Salary Transparency ($w_2 = 0.30$)**: Penalizes opaque "Negotiable" listings; rewards disclosed packages benchmarked against category medians.
+   - **Salary Transparency ($w_2 = 0.30$)**: Penalizes opaque "Negotiable" listings; rewards disclosed packages normalized to USD and BDT.
    - **Candidate Profile Match ($w_3 = 0.35$)**: Multi-factor keyword overlap + experience bracket alignment.
    - **Employer Credibility ($w_4 = 0.15$)**: Tiered rating for MNCs, Top Conglomerates, Financial Institutions, and verified enterprises.
-4. **Interfaces**:
-   - **CLI Tool**: Instant terminal queries with tabulate formatted tables.
-   - **Interactive Web Dashboard**: Modern, glassmorphic dark-mode web application with real-time category chips, experience sliders, LinkedIn paste modal, and CSV export.
+4. **Circadian Timezone Feasibility**:
+   - Computes daylight/graveyard shift impact, core hour overlap, and feasibility tiers across timezones.
 
 ---
 
