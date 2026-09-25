@@ -27,8 +27,8 @@
           1-Click Bookmarklet
         </button>
         <button id="btn-import-linkedin" class="btn btn-secondary">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          Paste LinkedIn Job
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+          Paste Job (LinkedIn / Facebook)
         </button>
         <button id="btn-export-csv" class="btn btn-secondary">Export CSV</button>
         <button id="btn-refresh" class="btn btn-primary">Refresh Live Jobs</button>
@@ -446,15 +446,28 @@
       </div>
     </div>
 
-    <!-- LinkedIn Ingest Modal -->
+    <!-- Social Ingest Modal (LinkedIn & Facebook) -->
     <div id="linkedin-modal" class="modal-backdrop">
       <div class="modal-window">
         <div class="modal-header">
-          <h3>Paste LinkedIn Job Posting</h3>
+          <div>
+            <h3 style="margin: 0; font-size: 16px;">Paste Job Post (LinkedIn / Facebook)</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 3px 0 0 0;">ToS-Compliant Manual & API Ingestion</p>
+          </div>
           <button id="btn-close-modal" class="close-btn">&times;</button>
         </div>
-        <textarea id="linkedin-paste-text" class="paste-textarea" placeholder="Paste job title, company name, location, and description here..."></textarea>
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <div style="padding: 10px 14px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 8px; margin-bottom: 12px; font-size: 11.5px; color: #cbd5e1; line-height: 1.5;">
+          <strong>Legal Policy Notice:</strong> Both LinkedIn and Facebook strictly prohibit automated live web scraping in their Terms of Service. This platform only ingests posts via direct manual paste or official Graph/Partner APIs, ensuring 100% legal compliance and zero account risks.
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="paste-source-select" style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Select Source Platform</label>
+          <select id="paste-source-select" class="form-select" style="padding: 8px 12px; border-radius: 6px; background: rgba(30, 41, 59, 0.8); color: #fff; border: 1px solid var(--border-color); width: 100%;">
+            <option value="linkedin" selected>LinkedIn Job Post / JSON-LD</option>
+            <option value="facebook">Facebook Group / Page Post</option>
+          </select>
+        </div>
+        <textarea id="linkedin-paste-text" class="paste-textarea" placeholder="Paste the job description, hiring post, or JSON-LD here..."></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px;">
           <button id="btn-cancel-paste" class="btn btn-secondary">Cancel</button>
           <button id="btn-submit-paste" class="btn btn-primary">Score & Ingest Job</button>
         </div>

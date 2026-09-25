@@ -769,13 +769,17 @@ async function loadAlertsCount() {
 
 async function handleLinkedInSubmit() {
   const text = document.getElementById("linkedin-paste-text").value.trim();
+  const platform = document.getElementById("paste-source-select") ? document.getElementById("paste-source-select").value : "linkedin";
+  
   if (!text) {
-    alert("Please paste LinkedIn job text or JSON-LD first.");
+    alert("Please paste the job text or JSON-LD first.");
     return;
   }
 
+  const endpoint = platform === "facebook" ? "/api/ingest/facebook" : "/api/ingest/linkedin";
+
   try {
-    const res = await fetch("/api/ingest/linkedin", {
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -783,7 +787,7 @@ async function handleLinkedInSubmit() {
         target_category_id: selectedCategoryId
       })
     });
-    if (!res.ok) throw new Error("Could not parse LinkedIn text");
+    if (!res.ok) throw new Error(`Could not parse job from pasted ${platform === "facebook" ? "Facebook" : "LinkedIn"} text.`);
     document.getElementById("linkedin-modal").classList.remove("show");
     document.getElementById("linkedin-paste-text").value = "";
     loadJobs();

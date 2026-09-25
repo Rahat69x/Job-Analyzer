@@ -16,6 +16,7 @@ from core.timezone_engine import feasibility_engine, FlexibilityTier
 from ingestion.bdjobs_client import BDJobsClient
 from ingestion.public_portals import fetch_sample_partner_jobs
 from ingestion.linkedin_parser import parse_pasted_linkedin_text
+from ingestion.facebook_parser import parse_pasted_facebook_text
 from ingestion.aggregator import global_aggregator
 from scoring.scorer import JobScorer
 
@@ -45,6 +46,13 @@ class LinkedInIngestRequest(BaseModel):
     target_category_id: int = 8
     user_skills: List[str] = []
     user_experience: float = 3.0
+
+class FacebookIngestRequest(BaseModel):
+    text: str
+    target_category_id: int = 8
+    user_skills: List[str] = []
+    user_experience: float = 3.0
+
 
 class TrackJobRequest(BaseModel):
     job_id: str
@@ -486,6 +494,29 @@ def ingest_linkedin_job(payload: LinkedInIngestRequest):
     scored = scorer.score_job(job, profile)
     return scored.model_dump()
 
+@app.post("/api/ingest/facebook")
+def ingest_facebook_job(payload: FacebookIngestRequest):
+    """
+    ToS-Compliant manual-paste or Graph API ingestion for Facebook job posts.
+    Adheres strictly to Facebook's automated scraping prohibition.
+    """
+    cat_info = bdjobs_client.get_category_info(payload.target_category_id)
+    job = parse_pasted_facebook_text(payload.text, payload.target_category_id, cat_info['name'])
+    
+    if not job:
+        raise HTTPException(status_code=400, detail="Could not parse job from pasted Facebook text.")
+        
+    profile = UserProfile(
+        target_category_ids=[payload.target_category_id],
+        skills=payload.user_skills,
+        experience_years=payload.user_experience
+    )
+    
+    upsert_jobs([job])
+    scored = scorer.score_job(job, profile)
+    return scored.model_dump()
+
+
 @app.get("/api/analytics")
 def get_analytics(category_id: Optional[int] = None):
     return get_market_analytics(category_id)
@@ -507,12 +538,17 @@ def get_alerts():
 if os.path.exists(STATIC_DIR):
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def serve_dashboard():
     index_file = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
     return JSONResponse({"status": "Global Job Discovery API active."})
+
+@app.api_route("/healthz", methods=["GET", "HEAD"])
+def healthz():
+    return {"status": "healthy"}
+
 
 if __name__ == "__main__":
     import uvicorn
