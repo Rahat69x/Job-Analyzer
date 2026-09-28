@@ -179,6 +179,7 @@ def search_jobs(
     experience: float = Query(3.0, description="Applicant experience years"),
     refresh_live: bool = Query(False, description="Force refresh from live sources"),
     sort_by: str = Query("recent", description="Sort by: recent, salary_desc, salary_asc, deadline"),
+    source: Optional[str] = Query(None, description="Source board e.g. Remote OK, Indeed, BDJobs"),
     limit: int = Query(50, description="Results limit")
 ):
     """
@@ -196,6 +197,7 @@ def search_jobs(
         visa_sponsorship=visa_sponsorship,
         candidate_origin=candidate_origin,
         sort_by=sort_by,
+        source=source,
         limit=limit
     )
 
@@ -216,6 +218,7 @@ def search_jobs(
                     visa_sponsorship=visa_sponsorship,
                     candidate_origin=candidate_origin,
                     sort_by=sort_by,
+                    source=source,
                     limit=limit
                 )
         except Exception as e:
@@ -237,6 +240,7 @@ def search_jobs(
                     visa_sponsorship=visa_sponsorship,
                     candidate_origin=candidate_origin,
                     sort_by=sort_by,
+                    source=source,
                     limit=limit
                 )
         except Exception:

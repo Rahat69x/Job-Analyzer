@@ -52,3 +52,22 @@ def test_currency_conversion_api():
     assert "USD" in data["rates"]
     assert "BDT" in data["rates"]
     assert data["bdt_per_usd"] == 120.0
+
+def test_source_filtering():
+    response = client.get("/api/global/search?source=Remote%20OK")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] > 0
+    for r in data["results"]:
+        assert "remote ok" in r["job"]["source"].lower()
+
+def test_taxonomy_counts():
+    response = client.get("/api/taxonomy")
+    assert response.status_code == 200
+    data = response.json()
+    assert "categories" in data
+    func = [c for c in data["categories"] if c["type"] == "Functional"]
+    spec = [c for c in data["categories"] if c["type"] == "Special Skilled"]
+    assert len(func) == 31
+    assert len(spec) == 33
+

@@ -508,6 +508,8 @@ body {
 /* Category Filter Tabs & Chips */
 .category-tabs {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
   margin-bottom: 16px;
   border-bottom: 1px solid var(--border-subtle);
@@ -643,6 +645,18 @@ body {
 .cat-footer-hint {
   color: var(--text-muted);
   font-size: 11px;
+}
+
+@media (max-width: 640px) {
+  #category-search {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 6px;
+  }
+  .category-status-footer {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 }
 
 /* Results Section */

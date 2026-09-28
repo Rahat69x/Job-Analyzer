@@ -274,6 +274,7 @@ def search_global_jobs(
     visa_sponsorship: Optional[bool] = None,
     candidate_origin: str = "Bangladesh",
     sort_by: str = "recent",
+    source: Optional[str] = None,
     limit: int = 50
 ) -> List[NormalizedJob]:
     """Execute dynamic multi-criteria SQL query across the global job catalog."""
@@ -283,6 +284,11 @@ def search_global_jobs(
 
     conditions = []
     params = []
+
+    # Source filter
+    if source and source.lower() not in ["all", "any", ""]:
+        conditions.append("source LIKE ?")
+        params.append(f"%{source}%")
 
     # Category filter
     if category_id is not None and int(category_id) > 0:

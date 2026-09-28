@@ -1,9 +1,45 @@
 // Job Analyzer — Global Job Discovery & Remote Job Platform Controller
 
 let currentTaxonomy = { categories: [], industries: [] };
-let selectedCategoryId = 8; // Default: IT/Telecommunication
 let currentTab = "Functional";
 let loadedJobs = [];
+let activeCompanyFilter = null;
+
+const GLOBAL_CONNECTORS = [
+  { id: 901, name: "Remote OK (Worldwide Tech)", source: "Remote OK", job_count: "Global" },
+  { id: 902, name: "We Work Remotely (Engineering)", source: "We Work Remotely", job_count: "Global" },
+  { id: 903, name: "Indeed Global (DE, UK, US, IN, SG)", source: "Indeed", job_count: "Multi-Country" },
+  { id: 904, name: "Company Career Pages (Google, MS)", source: "CompanyCareerPage", job_count: "Direct" },
+  { id: 905, name: "Curated Top Companies (72 Global)", source: "CompanyCareerPage", job_count: "Curated" },
+  { id: 906, name: "BDJobs Corporate Network", source: "BDJobs", job_count: "Bangladesh" },
+  { id: 907, name: "Skill.jobs Technology Portal", source: "Skill.jobs", job_count: "Partner" },
+  { id: 908, name: "Chakri.com Professional Hub", source: "Chakri", job_count: "Partner" }
+];
+
+const tabConfig = {
+  "Functional": {
+    label: "Selected Sector:",
+    hint: "• Click any industry sector to filter live jobs",
+    selectedId: 8,
+    selectedName: "IT/Telecommunication",
+    filterType: "category_id"
+  },
+  "Special Skilled": {
+    label: "Selected Skill:",
+    hint: "• Click any vocational skill to filter live jobs",
+    selectedId: 88,
+    selectedName: "Beautician/ Salon worker",
+    filterType: "category_id"
+  },
+  "Global": {
+    label: "Selected Source:",
+    hint: "• Click any global connector to filter live jobs",
+    selectedId: 901,
+    selectedName: "Remote OK (Worldwide Tech)",
+    selectedSource: "Remote OK",
+    filterType: "source"
+  }
+};
 
 // Debounce utility for real-time search
 function debounce(fn, delay = 400) {
@@ -242,7 +278,17 @@ async function loadJobs(refreshLive = false) {
   if (exp) params.append("experience", exp);
   if (visaOnly) params.append("visa_sponsorship", "true");
   if (refreshLive) params.append("refresh_live", "true");
-  if (selectedCategoryId) params.append("category_id", selectedCategoryId);
+  
+  if (!activeCompanyFilter) {
+    const currentCfg = tabConfig[currentTab];
+    if (currentCfg) {
+      if (currentCfg.filterType === "category_id" && currentCfg.selectedId) {
+        params.append("category_id", currentCfg.selectedId);
+      } else if (currentCfg.filterType === "source" && currentCfg.selectedSource) {
+        params.append("source", currentCfg.selectedSource);
+      }
+    }
+  }
   params.append("limit", "50");
 
   try {
@@ -339,7 +385,7 @@ function renderJobsTable(results) {
           </a>
         </td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="openTrackModal('${job.id}', '${escapeHtml(job.title).replace(/'/g, "\\'")}', '${escapeHtml(job.company.name).replace(/'/g, "\\'")}', ${score.final_score})">
+          <button class="btn btn-secondary btn-sm" onclick="openTrackModal('${job.id}')">
             📌 Track
           </button>
         </td>
@@ -608,8 +654,10 @@ async function loadTrackedJobsView() {
 }
 
 function openTrackModal(jobId, title, company, score) {
+  const found = loadedJobs.find(j => j.id === jobId);
+  const displayTitle = title || (found ? found.title : "Job Opportunity");
   document.getElementById("track-modal-job-id").value = jobId;
-  document.getElementById("track-modal-title").textContent = `Track: ${title}`;
+  document.getElementById("track-modal-title").textContent = `Track: ${displayTitle}`;
   document.getElementById("track-modal").classList.add("show");
 }
 
@@ -717,10 +765,34 @@ async function loadMarketAnalytics() {
 
 // ==================== TAXONOMY & HELPERS ====================
 
+function updateStatusFooter() {
+  const cfg = tabConfig[currentTab] || tabConfig["Functional"];
+  const labelEl = document.getElementById("cat-footer-label");
+  const displayEl = document.getElementById("active-category-display");
+  const hintEl = document.getElementById("cat-footer-hint");
+  
+  if (labelEl) labelEl.textContent = cfg.label;
+  if (displayEl) displayEl.textContent = cfg.selectedName;
+  if (hintEl) hintEl.textContent = cfg.hint;
+}
+
 async function loadTaxonomy() {
   try {
     const res = await fetch("/api/taxonomy");
     currentTaxonomy = await res.json();
+
+    const funcCount = (currentTaxonomy.categories || []).filter(c => c.type === "Functional").length;
+    const specCount = (currentTaxonomy.categories || []).filter(c => c.type === "Special Skilled").length;
+
+    const tabFunc = document.getElementById("tab-functional");
+    if (tabFunc) tabFunc.textContent = `Functional Roles (${funcCount || 31})`;
+
+    const tabSpec = document.getElementById("tab-special");
+    if (tabSpec) tabSpec.textContent = `Special Skilled (${specCount || 33})`;
+
+    const tabGlobal = document.getElementById("tab-global-sources");
+    if (tabGlobal) tabGlobal.textContent = `Global Connectors (${GLOBAL_CONNECTORS.length})`;
+
     renderCategoryChips();
   } catch (err) {
     console.error("Error loading taxonomy:", err);
@@ -729,63 +801,86 @@ async function loadTaxonomy() {
 
 function switchTab(tabName) {
   currentTab = tabName;
+  activeCompanyFilter = null;
+
   document.getElementById("tab-functional").classList.toggle("active", tabName === "Functional");
   document.getElementById("tab-special").classList.toggle("active", tabName === "Special Skilled");
   const tabGlobal = document.getElementById("tab-global-sources");
   if (tabGlobal) tabGlobal.classList.toggle("active", tabName === "Global");
+  
+  const searchInput = document.getElementById("category-search");
+  if (searchInput) searchInput.value = "";
+
   renderCategoryChips();
+  loadJobs();
 }
 
 function renderCategoryChips(searchFilter = "") {
   const container = document.getElementById("category-chips-container");
+  if (!container) return;
+
   let categories = [];
-  
   if (currentTab === "Global") {
-    categories = [
-      { id: 901, name: "Remote OK (Worldwide Tech)", job_count: "Global" },
-      { id: 902, name: "We Work Remotely (Engineering)", job_count: "Global" },
-      { id: 903, name: "Indeed Global (DE, UK, US, IN, SG)", job_count: "Multi-Country" },
-      { id: 904, name: "Company Career Pages (Google, MS)", job_count: "Direct" }
-    ];
+    categories = [...GLOBAL_CONNECTORS];
   } else {
     categories = (currentTaxonomy.categories || []).filter(c => c.type === currentTab);
   }
 
   if (searchFilter) {
-    categories = categories.filter(c => c.name.toLowerCase().includes(searchFilter.toLowerCase()));
+    const q = searchFilter.toLowerCase();
+    categories = categories.filter(c => c.name.toLowerCase().includes(q));
   }
+
+  const currentSelectedId = tabConfig[currentTab] ? tabConfig[currentTab].selectedId : null;
 
   container.innerHTML = categories.map(cat => {
     const count = (cat.active_jobs !== undefined && cat.active_jobs !== null) ? cat.active_jobs : (cat.job_count || '');
-    const isActive = (cat.id === selectedCategoryId);
+    const isActive = (cat.id === currentSelectedId);
     return `
-      <div class="cat-chip ${isActive ? 'active' : ''}" onclick="selectCategory(${cat.id}, '${escapeHtml(cat.name)}')">
+      <div class="cat-chip ${isActive ? 'active' : ''}" data-id="${cat.id}" data-name="${escapeHtml(cat.name)}" onclick="selectCategory(${cat.id}, this.getAttribute('data-name'))">
         <span>${escapeHtml(cat.name)}</span>
         ${count ? `<span class="cat-count">${count}</span>` : ''}
       </div>
     `;
   }).join("");
 
-  const activeDisplay = document.getElementById("active-category-display");
-  if (activeDisplay) {
-    const allCats = [...(currentTaxonomy.categories || []), 
-      { id: 901, name: "Remote OK (Worldwide Tech)" },
-      { id: 902, name: "We Work Remotely (Engineering)" },
-      { id: 903, name: "Indeed Global (DE, UK, US, IN, SG)" },
-      { id: 904, name: "Company Career Pages (Google, MS)" }
-    ];
-    const cur = allCats.find(c => c.id === selectedCategoryId);
-    if (cur) activeDisplay.textContent = cur.name;
-  }
+  updateStatusFooter();
 }
 
 function selectCategory(catId, catName) {
-  selectedCategoryId = catId;
-  const activeDisplay = document.getElementById("active-category-display");
-  if (activeDisplay && catName) {
-    activeDisplay.textContent = catName;
+  const cfg = tabConfig[currentTab];
+  if (!cfg) return;
+
+  cfg.selectedId = catId;
+  activeCompanyFilter = null;
+
+  if (currentTab === "Global") {
+    const conn = GLOBAL_CONNECTORS.find(c => c.id === catId);
+    if (conn) {
+      cfg.selectedName = conn.name;
+      cfg.selectedSource = conn.source;
+    } else if (catName) {
+      cfg.selectedName = catName;
+    }
+  } else {
+    if (catName) {
+      cfg.selectedName = catName;
+    } else {
+      const found = (currentTaxonomy.categories || []).find(c => c.id === catId);
+      if (found) cfg.selectedName = found.name;
+    }
   }
-  renderCategoryChips();
+
+  updateStatusFooter();
+
+  const container = document.getElementById("category-chips-container");
+  if (container) {
+    container.querySelectorAll(".cat-chip").forEach(chip => {
+      const chipId = parseInt(chip.getAttribute("data-id"), 10);
+      chip.classList.toggle("active", chipId === catId);
+    });
+  }
+
   loadJobs();
 }
 
@@ -822,7 +917,7 @@ async function handleLinkedInSubmit() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         text: text,
-        target_category_id: selectedCategoryId
+        target_category_id: tabConfig["Functional"].selectedId || 8
       })
     });
     if (!res.ok) throw new Error(`Could not parse job from pasted ${platform === "facebook" ? "Facebook" : "LinkedIn"} text.`);
@@ -926,12 +1021,23 @@ async function loadCompaniesView() {
           <a href="${c.careers_url && c.careers_url !== 'not verified' ? c.careers_url : c.website}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; text-decoration: none;">
             Official Careers ↗
           </a>
-          <button class="btn btn-secondary btn-sm" onclick="filterByCompany('${escapeHtml(c.name).replace(/'/g, "\\'")}')" style="flex: 1;">
+          <button class="btn btn-secondary btn-sm company-search-btn" data-company="${escapeHtml(c.name)}" style="flex: 1;">
             Search Openings
           </button>
         </div>
       </div>
     `).join("");
+
+    if (!container._hasClickDelegate) {
+      container.addEventListener("click", (e) => {
+        const btn = e.target.closest(".company-search-btn");
+        if (btn) {
+          const compName = btn.getAttribute("data-company");
+          if (compName) filterByCompany(compName);
+        }
+      });
+      container._hasClickDelegate = true;
+    }
   } catch (err) {
     container.innerHTML = `<div class="error-box" style="grid-column: 1 / -1;">Error loading companies: ${err.message}</div>`;
   }
@@ -942,7 +1048,10 @@ function filterByCompany(companyName) {
   const input = document.getElementById("global-search-input");
   if (input) {
     input.value = companyName;
-    loadJobs();
   }
+  activeCompanyFilter = companyName;
+  const countrySelect = document.getElementById("filter-country");
+  if (countrySelect) countrySelect.value = "Worldwide";
+  loadJobs();
 }
 
