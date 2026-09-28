@@ -180,12 +180,30 @@ def search_jobs(
     refresh_live: bool = Query(False, description="Force refresh from live sources"),
     sort_by: str = Query("recent", description="Sort by: recent, salary_desc, salary_asc, deadline"),
     source: Optional[str] = Query(None, description="Source board e.g. Remote OK, Indeed, BDJobs"),
+    min_salary: Optional[float] = Query(None, description="Minimum salary threshold"),
+    max_salary: Optional[float] = Query(None, description="Maximum salary threshold"),
+    salary_currency: str = Query("BDT", description="Salary currency (BDT or USD)"),
+    salary_period: str = Query("Monthly", description="Salary period (Monthly or Annual)"),
     limit: int = Query(50, description="Results limit")
 ):
     """
     Comprehensive global multi-criteria search.
     Intelligently scores and evaluates candidate eligibility.
     """
+    # Ensure category jobs are populated in DB before querying
+    if category_id:
+        init_db()
+        conn = get_connection()
+        cat_count = conn.cursor().execute("SELECT count(*) FROM jobs WHERE category_id = ?", (category_id,)).fetchone()[0]
+        conn.close()
+        if cat_count < 5 or refresh_live:
+            try:
+                live_cat_jobs = bdjobs_client.fetch_jobs_by_category(category_id, page=1, rpp=50)
+                if live_cat_jobs:
+                    upsert_jobs(live_cat_jobs)
+            except Exception as e:
+                print(f"[SearchAPI] Error fetching live category: {e}")
+
     results = search_global_jobs(
         q=q,
         category_id=category_id,
@@ -198,33 +216,15 @@ def search_jobs(
         candidate_origin=candidate_origin,
         sort_by=sort_by,
         source=source,
+        min_salary=min_salary,
+        max_salary=max_salary,
+        salary_currency=salary_currency,
+        salary_period=salary_period,
         limit=limit
     )
 
-    # If category_id requested and DB has few results, or refresh_live is requested: fetch from BDJobs API
-    if category_id and (len(results) < 5 or refresh_live):
-        try:
-            live_cat_jobs = bdjobs_client.fetch_jobs_by_category(category_id, page=1, rpp=50)
-            if live_cat_jobs:
-                upsert_jobs(live_cat_jobs)
-                results = search_global_jobs(
-                    q=q,
-                    category_id=category_id,
-                    country=country,
-                    workplace_type=workplace_type,
-                    remote_policy=remote_policy,
-                    experience_level=experience_level,
-                    employment_type=employment_type,
-                    visa_sponsorship=visa_sponsorship,
-                    candidate_origin=candidate_origin,
-                    sort_by=sort_by,
-                    source=source,
-                    limit=limit
-                )
-        except Exception as e:
-            print(f"[SearchAPI] Error fetching live category: {e}")
     # If general query has insufficient results, fetch live from aggregator
-    elif q and len(results) < 5:
+    if q and len(results) < 5:
         try:
             live_jobs = global_aggregator.fetch_all(query=q, country=country, limit_per_source=15)
             if live_jobs:
@@ -241,6 +241,10 @@ def search_jobs(
                     candidate_origin=candidate_origin,
                     sort_by=sort_by,
                     source=source,
+                    min_salary=min_salary,
+                    max_salary=max_salary,
+                    salary_currency=salary_currency,
+                    salary_period=salary_period,
                     limit=limit
                 )
         except Exception:

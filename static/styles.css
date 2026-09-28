@@ -481,6 +481,150 @@ body {
   color: #7075f5;
 }
 
+/* Salary Filter Section */
+.salary-filter-section {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.salary-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.salary-main-label {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary) !important;
+  margin-bottom: 0 !important;
+}
+
+.currency-toggle-pill {
+  display: inline-flex;
+  background: rgba(10, 15, 29, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.curr-pill {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.curr-pill:hover {
+  color: var(--text-primary);
+}
+
+.curr-pill.active {
+  background: var(--accent-indigo);
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.4);
+}
+
+.salary-badge {
+  font-size: 12px !important;
+  font-weight: 700;
+  color: #a5b4fc !important;
+  min-width: 65px;
+  text-align: right;
+}
+
+.salary-dual-readout {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: rgba(10, 15, 29, 0.6);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-top: 8px;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.salary-quick-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.salary-preset-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.salary-preset-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--text-primary);
+}
+
+.salary-preset-btn.active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--accent-indigo);
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
+.salary-manual-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.salary-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.salary-input-prefix {
+  position: absolute;
+  left: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.salary-num-input {
+  padding: 5px 8px 5px 22px !important;
+  font-size: 12px !important;
+  height: 30px;
+}
+
+.salary-to-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
 /* Scoring Weights Accordion */
 .weights-panel {
   background: rgba(0, 0, 0, 0.2);

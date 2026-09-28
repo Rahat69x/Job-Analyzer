@@ -275,7 +275,11 @@ def search_global_jobs(
     candidate_origin: str = "Bangladesh",
     sort_by: str = "recent",
     source: Optional[str] = None,
-    limit: int = 50
+    limit: int = 50,
+    min_salary: Optional[float] = None,
+    max_salary: Optional[float] = None,
+    salary_currency: str = "BDT",
+    salary_period: str = "Monthly"
 ) -> List[NormalizedJob]:
     """Execute dynamic multi-criteria SQL query across the global job catalog."""
     init_db()
@@ -319,6 +323,31 @@ def search_global_jobs(
 
     if visa_sponsorship is True:
         conditions.append("visa_sponsorship = 1")
+
+    # Salary range filter (normalized to annual BDT)
+    ann_bdt_min = None
+    ann_bdt_max = None
+    if min_salary is not None and float(min_salary) > 0:
+        val_min = float(min_salary)
+        if salary_currency.upper() == "USD":
+            ann_usd_min = val_min if salary_period.lower() == "annual" else val_min * 12.0
+            ann_bdt_min = ann_usd_min * 120.0
+        else: # BDT
+            ann_bdt_min = val_min * 12.0 if salary_period.lower() == "monthly" else val_min
+        
+        conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_max, salary_bdt_min) >= ?")
+        params.append(ann_bdt_min)
+
+    if max_salary is not None and float(max_salary) > 0:
+        val_max = float(max_salary)
+        if salary_currency.upper() == "USD":
+            ann_usd_max = val_max if salary_period.lower() == "annual" else val_max * 12.0
+            ann_bdt_max = ann_usd_max * 120.0
+        else: # BDT
+            ann_bdt_max = val_max * 12.0 if salary_period.lower() == "monthly" else val_max
+        
+        conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_min, salary_bdt_max) <= ?")
+        params.append(ann_bdt_max)
 
     # Smart tokenized search query
     raw_tokens = []
@@ -385,6 +414,12 @@ def search_global_jobs(
             fb_params.append(workplace_type)
         if visa_sponsorship is True:
             fb_conditions.append("visa_sponsorship = 1")
+        if ann_bdt_min is not None:
+            fb_conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_max, salary_bdt_min) >= ?")
+            fb_params.append(ann_bdt_min)
+        if ann_bdt_max is not None:
+            fb_conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_min, salary_bdt_max) <= ?")
+            fb_params.append(ann_bdt_max)
 
         search_tokens = content_tokens if content_tokens else raw_tokens
         or_conds = []

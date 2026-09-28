@@ -51,6 +51,192 @@ function debounce(fn, delay = 400) {
 }
 const debouncedLoadJobs = debounce(() => loadJobs(), 400);
 
+// ==================== SALARY FILTER STATE & HELPERS ====================
+const salaryState = {
+  currency: "BDT", // "BDT" (Monthly) or "USD" (Annual)
+  min: 0,
+  max: 0,
+  sliderMaxBDT: 200000,
+  sliderMaxUSD: 200000,
+  stepBDT: 5000,
+  stepUSD: 5000,
+  exchangeRate: 120 // 1 USD = 120 BDT
+};
+
+const SALARY_PRESETS = {
+  BDT: [
+    { label: "Any", val: 0 },
+    { label: "30K+ ৳", val: 30000 },
+    { label: "60K+ ৳", val: 60000 },
+    { label: "100K+ ৳ (High)", val: 100000 },
+    { label: "$50K+ (Global)", val: 500000 }
+  ],
+  USD: [
+    { label: "Any", val: 0 },
+    { label: "$30K+", val: 30000 },
+    { label: "$60K+", val: 60000 },
+    { label: "$100K+ (High)", val: 100000 },
+    { label: "$150K+ (Top)", val: 150000 }
+  ]
+};
+
+function updateSalarySliderFill(val) {
+  const slider = document.getElementById("input-salary-slider");
+  if (!slider) return;
+  const min = parseFloat(slider.min) || 0;
+  const max = parseFloat(slider.max) || 100;
+  const pct = Math.min(100, Math.max(0, ((val - min) / (max - min)) * 100));
+  slider.style.background = `linear-gradient(to right, #6366f1 0%, #6366f1 ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
+}
+
+function formatSalaryDisplay(val, currency) {
+  if (!val || val <= 0) return "Any";
+  if (currency === "BDT") {
+    if (val >= 100000) return `৳${(val / 100000).toFixed(val % 100000 === 0 ? 0 : 1)}L+/mo`;
+    return `৳${Math.round(val / 1000)}k+/mo`;
+  } else {
+    return `$${Math.round(val / 1000)}k+/yr`;
+  }
+}
+
+function updateSalaryReadout() {
+  const readout = document.getElementById("salary-dual-readout");
+  const badge = document.getElementById("label-salary-display");
+  if (!readout || !badge) return;
+
+  const minVal = salaryState.min;
+  const maxVal = salaryState.max;
+
+  badge.textContent = formatSalaryDisplay(minVal, salaryState.currency);
+
+  if (minVal <= 0 && maxVal <= 0) {
+    readout.innerHTML = `<span>All salaries (Disclosed & Negotiable)</span>`;
+    return;
+  }
+
+  if (salaryState.currency === "BDT") {
+    // BDT Monthly
+    const bdtMinText = minVal > 0 ? `৳${minVal.toLocaleString()}` : "0";
+    const bdtMaxText = maxVal > 0 ? `৳${maxVal.toLocaleString()}` : "";
+    const bdtRange = maxVal > 0 ? `${bdtMinText} – ${bdtMaxText}/mo` : `≥ ${bdtMinText}/mo`;
+
+    // Dual conversion in USD (annual)
+    const usdMinAnnual = Math.round((minVal * 12) / salaryState.exchangeRate);
+    const usdMaxAnnual = maxVal > 0 ? Math.round((maxVal * 12) / salaryState.exchangeRate) : 0;
+    const usdEquiv = maxVal > 0 
+      ? `~$${(usdMinAnnual / 1000).toFixed(0)}k–$${(usdMaxAnnual / 1000).toFixed(0)}k/yr USD`
+      : `~$${(usdMinAnnual / 1000).toFixed(0)}k+/yr USD`;
+
+    readout.innerHTML = `<span>Range: <strong>${bdtRange}</strong></span><span style="color: #6ee7b7; font-size: 10.5px;">${usdEquiv}</span>`;
+  } else {
+    // USD Annual
+    const usdMinText = minVal > 0 ? `$${minVal.toLocaleString()}` : "0";
+    const usdMaxText = maxVal > 0 ? `$${maxVal.toLocaleString()}` : "";
+    const usdRange = maxVal > 0 ? `${usdMinText} – ${usdMaxText}/yr` : `≥ ${usdMinText}/yr`;
+
+    // Dual conversion in BDT (monthly)
+    const bdtMinMo = Math.round((minVal * salaryState.exchangeRate) / 12);
+    const bdtMaxMo = maxVal > 0 ? Math.round((maxVal * salaryState.exchangeRate) / 12) : 0;
+    const bdtEquiv = maxVal > 0
+      ? `~৳${formatBDT(bdtMinMo)}–${formatBDT(bdtMaxMo)}/mo`
+      : `~৳${formatBDT(bdtMinMo)}+/mo BDT`;
+
+    readout.innerHTML = `<span>Range: <strong>${usdRange}</strong></span><span style="color: #818cf8; font-size: 10.5px;">${bdtEquiv}</span>`;
+  }
+}
+
+function renderSalaryPresets() {
+  const container = document.getElementById("salary-quick-presets");
+  if (!container) return;
+  const presets = SALARY_PRESETS[salaryState.currency] || SALARY_PRESETS.BDT;
+  container.innerHTML = presets.map(p => {
+    const isActive = (salaryState.min === p.val && salaryState.max === 0);
+    return `<button type="button" class="salary-preset-btn ${isActive ? 'active' : ''}" data-val="${p.val}">${p.label}</button>`;
+  }).join("");
+
+  container.querySelectorAll(".salary-preset-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const val = parseFloat(btn.getAttribute("data-val")) || 0;
+      setSalaryFilter(val, 0, true);
+    });
+  });
+}
+
+function setSalaryFilter(minVal, maxVal = 0, triggerSearch = true) {
+  salaryState.min = Math.max(0, minVal);
+  salaryState.max = Math.max(0, maxVal);
+
+  const slider = document.getElementById("input-salary-slider");
+  const minInput = document.getElementById("input-salary-min");
+  const maxInput = document.getElementById("input-salary-max");
+
+  if (slider) {
+    slider.value = salaryState.min;
+    updateSalarySliderFill(salaryState.min);
+  }
+
+  if (minInput) minInput.value = salaryState.min > 0 ? salaryState.min : "";
+  if (maxInput) maxInput.value = salaryState.max > 0 ? salaryState.max : "";
+
+  updateSalaryReadout();
+
+  const presets = document.querySelectorAll(".salary-preset-btn");
+  presets.forEach(p => {
+    const val = parseFloat(p.getAttribute("data-val")) || 0;
+    p.classList.toggle("active", val === salaryState.min && salaryState.max === 0);
+  });
+
+  if (triggerSearch) {
+    loadJobs();
+  }
+}
+
+function setSalaryCurrency(curr) {
+  if (salaryState.currency === curr) return;
+  salaryState.currency = curr;
+
+  const btnBdt = document.getElementById("btn-curr-bdt");
+  const btnUsd = document.getElementById("btn-curr-usd");
+  const prefixMin = document.getElementById("salary-prefix-min");
+  const prefixMax = document.getElementById("salary-prefix-max");
+  const slider = document.getElementById("input-salary-slider");
+
+  if (curr === "BDT") {
+    if (btnBdt) btnBdt.classList.add("active");
+    if (btnUsd) btnUsd.classList.remove("active");
+    if (prefixMin) prefixMin.textContent = "৳";
+    if (prefixMax) prefixMax.textContent = "৳";
+    if (slider) {
+      slider.max = salaryState.sliderMaxBDT;
+      slider.step = salaryState.stepBDT;
+    }
+  } else {
+    if (btnBdt) btnBdt.classList.remove("active");
+    if (btnUsd) btnUsd.classList.add("active");
+    if (prefixMin) prefixMin.textContent = "$";
+    if (prefixMax) prefixMax.textContent = "$";
+    if (slider) {
+      slider.max = salaryState.sliderMaxUSD;
+      slider.step = salaryState.stepUSD;
+    }
+  }
+
+  salaryState.min = 0;
+  salaryState.max = 0;
+  if (slider) {
+    slider.value = 0;
+    updateSalarySliderFill(0);
+  }
+  const minInput = document.getElementById("input-salary-min");
+  const maxInput = document.getElementById("input-salary-max");
+  if (minInput) minInput.value = "";
+  if (maxInput) maxInput.value = "";
+
+  renderSalaryPresets();
+  updateSalaryReadout();
+  loadJobs();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initEventListeners();
   setupBookmarkletLink();
@@ -123,6 +309,68 @@ function initEventListeners() {
     updateSliderFill(e.target.value);
   });
   expSlider.addEventListener("change", () => loadJobs());
+
+  // Salary Filter Controls
+  const salarySlider = document.getElementById("input-salary-slider");
+  if (salarySlider) {
+    updateSalarySliderFill(salarySlider.value);
+    salarySlider.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value) || 0;
+      salaryState.min = val;
+      updateSalarySliderFill(val);
+      const minInput = document.getElementById("input-salary-min");
+      if (minInput) minInput.value = val > 0 ? val : "";
+      updateSalaryReadout();
+      document.querySelectorAll(".salary-preset-btn").forEach(p => {
+        const pVal = parseFloat(p.getAttribute("data-val")) || 0;
+        p.classList.toggle("active", pVal === val && salaryState.max === 0);
+      });
+    });
+    salarySlider.addEventListener("change", () => loadJobs());
+  }
+
+  const btnCurrBdt = document.getElementById("btn-curr-bdt");
+  if (btnCurrBdt) {
+    btnCurrBdt.addEventListener("click", () => setSalaryCurrency("BDT"));
+  }
+  const btnCurrUsd = document.getElementById("btn-curr-usd");
+  if (btnCurrUsd) {
+    btnCurrUsd.addEventListener("click", () => setSalaryCurrency("USD"));
+  }
+
+  const minSalaryInput = document.getElementById("input-salary-min");
+  if (minSalaryInput) {
+    minSalaryInput.addEventListener("input", debounce(() => {
+      const val = parseFloat(minSalaryInput.value) || 0;
+      salaryState.min = val;
+      if (salarySlider && val <= parseFloat(salarySlider.max)) {
+        salarySlider.value = val;
+        updateSalarySliderFill(val);
+      }
+      updateSalaryReadout();
+      loadJobs();
+    }, 400));
+  }
+
+  const maxSalaryInput = document.getElementById("input-salary-max");
+  if (maxSalaryInput) {
+    maxSalaryInput.addEventListener("input", debounce(() => {
+      const val = parseFloat(maxSalaryInput.value) || 0;
+      salaryState.max = val;
+      updateSalaryReadout();
+      loadJobs();
+    }, 400));
+  }
+
+  const btnSalaryReset = document.getElementById("btn-salary-reset");
+  if (btnSalaryReset) {
+    btnSalaryReset.addEventListener("click", () => {
+      setSalaryFilter(0, 0, true);
+    });
+  }
+
+  renderSalaryPresets();
+  updateSalaryReadout();
 
   // Smart Job Role & Skills Autocomplete
   const skillsInput = document.getElementById("input-skills");
@@ -278,6 +526,16 @@ async function loadJobs(refreshLive = false) {
   if (exp) params.append("experience", exp);
   if (visaOnly) params.append("visa_sponsorship", "true");
   if (refreshLive) params.append("refresh_live", "true");
+
+  // Salary range filters
+  if (salaryState.min > 0) {
+    params.append("min_salary", salaryState.min);
+  }
+  if (salaryState.max > 0) {
+    params.append("max_salary", salaryState.max);
+  }
+  params.append("salary_currency", salaryState.currency);
+  params.append("salary_period", salaryState.currency === "USD" ? "Annual" : "Monthly");
   
   if (!activeCompanyFilter) {
     const currentCfg = tabConfig[currentTab];
@@ -299,7 +557,13 @@ async function loadJobs(refreshLive = false) {
     // Filter by candidate eligibility if checkbox is checked
     const eligibleOnly = document.getElementById("filter-eligible-only") ? document.getElementById("filter-eligible-only").checked : false;
     if (eligibleOnly) {
-      results = results.filter(r => r.job.candidate_eligibility.is_eligible);
+      results = results.filter(r => r.job.candidate_eligibility && r.job.candidate_eligibility.is_eligible);
+    }
+
+    // Filter by international applicants if checkbox is checked
+    const intlOnly = document.getElementById("filter-intl-only") ? document.getElementById("filter-intl-only").checked : false;
+    if (intlOnly) {
+      results = results.filter(r => r.job.remote_eligibility && r.job.remote_eligibility.accepts_international);
     }
 
     loadedJobs = results.map(r => r.job);

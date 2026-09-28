@@ -71,3 +71,40 @@ def test_taxonomy_counts():
     assert len(func) == 31
     assert len(spec) == 33
 
+def test_salary_filtering_bdt():
+    response = client.get("/api/global/search?min_salary=50000&salary_currency=BDT&salary_period=Monthly")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] > 0
+    for r in data["results"]:
+        job = r["job"]
+        assert job["salary"]["disclosed"] is True
+        # Annualized BDT should be at least 50,000 * 12 = 600,000
+        bdt_high = job["salary"]["salary_bdt_max"] or job["salary"]["salary_bdt_min"]
+        assert bdt_high >= 600000
+
+def test_salary_filtering_usd():
+    response = client.get("/api/global/search?min_salary=50000&salary_currency=USD&salary_period=Annual")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] > 0
+    for r in data["results"]:
+        job = r["job"]
+        assert job["salary"]["disclosed"] is True
+        usd_high = job["salary"]["salary_usd_max"] or job["salary"]["salary_usd_min"]
+        assert usd_high >= 50000
+
+def test_category_and_salary_filtering_alone():
+    # Category 11 = Healthcare/Medical with min_salary 50,000 BDT/mo alone
+    response = client.get("/api/global/search?category_id=11&min_salary=50000&salary_currency=BDT&salary_period=Monthly")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] > 0
+    for r in data["results"]:
+        job = r["job"]
+        assert job["category_id"] == 11
+        assert job["salary"]["disclosed"] is True
+        bdt_high = job["salary"]["salary_bdt_max"] or job["salary"]["salary_bdt_min"]
+        assert bdt_high >= 600000
+
+

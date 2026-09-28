@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/styles.css?v=3.2.2">
+  <link rel="stylesheet" href="/static/styles.css?v=3.3.0">
 </head>
 <body>
   <div class="app-container">
@@ -160,6 +160,54 @@
             </div>
           </div>
 
+          <!-- Salary Expectation / Range Filter -->
+          <div class="form-group salary-filter-section">
+            <div class="salary-header-row">
+              <label for="input-salary-slider" class="salary-main-label">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Minimum Salary
+              </label>
+              <div class="currency-toggle-pill">
+                <button type="button" id="btn-curr-bdt" class="curr-pill active" title="Filter in Bangladeshi Taka (Monthly)">BDT ৳</button>
+                <button type="button" id="btn-curr-usd" class="curr-pill" title="Filter in US Dollars (Annual)">USD $</button>
+              </div>
+            </div>
+
+            <!-- Slider row -->
+            <div class="slider-container" style="margin-top: 4px;">
+              <input type="range" id="input-salary-slider" min="0" max="200000" step="5000" value="0">
+              <span id="label-salary-display" class="slider-value salary-badge">Any</span>
+            </div>
+
+            <!-- Dual-currency live readout & conversion -->
+            <div id="salary-dual-readout" class="salary-dual-readout">
+              All salaries (Disclosed & Negotiable)
+            </div>
+
+            <!-- Quick High Salary Presets -->
+            <div class="salary-quick-presets" id="salary-quick-presets">
+              <button type="button" class="salary-preset-btn active" data-bdt="0" data-usd="0">Any</button>
+              <button type="button" class="salary-preset-btn" data-bdt="30000" data-usd="3000">30K+ ৳</button>
+              <button type="button" class="salary-preset-btn" data-bdt="60000" data-usd="6000">60K+ ৳</button>
+              <button type="button" class="salary-preset-btn" data-bdt="100000" data-usd="10000">100K+ ৳ (High)</button>
+              <button type="button" class="salary-preset-btn" data-bdt="500000" data-usd="50000">$50K+ (Global)</button>
+            </div>
+
+            <!-- Min / Max Manual Numeric Inputs -->
+            <div class="salary-manual-inputs">
+              <div class="salary-input-wrap">
+                <span class="salary-input-prefix" id="salary-prefix-min">৳</span>
+                <input type="number" id="input-salary-min" class="form-input salary-num-input" placeholder="Min" min="0" step="1000">
+              </div>
+              <span class="salary-to-text">to</span>
+              <div class="salary-input-wrap">
+                <span class="salary-input-prefix" id="salary-prefix-max">৳</span>
+                <input type="number" id="input-salary-max" class="form-input salary-num-input" placeholder="Max" min="0" step="1000">
+              </div>
+              <button type="button" id="btn-salary-reset" class="btn btn-secondary btn-sm" title="Reset salary filter" style="padding: 4px 8px; font-size: 11px;">Reset</button>
+            </div>
+          </div>
+
           <div class="form-group">
             <label>
               <input type="checkbox" id="check-partners" checked style="accent-color: var(--accent-indigo); margin-right: 6px;">
@@ -190,7 +238,7 @@
               <label><input type="checkbox" id="filter-intl-only"> International Applicants Accepted</label>
             </div>
             <div class="filter-check-row">
-              <label><input type="checkbox" id="filter-eligible-only" checked> Only Eligible Jobs for My Origin</label>
+              <label><input type="checkbox" id="filter-eligible-only"> Only Eligible Jobs for My Origin</label>
             </div>
           </div>
 
@@ -559,7 +607,7 @@
     </div>
   </div>
 
-  <script src="/static/autocomplete.js?v=3.2.2"></script>
-  <script src="/static/app.js?v=3.2.2"></script>
+  <script src="/static/autocomplete.js?v=3.3.0"></script>
+  <script src="/static/app.js?v=3.3.0"></script>
 </body>
 </html>
