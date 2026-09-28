@@ -216,65 +216,68 @@
           </div>
         </aside>
 
-        <!-- Category & Worldwide Taxonomy Card -->
-        <section class="glass-card taxonomy-card">
-          <div class="section-title">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"></path></svg>
-            Job Taxonomy & Industry Sectors (64 Categories + Global Feeds)
-          </div>
+        <!-- Right Column: Sector Selection & Job Listings Feed -->
+        <div class="main-content-column">
+          <!-- Category & Worldwide Taxonomy Card -->
+          <section class="glass-card taxonomy-card">
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"></path></svg>
+              Job Taxonomy & Industry Sectors (64 Categories + Global Feeds)
+            </div>
 
-          <div class="category-tabs">
-            <button id="tab-functional" class="tab-btn active">Functional Roles (31)</button>
-            <button id="tab-special" class="tab-btn">Special Skilled (33)</button>
-            <button id="tab-global-sources" class="tab-btn">Global Connectors (8)</button>
-            <input type="text" id="category-search" class="form-input" placeholder="Search categories..." style="width: 200px; padding: 4px 10px; margin-left: auto;">
-          </div>
+            <div class="category-tabs">
+              <button id="tab-functional" class="tab-btn active">Functional Roles (31)</button>
+              <button id="tab-special" class="tab-btn">Special Skilled (33)</button>
+              <button id="tab-global-sources" class="tab-btn">Global Connectors (8)</button>
+              <input type="text" id="category-search" class="form-input" placeholder="Search categories..." style="width: 200px; padding: 4px 10px; margin-left: auto;">
+            </div>
 
-          <div id="category-chips-container" class="category-chips">
-            <!-- Populated dynamically -->
-          </div>
+            <div id="category-chips-container" class="category-chips">
+              <!-- Populated dynamically -->
+            </div>
 
-          <div class="category-status-footer" id="category-status-footer">
-            <span class="cat-footer-label">Selected Sector:</span>
-            <span class="cat-footer-badge" id="active-category-display">IT/Telecommunication</span>
-            <span class="cat-footer-hint">• Click any industry sector to filter live jobs</span>
-          </div>
-        </section>
-      </div>
+            <div class="category-status-footer" id="category-status-footer">
+              <span class="cat-footer-label">Selected Sector:</span>
+              <span class="cat-footer-badge" id="active-category-display">IT/Telecommunication</span>
+              <span class="cat-footer-hint">• Click any industry sector to filter live jobs</span>
+            </div>
+          </section>
 
-      <!-- Ranked Results Feed -->
-      <main class="glass-card">
-        <div class="results-header">
-          <div class="results-stats">
-            Market Scope: <strong id="current-scope-label">Worldwide & Bangladesh</strong> | 
-            Evaluated Openings: <strong id="total-jobs-count">0</strong>
-          </div>
-          <div class="view-options">
-            <span class="currency-indicator">Showing in USD & BDT equivalent</span>
-          </div>
-        </div>
+          <!-- Ranked Results Feed (Moved upward to use freed space) -->
+          <main class="glass-card">
+            <div class="results-header">
+              <div class="results-stats">
+                Market Scope: <strong id="current-scope-label">Worldwide & Bangladesh</strong> | 
+                Evaluated Openings: <strong id="total-jobs-count">0</strong>
+              </div>
+              <div class="view-options">
+                <span class="currency-indicator">Showing in USD & BDT equivalent</span>
+              </div>
+            </div>
 
-        <div class="jobs-table-container">
-          <table class="jobs-table" id="jobs-table">
-            <thead>
-              <tr>
-                <th>Job & Role</th>
-                <th>Company & Tier</th>
-                <th>Location / Mode</th>
-                <th>Eligibility</th>
-                <th>Salary</th>
-                <th>Score</th>
-                <th>Apply Direct</th>
-                <th>Track</th>
-              </tr>
-            </thead>
-            <tbody id="jobs-table-body">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-      </main>
-    </div>
+            <div class="jobs-table-container">
+              <table class="jobs-table" id="jobs-table">
+                <thead>
+                  <tr>
+                    <th>Job & Role</th>
+                    <th>Company & Tier</th>
+                    <th>Location / Mode</th>
+                    <th>Eligibility</th>
+                    <th>Salary</th>
+                    <th>Score</th>
+                    <th>Apply Direct</th>
+                    <th>Track</th>
+                  </tr>
+                </thead>
+                <tbody id="jobs-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </main>
+        </div><!-- /.main-content-column -->
+      </div><!-- /.control-grid -->
+    </div><!-- /#view-explorer -->
 
     <!-- VIEW 2: REMOTE-FIRST HUB -->
     <div id="view-remote" class="view-panel">
