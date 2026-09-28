@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/styles.css?v=3.3.0">
+  <link rel="stylesheet" href="/static/styles.css?v=3.4.0">
 </head>
 <body>
   <div class="app-container">
@@ -286,17 +286,20 @@
 
             <div class="category-status-footer" id="category-status-footer">
               <span class="cat-footer-label" id="cat-footer-label">Selected Sector:</span>
-              <span class="cat-footer-badge" id="active-category-display">IT/Telecommunication</span>
-              <span class="cat-footer-hint" id="cat-footer-hint">• Click any industry sector to filter live jobs</span>
+              <span class="cat-footer-badge" id="active-category-display">All Sectors</span>
+              <span class="cat-footer-hint" id="cat-footer-hint">• Showing all industry sectors across global & Bangladesh sources • Click any industry sector to filter live jobs</span>
             </div>
           </section>
 
           <!-- Ranked Results Feed (Moved upward to use freed space) -->
           <main class="glass-card">
             <div class="results-header">
-              <div class="results-stats">
-                Market Scope: <strong id="current-scope-label">Worldwide & Bangladesh</strong> | 
-                Evaluated Openings: <strong id="total-jobs-count">0</strong>
+              <div class="results-stats-col">
+                <div class="results-stats">
+                  Market Scope: <strong id="current-scope-label">Worldwide & Bangladesh</strong> | 
+                  Evaluated Openings: <strong id="total-jobs-count">0</strong>
+                </div>
+                <div id="source-status-bar" class="source-status-bar"></div>
               </div>
               <div class="view-options">
                 <span class="currency-indicator">Showing in USD & BDT equivalent</span>
@@ -607,7 +610,7 @@
     </div>
   </div>
 
-  <script src="/static/autocomplete.js?v=3.3.0"></script>
-  <script src="/static/app.js?v=3.3.0"></script>
+  <script src="/static/autocomplete.js?v=3.4.0"></script>
+  <script src="/static/app.js?v=3.4.0"></script>
 </body>
 </html>

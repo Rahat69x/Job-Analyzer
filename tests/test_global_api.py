@@ -107,4 +107,28 @@ def test_category_and_salary_filtering_alone():
         bdt_high = job["salary"]["salary_bdt_max"] or job["salary"]["salary_bdt_min"]
         assert bdt_high >= 600000
 
+def test_global_scope_combines_all_connected_sources():
+    # When no category is selected, search should evaluate across all connected sources
+    response = client.get("/api/global/search")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] >= 400
+    sources = data.get("sources_evaluated", {})
+    assert len(sources) >= 5
+    assert "BDJobs" in sources
+    assert "CompanyCareerPage" in sources
+    assert "source_health" in data
+    assert isinstance(data.get("unavailable_sources"), list)
+
+def test_category_filters_aggregate_across_sources():
+    # Category 8 (IT) should pull from BDJobs, CompanyCareerPage, Remote OK, etc.
+    response = client.get("/api/global/search?category_id=8")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] > 50
+    sources = data.get("sources_evaluated", {})
+    assert "BDJobs" in sources
+    assert "CompanyCareerPage" in sources
+    assert len(sources) >= 3
+
 

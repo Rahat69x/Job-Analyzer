@@ -19,24 +19,24 @@ const GLOBAL_CONNECTORS = [
 const tabConfig = {
   "Functional": {
     label: "Selected Sector:",
-    hint: "• Click any industry sector to filter live jobs",
-    selectedId: 8,
-    selectedName: "IT/Telecommunication",
+    hint: "• Showing all industry sectors across global & Bangladesh sources • Click any industry sector to filter live jobs",
+    selectedId: null,
+    selectedName: "All Sectors",
     filterType: "category_id"
   },
   "Special Skilled": {
     label: "Selected Skill:",
-    hint: "• Click any vocational skill to filter live jobs",
-    selectedId: 88,
-    selectedName: "Beautician/ Salon worker",
+    hint: "• Showing all vocational skills • Click any skill to filter live jobs",
+    selectedId: null,
+    selectedName: "All Skills",
     filterType: "category_id"
   },
   "Global": {
     label: "Selected Source:",
-    hint: "• Click any global connector to filter live jobs",
-    selectedId: 901,
-    selectedName: "Remote OK (Worldwide Tech)",
-    selectedSource: "Remote OK",
+    hint: "• Showing all connected worldwide & Bangladesh sources • Click any source to filter",
+    selectedId: null,
+    selectedName: "All Global & BD Sources",
+    selectedSource: null,
     filterType: "source"
   }
 };
@@ -547,7 +547,7 @@ async function loadJobs(refreshLive = false) {
       }
     }
   }
-  params.append("limit", "50");
+  params.append("limit", "500");
 
   try {
     const res = await fetch(`/api/global/search?${params.toString()}`);
@@ -570,9 +570,13 @@ async function loadJobs(refreshLive = false) {
     document.getElementById("total-jobs-count").textContent = results.length;
     document.getElementById("current-scope-label").textContent = country === "Worldwide" ? "Worldwide & Bangladesh" : country;
 
+    renderSourceStatus(data);
     renderJobsTable(results);
   } catch (err) {
     console.error("Error loading jobs:", err);
+    document.getElementById("total-jobs-count").textContent = "0";
+    const bar = document.getElementById("source-status-bar");
+    if (bar) bar.innerHTML = `<span class="source-alert-pill">⚠️ Connection error: Job feeds temporarily unreachable</span>`;
     tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--accent-rose); padding: 30px;">Failed to load job listings. Please ensure server is running.</td></tr>`;
   }
 }
@@ -656,6 +660,54 @@ function renderJobsTable(results) {
       </tr>
     `;
   }).join("");
+}
+
+function renderSourceStatus(data) {
+  const bar = document.getElementById("source-status-bar");
+  if (!bar) return;
+
+  const sourcesEvaluated = (data && data.sources_evaluated) ? data.sources_evaluated : {};
+  const unavailableSources = (data && data.unavailable_sources) ? data.unavailable_sources : [];
+  const sourceHealth = (data && data.source_health) ? data.source_health : {};
+
+  const allKnownSources = [
+    { name: "BDJobs", label: "BDJobs" },
+    { name: "CompanyCareerPage", label: "Curated & Career Pages" },
+    { name: "Indeed", label: "Indeed Global" },
+    { name: "Remote OK", label: "Remote OK" },
+    { name: "We Work Remotely", label: "We Work Remotely" },
+    { name: "Skill.jobs", label: "Skill.jobs" },
+    { name: "Chakri", label: "Chakri" }
+  ];
+
+  let chipsHtml = `<span class="source-title-label">Evaluated Sources:</span>`;
+
+  allKnownSources.forEach(s => {
+    const count = sourcesEvaluated[s.name] || 0;
+    const health = sourceHealth[s.name] || { status: "online" };
+    const isOnline = health.status !== "unavailable";
+    const hasJobs = count > 0;
+    
+    chipsHtml += `
+      <span class="source-chip ${hasJobs ? 'has-jobs' : ''} ${!isOnline ? 'offline' : ''}" title="${escapeHtml(health.message || s.name)}">
+        <span class="source-dot"></span>
+        <span>${escapeHtml(s.label)}</span>
+        <span class="source-count">${count}</span>
+      </span>
+    `;
+  });
+
+  if (unavailableSources && unavailableSources.length > 0) {
+    unavailableSources.forEach(u => {
+      chipsHtml += `
+        <span class="source-alert-pill" title="${escapeHtml(u.reason || 'Source unreachable')}">
+          ⚠️ ${escapeHtml(u.source)} unavailable
+        </span>
+      `;
+    });
+  }
+
+  bar.innerHTML = chipsHtml;
 }
 
 function formatBDT(amount) {
@@ -1084,10 +1136,16 @@ function renderCategoryChips(searchFilter = "") {
   if (!container) return;
 
   let categories = [];
+  let allLabel = "All Sectors";
   if (currentTab === "Global") {
     categories = [...GLOBAL_CONNECTORS];
+    allLabel = "All Sources";
+  } else if (currentTab === "Special Skilled") {
+    categories = (currentTaxonomy.categories || []).filter(c => c.type === currentTab);
+    allLabel = "All Skills";
   } else {
     categories = (currentTaxonomy.categories || []).filter(c => c.type === currentTab);
+    allLabel = "All Sectors";
   }
 
   if (searchFilter) {
@@ -1096,10 +1154,17 @@ function renderCategoryChips(searchFilter = "") {
   }
 
   const currentSelectedId = tabConfig[currentTab] ? tabConfig[currentTab].selectedId : null;
+  const isAllActive = (currentSelectedId === null);
 
-  container.innerHTML = categories.map(cat => {
+  let chipsHtml = `
+    <div class="cat-chip ${isAllActive ? 'active' : ''}" data-id="all" data-name="${allLabel}" onclick="selectCategory(null, '${allLabel}')">
+      <span>${allLabel}</span>
+    </div>
+  `;
+
+  chipsHtml += categories.map(cat => {
     const count = (cat.active_jobs !== undefined && cat.active_jobs !== null) ? cat.active_jobs : (cat.job_count || '');
-    const isActive = (cat.id === currentSelectedId);
+    const isActive = (currentSelectedId !== null && cat.id === currentSelectedId);
     return `
       <div class="cat-chip ${isActive ? 'active' : ''}" data-id="${cat.id}" data-name="${escapeHtml(cat.name)}" onclick="selectCategory(${cat.id}, this.getAttribute('data-name'))">
         <span>${escapeHtml(cat.name)}</span>
@@ -1108,6 +1173,7 @@ function renderCategoryChips(searchFilter = "") {
     `;
   }).join("");
 
+  container.innerHTML = chipsHtml;
   updateStatusFooter();
 }
 
@@ -1115,10 +1181,20 @@ function selectCategory(catId, catName) {
   const cfg = tabConfig[currentTab];
   if (!cfg) return;
 
+  // Toggle off to All if already selected
+  if (cfg.selectedId === catId && catId !== null) {
+    const defaultName = currentTab === "Functional" ? "All Sectors" : (currentTab === "Special Skilled" ? "All Skills" : "All Global & BD Sources");
+    selectCategory(null, defaultName);
+    return;
+  }
+
   cfg.selectedId = catId;
   activeCompanyFilter = null;
 
-  if (currentTab === "Global") {
+  if (catId === null) {
+    cfg.selectedName = catName || (currentTab === "Functional" ? "All Sectors" : (currentTab === "Special Skilled" ? "All Skills" : "All Global & BD Sources"));
+    cfg.selectedSource = null;
+  } else if (currentTab === "Global") {
     const conn = GLOBAL_CONNECTORS.find(c => c.id === catId);
     if (conn) {
       cfg.selectedName = conn.name;
@@ -1140,8 +1216,13 @@ function selectCategory(catId, catName) {
   const container = document.getElementById("category-chips-container");
   if (container) {
     container.querySelectorAll(".cat-chip").forEach(chip => {
-      const chipId = parseInt(chip.getAttribute("data-id"), 10);
-      chip.classList.toggle("active", chipId === catId);
+      const chipIdAttr = chip.getAttribute("data-id");
+      if (catId === null) {
+        chip.classList.toggle("active", chipIdAttr === "all");
+      } else {
+        const chipId = parseInt(chipIdAttr, 10);
+        chip.classList.toggle("active", chipId === catId);
+      }
     });
   }
 

@@ -263,7 +263,9 @@ class IndeedGlobalConnector(BaseJobConnector):
                 "exp": "3 to 6 years",
                 "skills": ["Java", "Kotlin", "Spring Boot", "Kubernetes", "AWS"],
                 "context": "Berlin headquarters. Visa sponsorship and complete relocation package provided for international applicants.",
-                "url": "https://de.indeed.com/viewjob?jk=deliveryhero-java-berlin"
+                "url": "https://de.indeed.com/viewjob?jk=deliveryhero-java-berlin",
+                "category_id": 8,
+                "category_name": "IT/Telecommunication"
             },
             {
                 "id": "indeed-sg-102",
@@ -276,7 +278,9 @@ class IndeedGlobalConnector(BaseJobConnector):
                 "exp": "4 to 7 years",
                 "skills": ["Python", "SQL", "Machine Learning", "Data Science", "Tableau"],
                 "context": "Singapore Tech Hub. EP visa sponsorship available for qualified candidates.",
-                "url": "https://sg.indeed.com/viewjob?jk=grab-data-scientist-sg"
+                "url": "https://sg.indeed.com/viewjob?jk=grab-data-scientist-sg",
+                "category_id": 8,
+                "category_name": "IT/Telecommunication"
             },
             {
                 "id": "indeed-in-103",
@@ -289,7 +293,9 @@ class IndeedGlobalConnector(BaseJobConnector):
                 "exp": "2 to 5 years",
                 "skills": ["C++", "C", "Algorithms", "Multithreading", "Linux"],
                 "context": "High-frequency trading technology infrastructure. On-site in Gurgaon.",
-                "url": "https://in.indeed.com/viewjob?jk=tower-research-cpp-in"
+                "url": "https://in.indeed.com/viewjob?jk=tower-research-cpp-in",
+                "category_id": 1,
+                "category_name": "Accounting/Finance"
             },
             {
                 "id": "indeed-uk-104",
@@ -302,7 +308,9 @@ class IndeedGlobalConnector(BaseJobConnector):
                 "exp": "5 to 8 years",
                 "skills": ["Cloud Architecture", "AWS", "Terraform", "Kubernetes", "Security"],
                 "context": "London office or UK Hybrid. Skilled Worker visa sponsorship available.",
-                "url": "https://uk.indeed.com/viewjob?jk=revolut-cloud-architect-uk"
+                "url": "https://uk.indeed.com/viewjob?jk=revolut-cloud-architect-uk",
+                "category_id": 2,
+                "category_name": "Bank/Non-Bank Fin. Institution"
             },
             {
                 "id": "indeed-uae-105",
@@ -315,7 +323,9 @@ class IndeedGlobalConnector(BaseJobConnector):
                 "exp": "3 to 6 years",
                 "skills": ["Flutter", "Dart", "iOS", "Android", "Mobile Development"],
                 "context": "Dubai Media City. Tax-free salary, UAE residence visa and relocation provided.",
-                "url": "https://ae.indeed.com/viewjob?jk=careem-flutter-dubai"
+                "url": "https://ae.indeed.com/viewjob?jk=careem-flutter-dubai",
+                "category_id": 8,
+                "category_name": "IT/Telecommunication"
             },
             {
                 "id": "indeed-bd-106",
@@ -328,7 +338,24 @@ class IndeedGlobalConnector(BaseJobConnector):
                 "exp": "0 to 1 year",
                 "skills": ["C#", "C++", "Java", "Python", "Data Structures"],
                 "context": "Paid 6-month engineering internship for final-year CSE students or fresh graduates.",
-                "url": "https://bd.indeed.com/viewjob?jk=optimizely-intern-dhaka"
+                "url": "https://bd.indeed.com/viewjob?jk=optimizely-intern-dhaka",
+                "category_id": 8,
+                "category_name": "IT/Telecommunication"
+            },
+            {
+                "id": "indeed-de-107",
+                "title": "Medical Imaging Software Systems Specialist",
+                "company": "Siemens Healthineers",
+                "tier": "MNC",
+                "location": "Erlangen, Germany",
+                "country": "Germany",
+                "salary": "€80,000 - €105,000",
+                "exp": "3 to 6 years",
+                "skills": ["Healthcare Informatics", "DICOM", "Python", "Medical Imaging", "C++"],
+                "context": "Global healthcare medical technology division. Visa sponsorship and German relocation assistance provided.",
+                "url": "https://de.indeed.com/viewjob?jk=siemens-healthineers-erlangen",
+                "category_id": 11,
+                "category_name": "Healthcare/Medical"
             }
         ]
 
@@ -350,8 +377,8 @@ class IndeedGlobalConnector(BaseJobConnector):
                 source=self.name,
                 title=item["title"],
                 company=CompanyInfo(name=item["company"], tier=item["tier"], verified=True),
-                category_id=8,
-                category_name="IT/Telecommunication",
+                category_id=item.get("category_id", 8),
+                category_name=item.get("category_name", "IT/Telecommunication"),
                 country=item.get("country", job_country),
                 city=city,
                 location=item["location"],
@@ -404,7 +431,9 @@ class CompanyDirectConnector(BaseJobConnector):
                 "exp": "3 to 7 years",
                 "skills": ["C++", "Java", "Go", "Distributed Systems", "Linux"],
                 "context": "Direct official opening on Google Careers. H1-B and international transfer support.",
-                "url": "https://careers.google.com/jobs/results/direct-swe-infra"
+                "url": "https://careers.google.com/jobs/results/direct-swe-infra",
+                "category_id": 8,
+                "category_name": "IT/Telecommunication"
             },
             {
                 "id": "direct-microsoft-02",
@@ -417,20 +446,54 @@ class CompanyDirectConnector(BaseJobConnector):
                 "exp": "2 to 5 years",
                 "skills": ["C#", "C++", "Azure", "Cloud Computing", "Algorithms"],
                 "context": "Official Microsoft Career listing. Relocation and visa sponsorship available.",
-                "url": "https://careers.microsoft.com/us/en/job/direct-swe-azure"
+                "url": "https://careers.microsoft.com/us/en/job/direct-swe-azure",
+                "category_id": 8,
+                "category_name": "IT/Telecommunication"
             },
             {
                 "id": "direct-therap-03",
-                "title": "Software Engineer (Java Enterprise)",
+                "title": "Software Engineer (Java Enterprise / Healthcare EHR)",
                 "company": "Therap (BD) Ltd.",
                 "tier": "MNC",
                 "location": "Dhaka, Bangladesh",
                 "country": "Bangladesh",
                 "salary": "Tk. 85,000 - 130,000",
                 "exp": "1 to 3 years",
-                "skills": ["Java", "SQL", "Spring Boot", "Object-Oriented Programming"],
+                "skills": ["Java", "SQL", "Spring Boot", "Healthcare Systems"],
                 "context": "Direct recruitment from Therap Services USA. Top healthcare software in North America.",
-                "url": "https://therapservices.net/careers/dhaka-swe"
+                "url": "https://therapservices.net/careers/dhaka-swe",
+                "category_id": 11,
+                "category_name": "Healthcare/Medical"
+            },
+            {
+                "id": "direct-pfizer-04",
+                "title": "Clinical Healthcare Informatics & Data Lead",
+                "company": "Pfizer",
+                "tier": "MNC",
+                "location": "New York, NY, United States",
+                "country": "United States",
+                "salary": "$135,000 - $175,000",
+                "exp": "3 to 6 years",
+                "skills": ["Clinical Data", "Biostatistics", "Python", "Healthcare Analytics", "R"],
+                "context": "Global healthcare medical division. Full remote or hybrid option with international sponsorship.",
+                "url": "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/clinical-informatics",
+                "category_id": 11,
+                "category_name": "Healthcare/Medical"
+            },
+            {
+                "id": "direct-goldman-05",
+                "title": "Quantitative Financial Risk Analyst",
+                "company": "Goldman Sachs",
+                "tier": "Financial Institution",
+                "location": "Singapore",
+                "country": "Singapore",
+                "salary": "S$120,000 - S$160,000",
+                "exp": "3 to 5 years",
+                "skills": ["Quantitative Finance", "Python", "Risk Analytics", "Financial Modeling", "SQL"],
+                "context": "Direct career opening at Goldman Sachs Global Markets & Corporate Treasury. Employment Pass visa provided.",
+                "url": "https://www.goldmansachs.com/careers/quantitative-risk-analyst",
+                "category_id": 1,
+                "category_name": "Accounting/Finance"
             }
         ]
 
@@ -452,8 +515,8 @@ class CompanyDirectConnector(BaseJobConnector):
                 source=self.name,
                 title=item["title"],
                 company=CompanyInfo(name=item["company"], tier=item["tier"], verified=True),
-                category_id=8,
-                category_name="IT/Telecommunication",
+                category_id=item.get("category_id", 8),
+                category_name=item.get("category_name", "IT/Telecommunication"),
                 country=item.get("country", job_country),
                 city=city,
                 location=item["location"],
@@ -474,6 +537,37 @@ class CompanyDirectConnector(BaseJobConnector):
             ))
 
         return jobs[:limit]
+
+def classify_curated_company_category(industry: str, roles: List[str]) -> tuple[int, str]:
+    ind_low = (industry or "").lower()
+    if any(k in ind_low for k in ["health", "veterinary", "mental health", "medical", "wellness"]):
+        return 11, "Healthcare/Medical"
+    if any(k in ind_low for k in ["accounting", "payroll", "treasury", "fintech", "finance", "asset management"]):
+        return 1, "Accounting/Finance"
+    if any(k in ind_low for k in ["banking", "lending", "p2p"]):
+        return 2, "Bank/Non-Bank Fin. Institution"
+    if any(k in ind_low for k in ["hr tech", "benefits", "pre-employment", "talent network", "coaching", "human resources"]):
+        return 17, "HR/Org. Development"
+    if any(k in ind_low for k in ["marketing", "classifieds", "crm", "content marketing"]):
+        return 9, "Marketing/Sales"
+    if any(k in ind_low for k in ["e-commerce", "shopify"]):
+        return 30, "E-commerce/ Digital Marketing"
+    if any(k in ind_low for k in ["edtech", "learning", "e-learning"]):
+        return 4, "Education/Training"
+    if any(k in ind_low for k in ["design", "innovation studio", "wireframing", "ui/ux"]):
+        return 18, "Design/Creative"
+    if any(k in ind_low for k in ["hospitality", "travel tech"]):
+        return 20, "Hospitality/ Travel/ Tourism"
+    if any(k in ind_low for k in ["agri", "agricultural"]):
+        return 26, "Agro (Plant/Animal/Fisheries)"
+    if any(k in ind_low for k in ["media", "music", "publishing", "vod", "audio workstation"]):
+        return 10, "Media/Advertisement/Event Mgt."
+    if any(k in ind_low for k in ["civic tech", "government", "collaboration software", "project management"]):
+        return 7, "General Management/Admin"
+    if any(k in ind_low for k in ["research", "market research", "survey", "public records", "business intelligence"]):
+        return 13, "Research/Consultancy"
+
+    return 8, "IT/Telecommunication"
 
 COMPANIES_DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "companies.json")
 
@@ -558,13 +652,15 @@ class CuratedCompaniesConnector(BaseJobConnector):
             c_loc = c.get("location", "Remote")
             c_sal = c.get("salary_range", "not verified")
 
+            cat_id, cat_name = classify_curated_company_category(c_ind, c.get("typical_roles", []))
+
             job = NormalizedJob(
                 id=f"curated-{slug}",
                 source=self.name,
                 title=title,
                 company=CompanyInfo(name=c["name"], tier=c["tier"], verified=c["verified"]),
-                category_id=8,
-                category_name="IT/Telecommunication",
+                category_id=cat_id,
+                category_name=cat_name,
                 country=job_country,
                 city=city,
                 location=c["location"],

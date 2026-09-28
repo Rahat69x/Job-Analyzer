@@ -14,14 +14,14 @@ from core.db import (
 from core.normalizer import EXCHANGE_RATES_TO_USD, evaluate_candidate_eligibility
 from core.timezone_engine import feasibility_engine, FlexibilityTier
 from ingestion.bdjobs_client import BDJobsClient
-from ingestion.public_portals import fetch_sample_partner_jobs
+from ingestion.public_portals import fetch_sample_partner_jobs, fetch_all_partner_jobs
 from ingestion.linkedin_parser import parse_pasted_linkedin_text
 from ingestion.facebook_parser import parse_pasted_facebook_text
 from ingestion.aggregator import global_aggregator
 from ingestion.global_connectors import CuratedCompaniesConnector
 from scoring.scorer import JobScorer
 
-app = FastAPI(title="Job Analyzer - Global Job Discovery & Remote Job Platform", version="3.0.0")
+app = FastAPI(title="Job Analyzer - Global Job Discovery & Remote Job Platform", version="3.4.0")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TAXONOMY_PATH = os.path.join(BASE_DIR, "data", "taxonomy.json")
@@ -37,9 +37,10 @@ scorer = JobScorer()
 
 # Pre-populate global catalog and all curated companies in DB on boot
 try:
-    initial_jobs = global_aggregator.fetch_all(limit_per_source=15)
+    initial_jobs = global_aggregator.fetch_all(limit_per_source=50)
     curated_jobs = CuratedCompaniesConnector().fetch_jobs(limit=200)
-    all_initial = (initial_jobs or []) + (curated_jobs or [])
+    partner_jobs = fetch_all_partner_jobs()
+    all_initial = (initial_jobs or []) + (curated_jobs or []) + (partner_jobs or [])
     if all_initial:
         upsert_jobs(all_initial)
 except Exception as e:
@@ -184,49 +185,67 @@ def search_jobs(
     max_salary: Optional[float] = Query(None, description="Maximum salary threshold"),
     salary_currency: str = Query("BDT", description="Salary currency (BDT or USD)"),
     salary_period: str = Query("Monthly", description="Salary period (Monthly or Annual)"),
-    limit: int = Query(50, description="Results limit")
+    limit: int = Query(500, description="Results limit")
 ):
     """
     Comprehensive global multi-criteria search.
-    Intelligently scores and evaluates candidate eligibility.
+    Intelligently scores and evaluates candidate eligibility across all connected sources.
     """
+    cat_id = category_id if isinstance(category_id, int) else None
+    limit_val = limit if isinstance(limit, int) else 500
+    q_val = q if isinstance(q, str) else None
+    country_val = country if isinstance(country, str) else None
+    workplace_val = workplace_type if isinstance(workplace_type, str) else None
+    remote_policy_val = remote_policy if isinstance(remote_policy, str) else None
+    exp_lvl_val = experience_level if isinstance(experience_level, str) else None
+    emp_type_val = employment_type if isinstance(employment_type, str) else None
+    visa_val = visa_sponsorship if isinstance(visa_sponsorship, bool) else None
+    cand_origin_val = candidate_origin if isinstance(candidate_origin, str) else "Bangladesh"
+    sort_by_val = sort_by if isinstance(sort_by, str) else "recent"
+    source_val = source if isinstance(source, str) else None
+    min_sal_val = min_salary if isinstance(min_salary, (int, float)) else None
+    max_sal_val = max_salary if isinstance(max_salary, (int, float)) else None
+    sal_curr_val = salary_currency if isinstance(salary_currency, str) else "BDT"
+    sal_per_val = salary_period if isinstance(salary_period, str) else "Monthly"
+    exp_years_val = experience if isinstance(experience, (int, float)) else 3.0
+
     # Ensure category jobs are populated in DB before querying
-    if category_id:
+    if cat_id:
         init_db()
         conn = get_connection()
-        cat_count = conn.cursor().execute("SELECT count(*) FROM jobs WHERE category_id = ?", (category_id,)).fetchone()[0]
+        cat_count = conn.cursor().execute("SELECT count(*) FROM jobs WHERE category_id = ?", (cat_id,)).fetchone()[0]
         conn.close()
         if cat_count < 5 or refresh_live:
             try:
-                live_cat_jobs = bdjobs_client.fetch_jobs_by_category(category_id, page=1, rpp=50)
+                live_cat_jobs = bdjobs_client.fetch_jobs_by_category(cat_id, page=1, rpp=50)
                 if live_cat_jobs:
                     upsert_jobs(live_cat_jobs)
             except Exception as e:
                 print(f"[SearchAPI] Error fetching live category: {e}")
 
     results = search_global_jobs(
-        q=q,
-        category_id=category_id,
-        country=country,
-        workplace_type=workplace_type,
-        remote_policy=remote_policy,
-        experience_level=experience_level,
-        employment_type=employment_type,
-        visa_sponsorship=visa_sponsorship,
-        candidate_origin=candidate_origin,
-        sort_by=sort_by,
-        source=source,
-        min_salary=min_salary,
-        max_salary=max_salary,
-        salary_currency=salary_currency,
-        salary_period=salary_period,
-        limit=limit
+        q=q_val,
+        category_id=cat_id,
+        country=country_val,
+        workplace_type=workplace_val,
+        remote_policy=remote_policy_val,
+        experience_level=exp_lvl_val,
+        employment_type=emp_type_val,
+        visa_sponsorship=visa_val,
+        candidate_origin=cand_origin_val,
+        sort_by=sort_by_val,
+        source=source_val,
+        min_salary=min_sal_val,
+        max_salary=max_sal_val,
+        salary_currency=sal_curr_val,
+        salary_period=sal_per_val,
+        limit=limit_val
     )
 
     # If general query has insufficient results, fetch live from aggregator
     if q and len(results) < 5:
         try:
-            live_jobs = global_aggregator.fetch_all(query=q, country=country, limit_per_source=15)
+            live_jobs = global_aggregator.fetch_all(query=q, country=country, limit_per_source=25)
             if live_jobs:
                 upsert_jobs(live_jobs)
                 results = search_global_jobs(
@@ -250,24 +269,33 @@ def search_jobs(
         except Exception:
             pass
 
+    # Tally evaluated sources across matching pool
+    sources_evaluated: Dict[str, int] = {}
+    for r in results:
+        src = r.source or "Unknown"
+        sources_evaluated[src] = sources_evaluated.get(src, 0) + 1
+
     # Score and rank against candidate profile
-    skills_list = [s.strip() for s in skills.split(",") if s.strip()] if skills else []
+    skills_list = [s.strip() for s in skills.split(",") if s.strip()] if isinstance(skills, str) and skills else []
     profile = UserProfile(
-        candidate_origin_country=candidate_origin,
-        target_category_ids=[category_id] if category_id else [],
+        candidate_origin_country=cand_origin_val,
+        target_category_ids=[cat_id] if cat_id else [],
         skills=skills_list,
-        experience_years=experience,
-        preferred_countries=[country] if country and country != "Worldwide" else [],
-        preferred_workplace_type=[workplace_type] if workplace_type else ["Remote", "Hybrid", "On-site"]
+        experience_years=exp_years_val,
+        preferred_countries=[country_val] if country_val and country_val != "Worldwide" else [],
+        preferred_workplace_type=[workplace_val] if workplace_val else ["Remote", "Hybrid", "On-site"]
     )
 
     ranked = scorer.rank_jobs(results, profile)
     return {
         "total": len(ranked),
-        "query": q,
-        "category_id": category_id,
-        "country": country or "All Countries",
-        "candidate_origin": candidate_origin,
+        "query": q_val,
+        "category_id": cat_id,
+        "country": country_val or "All Countries",
+        "candidate_origin": cand_origin_val,
+        "sources_evaluated": sources_evaluated,
+        "source_health": global_aggregator.get_source_health(),
+        "unavailable_sources": global_aggregator.get_unavailable_sources(),
         "results": [r.model_dump() for r in ranked]
     }
 
