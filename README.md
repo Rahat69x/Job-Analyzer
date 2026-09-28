@@ -10,6 +10,9 @@
 
 1. **Global & Bangladesh Discovery**:
    - Covers Bangladesh (BDJobs live API, Chakri, Skill.jobs) and major international tech hubs (USA, Germany, UK, India, Singapore, Worldwide Remote).
+   - Independent 3-tab taxonomy: **Functional Roles (31 categories)**, **Special Skilled (33 categories)**, and **Global Connectors (8 feeds)** with individual active category retention.
+   - 8 Global Connectors: Remote OK, We Work Remotely, Indeed Global, Company Career Pages, Curated Top Companies, BDJobs Corporate Network, Skill.jobs, and Chakri.
+   - Curated directory of 72 leading global companies with typical roles, workplace modes, salary tiers, and official career links.
    - Real-time country, workplace, and remote eligibility filters with direct application links.
 2. **Strict ToS Compliance for Social & Professional Networks**:
    - **LinkedIn & Facebook**: Both platforms strictly prohibit automated web scraping in their Terms of Service.
