@@ -273,6 +273,7 @@ def search_global_jobs(
     employment_type: Optional[str] = None,
     visa_sponsorship: Optional[bool] = None,
     candidate_origin: str = "Bangladesh",
+    sort_by: str = "recent",
     limit: int = 50
 ) -> List[NormalizedJob]:
     """Execute dynamic multi-criteria SQL query across the global job catalog."""
@@ -350,7 +351,15 @@ def search_global_jobs(
             conditions.append("(" + " AND ".join(token_conds) + ")")
 
     where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
-    sql = f"SELECT * FROM jobs{where_clause} ORDER BY publish_date DESC, rowid DESC LIMIT ?"
+    order_clause = "ORDER BY publish_date DESC, rowid DESC"
+    if sort_by == "salary_desc":
+        order_clause = "ORDER BY COALESCE(salary_usd_max, salary_usd_min, 0) DESC, publish_date DESC"
+    elif sort_by == "salary_asc":
+        order_clause = "ORDER BY CASE WHEN salary_usd_min > 0 THEN salary_usd_min ELSE 99999999 END ASC, publish_date DESC"
+    elif sort_by == "deadline":
+        order_clause = "ORDER BY CASE WHEN deadline IS NOT NULL AND deadline != '' THEN deadline ELSE '9999-12-31' END ASC, publish_date DESC"
+
+    sql = f"SELECT * FROM jobs{where_clause} {order_clause} LIMIT ?"
     params.append(limit)
 
     rows = cursor.execute(sql, params).fetchall()
@@ -381,7 +390,7 @@ def search_global_jobs(
             fb_conditions.append("(" + " OR ".join(or_conds) + ")")
             fb_where = " WHERE " + " AND ".join(fb_conditions) if fb_conditions else ""
             fb_params.append(limit)
-            rows = cursor.execute(f"SELECT * FROM jobs{fb_where} ORDER BY publish_date DESC, rowid DESC LIMIT ?", fb_params).fetchall()
+            rows = cursor.execute(f"SELECT * FROM jobs{fb_where} {order_clause} LIMIT ?", fb_params).fetchall()
 
     conn.close()
 

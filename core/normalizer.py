@@ -1,4 +1,6 @@
 import re
+import os
+import json
 from datetime import datetime, timezone
 from typing import Optional, Tuple, List, Dict
 from core.models import (
@@ -419,12 +421,23 @@ def parse_date(date_str: Optional[str]) -> Optional[datetime]:
         except Exception:
             pass
 
-    return None
+COMPANIES_JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "companies.json")
+CURATED_COMPANY_TIERS = {}
+if os.path.exists(COMPANIES_JSON_PATH):
+    try:
+        with open(COMPANIES_JSON_PATH, "r", encoding="utf-8") as f:
+            for item in json.load(f):
+                CURATED_COMPANY_TIERS[item["name"].lower().strip()] = item["tier"]
+    except Exception:
+        pass
 
 def classify_company_tier(company_name: str) -> CompanyTier:
     """Classify corporate standing based on company name."""
     lower = company_name.lower().strip()
     
+    if lower in CURATED_COMPANY_TIERS:
+        return CURATED_COMPANY_TIERS[lower]
+        
     if any(c in lower for c in ["leading", "reputed", "confidential", "multinational company", "group of companies"]) and len(lower.split()) <= 5:
         if not any(top in lower for top in TOP_CONGLOMERATES_AND_BANKS):
             return "Confidential"

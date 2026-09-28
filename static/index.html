@@ -75,6 +75,14 @@
             </select>
           </div>
 
+          <div class="search-field-group select-group">
+            <select id="filter-sort">
+              <option value="recent">Sort: Most Recent</option>
+              <option value="salary_desc">Sort: Highest Salary</option>
+              <option value="deadline">Sort: Application Deadline</option>
+            </select>
+          </div>
+
           <button id="btn-global-search" class="btn btn-primary search-btn">
             Find Opportunities
           </button>
@@ -122,6 +130,10 @@
       <button id="nav-tab-analytics" class="nav-tab">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
         Market & Currencies
+      </button>
+      <button id="nav-tab-companies" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+        Featured Companies (<span id="companies-count">72</span>)
       </button>
     </nav>
 
@@ -205,7 +217,7 @@
         </aside>
 
         <!-- Category & Worldwide Taxonomy Card -->
-        <section class="glass-card">
+        <section class="glass-card taxonomy-card">
           <div class="section-title">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"></path></svg>
             Job Taxonomy & Industry Sectors (64 Categories + Global Feeds)
@@ -220,6 +232,12 @@
 
           <div id="category-chips-container" class="category-chips">
             <!-- Populated dynamically -->
+          </div>
+
+          <div class="category-status-footer" id="category-status-footer">
+            <span class="cat-footer-label">Selected Sector:</span>
+            <span class="cat-footer-badge" id="active-category-display">IT/Telecommunication</span>
+            <span class="cat-footer-hint">• Click any industry sector to filter live jobs</span>
           </div>
         </section>
       </div>
@@ -424,6 +442,33 @@
             <tr><td>Bangladeshi Taka</td><td>BDT (Tk.)</td><td>0.0083</td><td>Tk. 12,000,000 (~1 Crore BDT)</td><td>12,000,000 BDT</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- VIEW 8: FEATURED COMPANIES -->
+    <div id="view-companies" class="view-panel">
+      <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+          <div>
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+              Featured Global & Remote-First Companies
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Verified company directory with official careers links, typical roles, remote flexibility, and public salary ranges.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="company-filter-input" class="form-input" placeholder="Search company or role..." style="max-width: 240px; padding: 8px 12px; font-size: 13px;">
+            <select id="company-sort-select" class="form-select" style="padding: 8px 12px; font-size: 13px;">
+              <option value="name">Sort by Name (A-Z)</option>
+              <option value="salary_desc">Sort by Highest Salary</option>
+            </select>
+          </div>
+        </div>
+        <div id="companies-cards-container" class="cards-grid">
+          <!-- Populated via API -->
+        </div>
       </div>
     </div>
 

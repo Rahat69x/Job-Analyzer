@@ -7,7 +7,8 @@ from ingestion.base_connector import BaseJobConnector
 from ingestion.bdjobs_client import BDJobsClient
 from ingestion.public_portals import fetch_sample_partner_jobs
 from ingestion.global_connectors import (
-    RemoteOKConnector, WeWorkRemotelyConnector, IndeedGlobalConnector, CompanyDirectConnector
+    RemoteOKConnector, WeWorkRemotelyConnector, IndeedGlobalConnector, CompanyDirectConnector,
+    CuratedCompaniesConnector
 )
 
 logger = logging.getLogger(__name__)
@@ -20,7 +21,8 @@ class GlobalJobAggregator:
             RemoteOKConnector(),
             WeWorkRemotelyConnector(),
             IndeedGlobalConnector(),
-            CompanyDirectConnector()
+            CompanyDirectConnector(),
+            CuratedCompaniesConnector()
         ]
 
     def register_connector(self, connector: BaseJobConnector):

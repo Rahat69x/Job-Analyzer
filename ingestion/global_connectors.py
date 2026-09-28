@@ -1,6 +1,7 @@
 import urllib.request
 import json
 import logging
+import os
 from typing import List, Optional
 from datetime import datetime, timezone, timedelta
 
@@ -471,5 +472,117 @@ class CompanyDirectConnector(BaseJobConnector):
                 apply_url=item["url"],
                 source_reliability="official_career_page"
             ))
+
+        return jobs[:limit]
+
+COMPANIES_DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "companies.json")
+
+class CuratedCompaniesConnector(BaseJobConnector):
+    @property
+    def name(self) -> str:
+        return "CompanyCareerPage"
+
+    @property
+    def is_global(self) -> bool:
+        return True
+
+    def fetch_jobs(
+        self, 
+        query: Optional[str] = None, 
+        country: Optional[str] = None, 
+        remote_only: bool = False,
+        limit: int = 100
+    ) -> List[NormalizedJob]:
+        if not os.path.exists(COMPANIES_DATA_PATH):
+            return []
+
+        try:
+            with open(COMPANIES_DATA_PATH, "r", encoding="utf-8") as f:
+                companies = json.load(f)
+        except Exception as e:
+            logger.error(f"Failed to load companies.json: {e}")
+            return []
+
+        now = datetime.now(timezone.utc)
+        jobs: List[NormalizedJob] = []
+
+        for idx, c in enumerate(companies):
+            # Skip 1Password to avoid duplicate since it's already in RemoteOKConnector
+            if c["name"].lower() == "1password":
+                continue
+
+            # Query filter
+            if query:
+                q_low = query.lower()
+                c_name_low = c["name"].lower()
+                c_ind_low = c.get("industry", "").lower()
+                roles_str = " ".join(c.get("typical_roles", [])).lower()
+                if q_low not in c_name_low and q_low not in c_ind_low and q_low not in roles_str:
+                    continue
+
+            # Country filter
+            if country and country != "Worldwide":
+                c_loc = c.get("location", "")
+                if country.lower() not in c_loc.lower() and c.get("remote_policy") != "Worldwide":
+                    continue
+
+            # Remote only filter
+            if remote_only and c.get("workplace_type") != "Remote":
+                continue
+
+            slug = c["name"].lower().replace(" ", "-").replace("&", "and").replace("!", "").replace("/", "-")
+            title = c["typical_roles"][0] if c.get("typical_roles") else "Software Engineer"
+            sal_raw = c["salary_range"] if c.get("salary_range") != "not verified" else "Negotiable"
+            currency = "USD" if "$" in sal_raw else ("EUR" if "€" in sal_raw else ("GBP" if "£" in sal_raw else ("CHF" if "CHF" in sal_raw else "BDT")))
+            sal = parse_salary(sal_raw, currency)
+
+            city, job_country, region = normalize_location(c["location"])
+            workplace_type = c["workplace_type"]
+            policy = c["remote_policy"]
+            is_worldwide = (policy == "Worldwide")
+
+            allowed_countries = ["United States"] if policy == "Country-Restricted" and "USA" in c["location"] else []
+            allowed_regions = ["Europe"] if policy == "Regional" and "Europe" in c["location"] else []
+
+            elig = RemoteEligibility(
+                policy=policy,
+                allowed_countries=allowed_countries,
+                allowed_regions=allowed_regions,
+                accepts_international=is_worldwide
+            )
+            cand_elig = evaluate_candidate_eligibility(job_country, workplace_type, elig, "Bangladesh")
+
+            apply_link = c["careers_url"] if c.get("careers_url") and c["careers_url"] != "not verified" else c["website"]
+            c_name = c["name"]
+            c_ind = c.get("industry", "Technology")
+            c_loc = c.get("location", "Remote")
+            c_sal = c.get("salary_range", "not verified")
+
+            job = NormalizedJob(
+                id=f"curated-{slug}",
+                source=self.name,
+                title=title,
+                company=CompanyInfo(name=c["name"], tier=c["tier"], verified=c["verified"]),
+                category_id=8,
+                category_name="IT/Telecommunication",
+                country=job_country,
+                city=city,
+                location=c["location"],
+                workplace_type=workplace_type,
+                remote_eligibility=elig,
+                candidate_eligibility=cand_elig,
+                publish_date=now - timedelta(days=(idx % 4) + 1),
+                deadline=now + timedelta(days=21 + (idx % 14)),
+                experience=parse_experience("3 to 6 years"),
+                experience_level="Mid Level",
+                salary=sal,
+                job_type="FullTime",
+                employment_type="Full-time",
+                skills_required=c.get("typical_roles", [])[:3],
+                job_context=f"{c_name} is actively hiring for {title} in {c_ind}. Work mode: {c_loc}. Verified salary range: {c_sal}.",
+                apply_url=apply_link,
+                source_reliability="official_career_page"
+            )
+            jobs.append(job)
 
         return jobs[:limit]

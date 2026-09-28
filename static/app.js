@@ -109,11 +109,26 @@ function initEventListeners() {
     originSelect.addEventListener("change", () => loadJobs());
   }
 
-  // Country & Workplace filter dropdowns — real-time
+  // Country & Workplace & Sort filter dropdowns — real-time
   const countryFilter = document.getElementById("filter-country");
   if (countryFilter) countryFilter.addEventListener("change", () => loadJobs());
   const workplaceFilter = document.getElementById("filter-workplace");
   if (workplaceFilter) workplaceFilter.addEventListener("change", () => loadJobs());
+  const sortFilter = document.getElementById("filter-sort");
+  if (sortFilter) sortFilter.addEventListener("change", () => loadJobs());
+
+  // Companies Tab & Filters
+  const tabCompanies = document.getElementById("nav-tab-companies");
+  if (tabCompanies) {
+    tabCompanies.addEventListener("click", () => {
+      switchView("nav-tab-companies", "view-companies");
+      loadCompaniesView();
+    });
+  }
+  const companyInput = document.getElementById("company-filter-input");
+  if (companyInput) companyInput.addEventListener("input", debounce(loadCompaniesView, 250));
+  const companySort = document.getElementById("company-sort-select");
+  if (companySort) companySort.addEventListener("change", loadCompaniesView);
 
   // Global search input — debounced real-time as user types
   const globalInput = document.getElementById("global-search-input");
@@ -189,8 +204,8 @@ function initEventListeners() {
 }
 
 function switchView(tabId, viewId) {
-  const tabs = ["nav-tab-explorer", "nav-tab-remote", "nav-tab-country", "nav-tab-recommended", "nav-tab-tracker", "nav-tab-alerts", "nav-tab-analytics"];
-  const views = ["view-explorer", "view-remote", "view-country", "view-recommended", "view-tracker", "view-alerts", "view-analytics"];
+  const tabs = ["nav-tab-explorer", "nav-tab-remote", "nav-tab-country", "nav-tab-recommended", "nav-tab-tracker", "nav-tab-alerts", "nav-tab-analytics", "nav-tab-companies"];
+  const views = ["view-explorer", "view-remote", "view-country", "view-recommended", "view-tracker", "view-alerts", "view-analytics", "view-companies"];
   
   tabs.forEach(t => {
     const el = document.getElementById(t);
@@ -211,6 +226,7 @@ async function loadJobs(refreshLive = false) {
   const query = document.getElementById("global-search-input").value.trim();
   const country = document.getElementById("filter-country").value;
   const workplace = document.getElementById("filter-workplace").value;
+  const sortBy = document.getElementById("filter-sort") ? document.getElementById("filter-sort").value : "recent";
   const candidateOrigin = document.getElementById("candidate-origin") ? document.getElementById("candidate-origin").value : "Bangladesh";
   const skills = document.getElementById("input-skills").value.trim();
   const exp = document.getElementById("input-experience").value;
@@ -220,11 +236,13 @@ async function loadJobs(refreshLive = false) {
   if (query) params.append("q", query);
   if (country && country !== "Worldwide") params.append("country", country);
   if (workplace && workplace !== "All") params.append("workplace_type", workplace);
+  if (sortBy) params.append("sort_by", sortBy);
   if (candidateOrigin) params.append("candidate_origin", candidateOrigin);
   if (skills) params.append("skills", skills);
   if (exp) params.append("experience", exp);
   if (visaOnly) params.append("visa_sponsorship", "true");
   if (refreshLive) params.append("refresh_live", "true");
+  if (selectedCategoryId) params.append("category_id", selectedCategoryId);
   params.append("limit", "50");
 
   try {
@@ -737,16 +755,36 @@ function renderCategoryChips(searchFilter = "") {
     categories = categories.filter(c => c.name.toLowerCase().includes(searchFilter.toLowerCase()));
   }
 
-  container.innerHTML = categories.map(cat => `
-    <div class="cat-chip ${cat.id === selectedCategoryId ? 'active' : ''}" onclick="selectCategory(${cat.id})">
-      <span>${escapeHtml(cat.name)}</span>
-      <span class="cat-count">${cat.job_count || ''}</span>
-    </div>
-  `).join("");
+  container.innerHTML = categories.map(cat => {
+    const count = (cat.active_jobs !== undefined && cat.active_jobs !== null) ? cat.active_jobs : (cat.job_count || '');
+    const isActive = (cat.id === selectedCategoryId);
+    return `
+      <div class="cat-chip ${isActive ? 'active' : ''}" onclick="selectCategory(${cat.id}, '${escapeHtml(cat.name)}')">
+        <span>${escapeHtml(cat.name)}</span>
+        ${count ? `<span class="cat-count">${count}</span>` : ''}
+      </div>
+    `;
+  }).join("");
+
+  const activeDisplay = document.getElementById("active-category-display");
+  if (activeDisplay) {
+    const allCats = [...(currentTaxonomy.categories || []), 
+      { id: 901, name: "Remote OK (Worldwide Tech)" },
+      { id: 902, name: "We Work Remotely (Engineering)" },
+      { id: 903, name: "Indeed Global (DE, UK, US, IN, SG)" },
+      { id: 904, name: "Company Career Pages (Google, MS)" }
+    ];
+    const cur = allCats.find(c => c.id === selectedCategoryId);
+    if (cur) activeDisplay.textContent = cur.name;
+  }
 }
 
-function selectCategory(catId) {
+function selectCategory(catId, catName) {
   selectedCategoryId = catId;
+  const activeDisplay = document.getElementById("active-category-display");
+  if (activeDisplay && catName) {
+    activeDisplay.textContent = catName;
+  }
   renderCategoryChips();
   loadJobs();
 }
@@ -838,3 +876,73 @@ function escapeHtml(str) {
   if (!str) return "";
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
+
+async function loadCompaniesView() {
+  const container = document.getElementById("companies-cards-container");
+  if (!container) return;
+
+  const q = document.getElementById("company-filter-input") ? document.getElementById("company-filter-input").value.trim() : "";
+  const sort = document.getElementById("company-sort-select") ? document.getElementById("company-sort-select").value : "name";
+
+  container.innerHTML = `<div class="loading-container" style="grid-column: 1 / -1;"><div class="loader-spinner"></div><p style="margin-top: 10px;">Loading verified company directory...</p></div>`;
+
+  try {
+    const params = new URLSearchParams();
+    if (q) params.append("q", q);
+    if (sort) params.append("sort_by", sort);
+
+    const res = await fetch(`/api/companies?${params.toString()}`);
+    const data = await res.json();
+    const companies = data.companies || [];
+
+    const countEl = document.getElementById("companies-count");
+    if (countEl) countEl.textContent = companies.length;
+
+    if (companies.length === 0) {
+      container.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;"><p>No companies found matching your query.</p></div>`;
+      return;
+    }
+
+    container.innerHTML = companies.map(c => `
+      <div class="glass-card job-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #fff; margin: 0;">${escapeHtml(c.name)}</h3>
+            <span class="company-tier tier-${(c.tier || 'sme').toLowerCase().replace(/[^a-z]/g, '-')}">${escapeHtml(c.tier || 'Corporate')}</span>
+          </div>
+          <div style="font-size: 12px; color: var(--accent-indigo); font-weight: 500; margin-bottom: 8px;">
+            ${escapeHtml(c.industry || 'Technology')}
+          </div>
+          <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">
+            <strong>Typical Roles:</strong> ${escapeHtml((c.typical_roles || []).join(', '))}
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
+            <span class="badge" style="background: rgba(99, 102, 241, 0.12); color: #a5b4fc; font-size: 11px;">📍 ${escapeHtml(c.location || 'Remote')}</span>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #6ee7b7; font-size: 11px;">💼 ${escapeHtml(c.workplace_type || 'Remote')}</span>
+            ${c.salary_range && c.salary_range !== 'not verified' ? `<span class="badge" style="background: rgba(245, 158, 11, 0.12); color: #fcd34d; font-size: 11px; font-weight: 600;">💰 ${escapeHtml(c.salary_range)}</span>` : `<span class="badge" style="background: rgba(100, 116, 139, 0.15); color: #94a3b8; font-size: 11px;">Salary: not verified</span>`}
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+          <a href="${c.careers_url && c.careers_url !== 'not verified' ? c.careers_url : c.website}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; text-decoration: none;">
+            Official Careers ↗
+          </a>
+          <button class="btn btn-secondary btn-sm" onclick="filterByCompany('${escapeHtml(c.name).replace(/'/g, "\\'")}')" style="flex: 1;">
+            Search Openings
+          </button>
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    container.innerHTML = `<div class="error-box" style="grid-column: 1 / -1;">Error loading companies: ${err.message}</div>`;
+  }
+}
+
+function filterByCompany(companyName) {
+  switchView("nav-tab-explorer", "view-explorer");
+  const input = document.getElementById("global-search-input");
+  if (input) {
+    input.value = companyName;
+    loadJobs();
+  }
+}
+

@@ -18,6 +18,7 @@ from ingestion.public_portals import fetch_sample_partner_jobs
 from ingestion.linkedin_parser import parse_pasted_linkedin_text
 from ingestion.facebook_parser import parse_pasted_facebook_text
 from ingestion.aggregator import global_aggregator
+from ingestion.global_connectors import CuratedCompaniesConnector
 from scoring.scorer import JobScorer
 
 app = FastAPI(title="Job Analyzer - Global Job Discovery & Remote Job Platform", version="3.0.0")
@@ -27,17 +28,20 @@ TAXONOMY_PATH = os.path.join(BASE_DIR, "data", "taxonomy.json")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 ALERTS_PATH = os.path.join(BASE_DIR, "data", "alerts.json")
 JOB_ROLES_PATH = os.path.join(BASE_DIR, "data", "job_roles.json")
+COMPANIES_PATH = os.path.join(BASE_DIR, "data", "companies.json")
 
 # Initialize database, client & scorer
 init_db()
 bdjobs_client = BDJobsClient(TAXONOMY_PATH)
 scorer = JobScorer()
 
-# Pre-populate global catalog in DB on boot
+# Pre-populate global catalog and all curated companies in DB on boot
 try:
     initial_jobs = global_aggregator.fetch_all(limit_per_source=15)
-    if initial_jobs:
-        upsert_jobs(initial_jobs)
+    curated_jobs = CuratedCompaniesConnector().fetch_jobs(limit=200)
+    all_initial = (initial_jobs or []) + (curated_jobs or [])
+    if all_initial:
+        upsert_jobs(all_initial)
 except Exception as e:
     pass
 
@@ -174,6 +178,7 @@ def search_jobs(
     skills: Optional[str] = Query(None, description="Comma-separated skills"),
     experience: float = Query(3.0, description="Applicant experience years"),
     refresh_live: bool = Query(False, description="Force refresh from live sources"),
+    sort_by: str = Query("recent", description="Sort by: recent, salary_desc, salary_asc, deadline"),
     limit: int = Query(50, description="Results limit")
 ):
     """
@@ -190,6 +195,7 @@ def search_jobs(
         employment_type=employment_type,
         visa_sponsorship=visa_sponsorship,
         candidate_origin=candidate_origin,
+        sort_by=sort_by,
         limit=limit
     )
 
@@ -209,6 +215,7 @@ def search_jobs(
                     employment_type=employment_type,
                     visa_sponsorship=visa_sponsorship,
                     candidate_origin=candidate_origin,
+                    sort_by=sort_by,
                     limit=limit
                 )
         except Exception as e:
@@ -229,6 +236,7 @@ def search_jobs(
                     employment_type=employment_type,
                     visa_sponsorship=visa_sponsorship,
                     candidate_origin=candidate_origin,
+                    sort_by=sort_by,
                     limit=limit
                 )
         except Exception:
@@ -533,6 +541,54 @@ def update_tracked_job(payload: TrackJobRequest):
 @app.get("/api/alerts")
 def get_alerts():
     return get_global_alerts()
+
+@app.get("/api/companies")
+def list_companies(
+    q: Optional[str] = None,
+    industry: Optional[str] = None,
+    remote_only: bool = False,
+    sort_by: str = "name"
+):
+    """
+    Returns curated company directory with industry, typical roles, remote policy, and verified salary ranges.
+    """
+    if not os.path.exists(COMPANIES_PATH):
+        return {"total": 0, "companies": []}
+
+    try:
+        with open(COMPANIES_PATH, "r", encoding="utf-8") as f:
+            comps = json.load(f)
+    except Exception:
+        return {"total": 0, "companies": []}
+
+    filtered = []
+    for c in comps:
+        if q:
+            q_low = q.lower().strip()
+            c_name = c.get("name", "").lower()
+            c_ind = c.get("industry", "").lower()
+            roles = " ".join(c.get("typical_roles", [])).lower()
+            if q_low not in c_name and q_low not in c_ind and q_low not in roles:
+                continue
+
+        if industry and industry.lower() not in c.get("industry", "").lower():
+            continue
+
+        if remote_only and c.get("workplace_type") != "Remote":
+            continue
+
+        filtered.append(c)
+
+    if sort_by == "salary_desc":
+        filtered.sort(key=lambda x: ("$" in x.get("salary_range", ""), x.get("salary_range", "")), reverse=True)
+    elif sort_by == "name":
+        filtered.sort(key=lambda x: x.get("name", "").lower())
+
+    return {
+        "total": len(filtered),
+        "companies": filtered
+    }
+
 
 # Serve static files
 if os.path.exists(STATIC_DIR):
