@@ -461,7 +461,7 @@ class CompanyDirectConnector(BaseJobConnector):
                 "exp": "1 to 3 years",
                 "skills": ["Java", "SQL", "Spring Boot", "Healthcare Systems"],
                 "context": "Direct recruitment from Therap Services USA. Top healthcare software in North America.",
-                "url": "https://therapservices.net/careers/dhaka-swe",
+                "url": "https://therap.hire.trakstar.com",
                 "category_id": 11,
                 "category_name": "Healthcare/Medical"
             },
