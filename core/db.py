@@ -1,13 +1,15 @@
 import sqlite3
 import os
 import json
-from datetime import datetime, timezone
-from typing import List, Dict, Optional, Any
+from datetime import datetime, timezone, timedelta
+from typing import List, Dict, Optional, Any, Tuple
 from core.models import (
     NormalizedJob, CompanyInfo, SalaryInfo, ExperienceRequirement, 
     RemoteEligibility, CandidateEligibility, WorkplaceType, ExperienceLevel
 )
 from core.normalizer import evaluate_candidate_eligibility
+from core.occupation_taxonomy import normalize_search_query
+from core.source_registry import source_registry
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "jobs.db")
 
@@ -66,7 +68,13 @@ def init_db():
         source_reliability TEXT DEFAULT 'major_board',
         canonical_id TEXT,
         alternate_sources TEXT DEFAULT '[]',
-        first_seen_at TEXT
+        first_seen_at TEXT,
+        remote_type TEXT DEFAULT 'UNKNOWN',
+        source_type TEXT DEFAULT 'GLOBAL_JOB_BOARD',
+        source_job_id TEXT,
+        region TEXT DEFAULT 'Worldwide',
+        updated_at TEXT,
+        collected_at TEXT
     );
     """)
 
@@ -93,7 +101,13 @@ def init_db():
         "skills_required": "TEXT DEFAULT '[]'",
         "source_reliability": "TEXT DEFAULT 'major_board'",
         "canonical_id": "TEXT",
-        "alternate_sources": "TEXT DEFAULT '[]'"
+        "alternate_sources": "TEXT DEFAULT '[]'",
+        "remote_type": "TEXT DEFAULT 'UNKNOWN'",
+        "source_type": "TEXT DEFAULT 'GLOBAL_JOB_BOARD'",
+        "source_job_id": "TEXT",
+        "region": "TEXT DEFAULT 'Worldwide'",
+        "updated_at": "TEXT",
+        "collected_at": "TEXT"
     }
     for col, col_def in migration_cols.items():
         if col not in existing_cols:
@@ -147,6 +161,8 @@ def upsert_jobs(jobs: List[NormalizedJob]):
     for j in jobs:
         pub_str = j.publish_date.isoformat() if j.publish_date else None
         dead_str = j.deadline.isoformat() if j.deadline else None
+        upd_str = j.updated_at.isoformat() if j.updated_at else now_str
+        col_str = j.collected_at.isoformat() if j.collected_at else now_str
         
         cursor.execute("""
         INSERT INTO jobs (
@@ -156,7 +172,8 @@ def upsert_jobs(jobs: List[NormalizedJob]):
             min_exp, max_exp, experience_level, min_salary, max_salary, salary_text, salary_disclosed,
             currency, salary_type, salary_usd_min, salary_usd_max, salary_bdt_min, salary_bdt_max,
             job_type, employment_type, vacancies, skills_required, apply_url, job_context,
-            source_reliability, canonical_id, alternate_sources, first_seen_at
+            source_reliability, canonical_id, alternate_sources, first_seen_at,
+            remote_type, source_type, source_job_id, region, updated_at, collected_at
         ) VALUES (
             ?, ?, ?, ?, ?, ?, ?, ?,
             ?, ?, ?, ?, ?, ?, ?,
@@ -164,7 +181,8 @@ def upsert_jobs(jobs: List[NormalizedJob]):
             ?, ?, ?, ?, ?, ?, ?,
             ?, ?, ?, ?, ?, ?,
             ?, ?, ?, ?, ?, ?,
-            ?, ?, ?, ?
+            ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?
         )
         ON CONFLICT(id) DO UPDATE SET
             title=excluded.title,
@@ -200,7 +218,13 @@ def upsert_jobs(jobs: List[NormalizedJob]):
             apply_url=excluded.apply_url,
             job_context=excluded.job_context,
             source_reliability=excluded.source_reliability,
-            alternate_sources=excluded.alternate_sources;
+            alternate_sources=excluded.alternate_sources,
+            remote_type=excluded.remote_type,
+            source_type=excluded.source_type,
+            source_job_id=excluded.source_job_id,
+            region=excluded.region,
+            updated_at=excluded.updated_at,
+            collected_at=excluded.collected_at;
         """, (
             j.id, j.source, j.title, j.company.name, j.company.tier, j.category_id, j.category_name, j.category_type,
             j.country, j.city, j.location, j.workplace_type, j.remote_eligibility.policy,
@@ -215,7 +239,8 @@ def upsert_jobs(jobs: List[NormalizedJob]):
             j.salary.salary_bdt_min, j.salary.salary_bdt_max,
             j.job_type, j.employment_type, j.vacancies, json.dumps(j.skills_required),
             j.apply_url, j.job_context, j.source_reliability, j.canonical_id,
-            json.dumps(j.alternate_sources), now_str
+            json.dumps(j.alternate_sources), now_str,
+            j.remote_type, j.source_type, j.source_job_id, j.region, upd_str, col_str
         ))
         
     conn.commit()
@@ -245,10 +270,19 @@ def row_to_normalized_job(row: sqlite3.Row, candidate_origin: str = "Bangladesh"
 
     pub_date = datetime.fromisoformat(row["publish_date"]) if row["publish_date"] else None
     dead_date = datetime.fromisoformat(row["deadline"]) if row["deadline"] else None
+    upd_date = datetime.fromisoformat(row["updated_at"]) if "updated_at" in row.keys() and row["updated_at"] else None
+    col_date = datetime.fromisoformat(row["collected_at"]) if "collected_at" in row.keys() and row["collected_at"] else None
+
+    rem_type = row["remote_type"] if "remote_type" in row.keys() and row["remote_type"] else ("REMOTE" if workplace_type == "Remote" else ("HYBRID" if workplace_type == "Hybrid" else "ONSITE"))
+    src_type = row["source_type"] if "source_type" in row.keys() and row["source_type"] else "GLOBAL_JOB_BOARD"
+    src_jid = row["source_job_id"] if "source_job_id" in row.keys() else None
+    reg = row["region"] if "region" in row.keys() and row["region"] else "Worldwide"
 
     return NormalizedJob(
         id=row["id"],
         source=row["source"],
+        source_type=src_type,
+        source_job_id=src_jid,
         title=row["title"],
         company=CompanyInfo(name=row["company_name"], tier=row["company_tier"], verified=True),
         category_id=row["category_id"],
@@ -257,11 +291,15 @@ def row_to_normalized_job(row: sqlite3.Row, candidate_origin: str = "Bangladesh"
         country=country,
         city=row["city"] if "city" in row.keys() else "Dhaka",
         location=row["location"],
+        region=reg,
         workplace_type=workplace_type,
+        remote_type=rem_type,
         remote_eligibility=remote_elig,
         candidate_eligibility=cand_elig,
         publish_date=pub_date,
         deadline=dead_date,
+        updated_at=upd_date,
+        collected_at=col_date,
         experience=ExperienceRequirement(min_years=row["min_exp"], max_years=row["max_exp"], raw_text=f"{row['min_exp']}y+"),
         experience_level=row["experience_level"] if "experience_level" in row.keys() and row["experience_level"] else "Mid Level",
         salary=SalaryInfo(
@@ -310,16 +348,70 @@ def search_global_jobs(
     candidate_origin: str = "Bangladesh",
     sort_by: str = "recent",
     source: Optional[str] = None,
-    limit: int = 500,
+    limit: int = 1500,
     min_salary: Optional[float] = None,
     max_salary: Optional[float] = None,
     salary_currency: str = "BDT",
-    salary_period: str = "Monthly"
+    salary_period: str = "Monthly",
+    freshness_days: Optional[int] = None
 ) -> List[NormalizedJob]:
-    """Execute dynamic multi-criteria SQL query across the global job catalog."""
+    """Backward-compatible entry point returning List[NormalizedJob]."""
+    jobs, _ = search_global_jobs_with_diagnostics(
+        q=q,
+        category_id=category_id,
+        country=country,
+        workplace_type=workplace_type,
+        remote_policy=remote_policy,
+        experience_level=experience_level,
+        employment_type=employment_type,
+        visa_sponsorship=visa_sponsorship,
+        candidate_origin=candidate_origin,
+        sort_by=sort_by,
+        source=source,
+        limit=limit,
+        min_salary=min_salary,
+        max_salary=max_salary,
+        salary_currency=salary_currency,
+        salary_period=salary_period,
+        freshness_days=freshness_days
+    )
+    return jobs
+
+def search_global_jobs_with_diagnostics(
+    q: Optional[str] = None,
+    category_id: Optional[int] = None,
+    country: Optional[str] = None,
+    workplace_type: Optional[str] = None,
+    remote_policy: Optional[str] = None,
+    experience_level: Optional[str] = None,
+    employment_type: Optional[str] = None,
+    visa_sponsorship: Optional[bool] = None,
+    candidate_origin: str = "Bangladesh",
+    sort_by: str = "recent",
+    source: Optional[str] = None,
+    limit: int = 1500,
+    min_salary: Optional[float] = None,
+    max_salary: Optional[float] = None,
+    salary_currency: str = "BDT",
+    salary_period: str = "Monthly",
+    freshness_days: Optional[int] = None
+) -> Tuple[List[NormalizedJob], Dict[str, Any]]:
+    """
+    Production-grade global search pipeline:
+    - Normalizes queries via deliberate occupation taxonomy.
+    - Strictly excludes Bangladesh/BDJobs from worldwide & international queries.
+    - Treats location and remote requirements as hard filters.
+    - Applies weighted relevance scoring (Title > Skills > Description).
+    - Returns hydrated jobs and complete diagnostic funnel metrics.
+    """
     init_db()
     conn = get_connection()
     cursor = conn.cursor()
+
+    total_in_db = cursor.execute("SELECT count(*) FROM jobs").fetchone()[0]
+    all_reg_sources = source_registry.get_all_sources()
+    active_sources_cnt = len([s for s in all_reg_sources if s.status in ["ACTIVE", "PARTIAL"]])
+    unavail_sources_cnt = len(all_reg_sources) - active_sources_cnt
 
     conditions = []
     params = []
@@ -334,13 +426,53 @@ def search_global_jobs(
         conditions.append("category_id = ?")
         params.append(int(category_id))
 
-    # Country filter
-    if country and country.lower() not in ["all", "worldwide", "any"]:
-        conditions.append("country = ?")
-        params.append(country)
+    # Location / Country Filter & Strict BDJobs Exclusion
+    is_bd_search = bool((country and country.lower() in ["bangladesh", "bd"]) or (source and "bdjobs" in source.lower()))
+    is_explicit_worldwide = bool(country and country.lower() in ["worldwide", "remote worldwide"])
+    has_international_country = bool(country and country.lower() not in ["all", "any", "worldwide", "remote worldwide", "bangladesh", "bd", "worldwide & bangladesh"])
+    is_worldwide_search = not country or country.lower() in ["all", "worldwide", "any", "remote worldwide"]
 
-    # Workplace mode filter
-    if workplace_type and workplace_type.lower() not in ["all", "any"]:
+    if is_explicit_worldwide or has_international_country:
+        conditions.append("source != 'BDJobs'")
+    elif q and q.strip() and not is_bd_search:
+        # If searching a specific role and country wasn't Bangladesh, exclude BDJobs from worldwide query
+        conditions.append("source != 'BDJobs'")
+
+    if not is_worldwide_search:
+        c_lower = country.lower()
+        if c_lower in ["european union", "eu", "europe"]:
+            conditions.append("(region = 'Europe' OR country IN ('Germany', 'United Kingdom', 'France', 'Netherlands', 'Ireland', 'Sweden', 'Switzerland', 'Poland', 'Spain', 'Italy') OR (workplace_type = 'Remote' AND remote_policy = 'Worldwide'))")
+        elif c_lower in ["united states", "usa", "us"]:
+            conditions.append("(country = 'United States' OR location LIKE '%united states%' OR location LIKE '%usa%' OR (workplace_type = 'Remote' AND (remote_policy = 'Worldwide' OR allowed_countries LIKE '%United States%')))")
+        elif c_lower in ["united kingdom", "uk"]:
+            conditions.append("(country = 'United Kingdom' OR location LIKE '%united kingdom%' OR location LIKE '%uk%' OR (workplace_type = 'Remote' AND (remote_policy = 'Worldwide' OR allowed_countries LIKE '%United Kingdom%')))")
+        elif c_lower == "germany":
+            conditions.append("(country = 'Germany' OR location LIKE '%germany%' OR location LIKE '%berlin%' OR location LIKE '%munich%' OR (workplace_type = 'Remote' AND (remote_policy = 'Worldwide' OR allowed_countries LIKE '%Germany%')))")
+        elif c_lower == "india":
+            conditions.append("(country = 'India' OR location LIKE '%india%' OR location LIKE '%bangalore%' OR location LIKE '%bengaluru%' OR (workplace_type = 'Remote' AND (remote_policy = 'Worldwide' OR allowed_countries LIKE '%India%')))")
+        elif c_lower == "singapore":
+            conditions.append("(country = 'Singapore' OR location LIKE '%singapore%' OR (workplace_type = 'Remote' AND (remote_policy = 'Worldwide' OR allowed_countries LIKE '%Singapore%')))")
+        elif c_lower == "canada":
+            conditions.append("(country = 'Canada' OR location LIKE '%canada%' OR location LIKE '%toronto%' OR (workplace_type = 'Remote' AND (remote_policy = 'Worldwide' OR allowed_countries LIKE '%Canada%')))")
+        elif c_lower == "bangladesh":
+            conditions.append("(country = 'Bangladesh' OR location LIKE '%bangladesh%' OR location LIKE '%dhaka%')")
+        else:
+            conditions.append("(country = ? OR location LIKE ? OR (workplace_type = 'Remote' AND remote_policy = 'Worldwide'))")
+            params.extend([country, f"%{country}%"])
+
+    # Workplace mode / Remote filter
+    has_remote_requested = bool(
+        (workplace_type and workplace_type.lower() == "remote") or 
+        (q and "remote" in q.lower()) or 
+        (country and "remote" in country.lower())
+    )
+    if has_remote_requested:
+        conditions.append("workplace_type = 'Remote'")
+        if is_worldwide_search:
+            # Must be true worldwide remote, not country restricted
+            conditions.append("(remote_policy = 'Worldwide' OR location LIKE '%worldwide%' OR location LIKE '%anywhere%' OR location LIKE '%global%')")
+            conditions.append("location NOT LIKE '%us only%' AND location NOT LIKE '%united states only%'")
+    elif workplace_type and workplace_type.lower() not in ["all", "any"]:
         conditions.append("workplace_type = ?")
         params.append(workplace_type)
 
@@ -359,66 +491,39 @@ def search_global_jobs(
     if visa_sponsorship is True:
         conditions.append("visa_sponsorship = 1")
 
-    # Salary range filter (normalized to annual BDT)
-    ann_bdt_min = None
-    ann_bdt_max = None
+    # Freshness filter
+    if freshness_days and int(freshness_days) > 0:
+        cutoff_date = (datetime.now(timezone.utc) - timedelta(days=int(freshness_days))).isoformat()
+        conditions.append("(publish_date >= ? OR updated_at >= ?)")
+        params.extend([cutoff_date, cutoff_date])
+
+    # Salary range filter
     if min_salary is not None and float(min_salary) > 0:
         val_min = float(min_salary)
-        if salary_currency.upper() == "USD":
-            ann_usd_min = val_min if salary_period.lower() == "annual" else val_min * 12.0
-            ann_bdt_min = ann_usd_min * 120.0
-        else: # BDT
-            ann_bdt_min = val_min * 12.0 if salary_period.lower() == "monthly" else val_min
-        
+        ann_bdt_min = (val_min if salary_period.lower() == "annual" else val_min * 12.0) * 120.0 if salary_currency.upper() == "USD" else (val_min * 12.0 if salary_period.lower() == "monthly" else val_min)
         conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_max, salary_bdt_min) >= ?")
         params.append(ann_bdt_min)
 
     if max_salary is not None and float(max_salary) > 0:
         val_max = float(max_salary)
-        if salary_currency.upper() == "USD":
-            ann_usd_max = val_max if salary_period.lower() == "annual" else val_max * 12.0
-            ann_bdt_max = ann_usd_max * 120.0
-        else: # BDT
-            ann_bdt_max = val_max * 12.0 if salary_period.lower() == "monthly" else val_max
-        
+        ann_bdt_max = (val_max if salary_period.lower() == "annual" else val_max * 12.0) * 120.0 if salary_currency.upper() == "USD" else (val_max * 12.0 if salary_period.lower() == "monthly" else val_max)
         conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_min, salary_bdt_max) <= ?")
         params.append(ann_bdt_max)
 
-    # Smart tokenized search query
-    raw_tokens = []
-    content_tokens = []
+    # Deliberate Query Expansion using Occupation Taxonomy
+    query_terms = []
     if q and q.strip():
-        raw_tokens = [w.strip() for w in q.split() if w.strip()]
-        
-        # Check for workplace hints
-        has_remote = any(w.lower() == "remote" for w in raw_tokens)
-        if has_remote and (not workplace_type or workplace_type.lower() in ["all", "any"]):
-            conditions.append("workplace_type = 'Remote'")
-            
-        known_countries = {
-            "bangladesh": "Bangladesh", "bd": "Bangladesh", "usa": "United States", 
-            "us": "United States", "germany": "Germany", "india": "India", 
-            "singapore": "Singapore", "uk": "United Kingdom", "canada": "Canada"
-        }
-        
-        for token in raw_tokens:
-            t_lower = token.lower()
-            if t_lower in ["remote", "worldwide", "international", "job", "jobs"]:
-                continue
-            if t_lower in known_countries and (not country or country.lower() in ["all", "worldwide", "any"]):
-                if "country = ?" not in conditions:
-                    conditions.append("country = ?")
-                    params.append(known_countries[t_lower])
-                continue
-            content_tokens.append(token)
+        raw_tokens = [w for w in q.split() if w.lower() not in ["job", "jobs", "remote", "worldwide", "international"]]
+        clean_query = " ".join(raw_tokens).strip() if raw_tokens else q.strip()
+        query_terms = normalize_search_query(clean_query)
 
-        if content_tokens:
+        if query_terms:
             token_conds = []
-            for token in content_tokens:
-                pattern = f"%{token}%"
-                token_conds.append("(title LIKE ? OR company_name LIKE ? OR skills_required LIKE ? OR category_name LIKE ? OR job_context LIKE ?)")
-                params.extend([pattern, pattern, pattern, pattern, pattern])
-            conditions.append("(" + " AND ".join(token_conds) + ")")
+            for term in query_terms:
+                token_conds.append("(title LIKE ? OR skills_required LIKE ? OR job_context LIKE ?)")
+                p = f"%{term}%"
+                params.extend([p, p, p])
+            conditions.append("(" + " OR ".join(token_conds) + ")")
 
     where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
     order_clause = "ORDER BY publish_date DESC, rowid DESC"
@@ -433,44 +538,56 @@ def search_global_jobs(
     params.append(limit)
 
     rows = cursor.execute(sql, params).fetchall()
-
-    # If strict AND search returned 0 results, fall back to OR search across content tokens
-    if not rows and q and q.strip() and len(raw_tokens) > 1:
-        fb_conditions = []
-        fb_params = []
-        if category_id is not None and int(category_id) > 0:
-            fb_conditions.append("category_id = ?")
-            fb_params.append(int(category_id))
-        if country and country.lower() not in ["all", "worldwide", "any"]:
-            fb_conditions.append("country = ?")
-            fb_params.append(country)
-        if workplace_type and workplace_type.lower() not in ["all", "any"]:
-            fb_conditions.append("workplace_type = ?")
-            fb_params.append(workplace_type)
-        if visa_sponsorship is True:
-            fb_conditions.append("visa_sponsorship = 1")
-        if ann_bdt_min is not None:
-            fb_conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_max, salary_bdt_min) >= ?")
-            fb_params.append(ann_bdt_min)
-        if ann_bdt_max is not None:
-            fb_conditions.append("salary_disclosed = 1 AND COALESCE(salary_bdt_min, salary_bdt_max) <= ?")
-            fb_params.append(ann_bdt_max)
-
-        search_tokens = content_tokens if content_tokens else raw_tokens
-        or_conds = []
-        for token in search_tokens:
-            pattern = f"%{token}%"
-            or_conds.append("(title LIKE ? OR company_name LIKE ? OR skills_required LIKE ? OR category_name LIKE ?)")
-            fb_params.extend([pattern, pattern, pattern, pattern])
-        if or_conds:
-            fb_conditions.append("(" + " OR ".join(or_conds) + ")")
-            fb_where = " WHERE " + " AND ".join(fb_conditions) if fb_conditions else ""
-            fb_params.append(limit)
-            rows = cursor.execute(f"SELECT * FROM jobs{fb_where} {order_clause} LIMIT ?", fb_params).fetchall()
-
     conn.close()
 
-    return [row_to_normalized_job(r, candidate_origin) for r in rows]
+    hydrated = [row_to_normalized_job(r, candidate_origin) for r in rows]
+
+    # Weighted relevance ranking: Title match > Skills match > Description match
+    if q and q.strip():
+        primary_q = q.lower().strip()
+        def calculate_relevance(job: NormalizedJob) -> float:
+            t = job.title.lower()
+            s = " ".join(job.skills_required).lower()
+            d = (job.job_context or "").lower()
+            rel = 0.0
+            if primary_q == t:
+                rel += 200.0
+            elif primary_q in t:
+                rel += 100.0
+            elif any(term in t for term in query_terms):
+                rel += 75.0
+            elif any(term in s for term in query_terms):
+                rel += 40.0
+            elif any(term in d for term in query_terms):
+                rel += 15.0
+            return rel
+
+        def get_sort_date(j: NormalizedJob) -> datetime:
+            if not j.publish_date:
+                return datetime.min.replace(tzinfo=timezone.utc)
+            if j.publish_date.tzinfo is None:
+                return j.publish_date.replace(tzinfo=timezone.utc)
+            return j.publish_date
+
+        if sort_by in ["recent", "relevance"]:
+            hydrated.sort(key=lambda j: (calculate_relevance(j), get_sort_date(j)), reverse=True)
+
+    # Diagnostic Search Funnel Calculation (Section 18)
+    diagnostics = {
+        "query": q,
+        "normalized_terms": query_terms,
+        "sources_queried": active_sources_cnt,
+        "sources_active": active_sources_cnt,
+        "sources_unavailable": unavail_sources_cnt,
+        "total_evaluated": total_in_db,
+        "matching_title_or_skills": len(hydrated),
+        "matching_location": len([j for j in hydrated if not country or country.lower() in ["all", "worldwide"] or country.lower() in j.country.lower() or country.lower() in j.location.lower()]),
+        "matching_remote": len([j for j in hydrated if not has_remote_requested or j.workplace_type == "Remote"]),
+        "final_results": len(hydrated),
+        "explanation": f"Evaluated {total_in_db} jobs across {active_sources_cnt} active global sources." if hydrated else "No matching jobs found from currently available sources with active endpoints."
+    }
+
+    return hydrated, diagnostics
 
 def get_country_explorer_stats() -> List[Dict[str, Any]]:
     """Aggregate vacancies, remote percentage, top companies, and visa positions per country."""

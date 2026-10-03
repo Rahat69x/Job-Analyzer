@@ -83,6 +83,17 @@
             </select>
           </div>
 
+          <div class="search-field-group select-group">
+            <select id="filter-freshness" title="Filter by posting freshness">
+              <option value="">Any Freshness</option>
+              <option value="1">Past 24 Hours</option>
+              <option value="3">Past 3 Days</option>
+              <option value="7">Past 7 Days</option>
+              <option value="14">Past 14 Days</option>
+              <option value="30">Past 30 Days</option>
+            </select>
+          </div>
+
           <button id="btn-global-search" class="btn btn-primary search-btn">
             Find Opportunities
           </button>
@@ -127,13 +138,17 @@
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
         Job Alerts (<span id="alerts-count">0</span>)
       </button>
-      <button id="nav-tab-analytics" class="nav-tab">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-        Market & Currencies
+      <button id="nav-tab-source-health" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Source Health (<span id="active-sources-tab-count">33</span> Active)
       </button>
       <button id="nav-tab-companies" class="nav-tab">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-        Featured Companies (<span id="companies-count">72</span>)
+        Featured Companies (<span id="companies-count">0</span>)
+      </button>
+      <button id="nav-tab-analytics" class="nav-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Market & Currencies
       </button>
       <button id="nav-tab-ai-analytics" class="nav-tab ai-special-tab">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -893,6 +908,94 @@ LIMIT 15;</code></pre>
         </div>
         <div id="companies-cards-container" class="cards-grid">
           <!-- Populated via API -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 10: SOURCE HEALTH & INGESTION DIAGNOSTIC DASHBOARD -->
+    <div id="view-source-health" class="view-panel">
+      <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+          <div>
+            <div class="section-title">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              Source Health Diagnostic Dashboard
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Real-time ingestion telemetry, endpoint statuses, and harvest metrics across all 70 registered job sources.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button id="btn-trigger-pipeline" class="btn btn-primary btn-sm" style="display: flex; align-items: center; gap: 6px;">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Run Ingestion Pipeline
+            </button>
+            <button id="btn-refresh-health" class="btn btn-secondary btn-sm">Refresh Status</button>
+          </div>
+        </div>
+
+        <!-- Telemetry metric summary cards -->
+        <div class="telemetry-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px;">
+          <div class="stat-card" style="background: rgba(30, 41, 59, 0.6); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase;">Total Registered</div>
+            <div id="health-total-sources" style="font-size: 24px; font-weight: 700; color: #fff; margin-top: 4px;">70</div>
+          </div>
+          <div class="stat-card" style="background: rgba(16, 185, 129, 0.1); padding: 14px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);">
+            <div style="font-size: 11.5px; color: #6ee7b7; text-transform: uppercase;">Active Endpoints</div>
+            <div id="health-active-sources" style="font-size: 24px; font-weight: 700; color: #6ee7b7; margin-top: 4px;">33</div>
+          </div>
+          <div class="stat-card" style="background: rgba(245, 158, 11, 0.1); padding: 14px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.3);">
+            <div style="font-size: 11.5px; color: #fcd34d; text-transform: uppercase;">Partial Endpoints</div>
+            <div id="health-partial-sources" style="font-size: 24px; font-weight: 700; color: #fcd34d; margin-top: 4px;">0</div>
+          </div>
+          <div class="stat-card" style="background: rgba(100, 116, 139, 0.1); padding: 14px; border-radius: 8px; border: 1px solid rgba(100, 116, 139, 0.3);">
+            <div style="font-size: 11.5px; color: #94a3b8; text-transform: uppercase;">Unavailable / Static</div>
+            <div id="health-unavailable-sources" style="font-size: 24px; font-weight: 700; color: #94a3b8; margin-top: 4px;">37</div>
+          </div>
+          <div class="stat-card" style="background: rgba(99, 102, 241, 0.1); padding: 14px; border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.3);">
+            <div style="font-size: 11.5px; color: #a5b4fc; text-transform: uppercase;">Jobs Ingested</div>
+            <div id="health-jobs-ingested" style="font-size: 24px; font-weight: 700; color: #a5b4fc; margin-top: 4px;">887</div>
+          </div>
+          <div class="stat-card" style="background: rgba(14, 165, 233, 0.1); padding: 14px; border-radius: 8px; border: 1px solid rgba(14, 165, 233, 0.3);">
+            <div style="font-size: 11.5px; color: #38bdf8; text-transform: uppercase;">Jobs Deduplicated</div>
+            <div id="health-jobs-deduped" style="font-size: 24px; font-weight: 700; color: #38bdf8; margin-top: 4px;">819</div>
+          </div>
+        </div>
+
+        <!-- Category Filter Tabs for Sources (Section 16) -->
+        <div class="source-category-tabs" id="source-cat-filters" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+          <button type="button" class="source-cat-btn active" data-cat="ALL">All Categories (70)</button>
+          <button type="button" class="source-cat-btn" data-cat="Global Job Boards">Global Job Boards</button>
+          <button type="button" class="source-cat-btn" data-cat="Remote Job Boards">Remote Job Boards</button>
+          <button type="button" class="source-cat-btn" data-cat="ATS / Career Systems">ATS / Career Systems</button>
+          <button type="button" class="source-cat-btn" data-cat="Company Careers">Company Careers</button>
+          <button type="button" class="source-cat-btn" data-cat="Regional Sources">Regional Sources</button>
+          <button type="button" class="source-cat-btn" data-cat="Government Sources">Government Sources</button>
+          <button type="button" class="source-cat-btn" data-cat="Bangladesh Sources">Bangladesh Sources</button>
+        </div>
+
+        <div id="pipeline-status-banner" style="display: none; padding: 10px 16px; border-radius: 6px; margin-bottom: 14px; font-size: 12.5px;"></div>
+
+        <!-- Table of Sources (Section 10) -->
+        <div class="jobs-table-container">
+          <table class="jobs-table" id="sources-health-table">
+            <thead>
+              <tr>
+                <th>Source Name & Platform</th>
+                <th>Category</th>
+                <th>Type & Access</th>
+                <th>Status</th>
+                <th>Jobs Ingested</th>
+                <th>Deduped</th>
+                <th>HTTP</th>
+                <th>Last Success</th>
+                <th>Diagnostic / Error Details</th>
+              </tr>
+            </thead>
+            <tbody id="sources-health-tbody">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

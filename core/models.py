@@ -53,6 +53,8 @@ class CompanyInfo(BaseModel):
 class NormalizedJob(BaseModel):
     id: str
     source: JobSource = "BDJobs"
+    source_type: str = "GLOBAL_JOB_BOARD"
+    source_job_id: Optional[str] = None
     title: str
     company: CompanyInfo
     category_id: int = 8
@@ -61,11 +63,15 @@ class NormalizedJob(BaseModel):
     country: str = "Bangladesh"
     city: Optional[str] = "Dhaka"
     location: str = "Dhaka"
+    region: str = "Worldwide"
     workplace_type: WorkplaceType = "On-site"
+    remote_type: str = "ONSITE"  # REMOTE, HYBRID, ONSITE, UNKNOWN
     remote_eligibility: RemoteEligibility = Field(default_factory=RemoteEligibility)
     candidate_eligibility: CandidateEligibility = Field(default_factory=CandidateEligibility)
-    publish_date: Optional[datetime] = None
+    publish_date: Optional[datetime] = None  # posted_at
     deadline: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    collected_at: Optional[datetime] = None
     experience: ExperienceRequirement = Field(default_factory=ExperienceRequirement)
     experience_level: ExperienceLevel = "Mid Level"
     salary: SalaryInfo = Field(default_factory=SalaryInfo)
@@ -73,11 +79,61 @@ class NormalizedJob(BaseModel):
     employment_type: EmploymentType = "Full-time"
     vacancies: int = 1
     skills_required: List[str] = Field(default_factory=list)
-    job_context: str = ""
+    job_context: str = ""  # description
     apply_url: str
     source_reliability: SourceReliability = "major_board"
     canonical_id: Optional[str] = None
     alternate_sources: List[str] = Field(default_factory=list)
+
+    @property
+    def posted_at(self) -> Optional[datetime]:
+        return self.publish_date
+
+    @property
+    def description(self) -> str:
+        return self.job_context
+
+    @property
+    def salary_min(self) -> Optional[float]:
+        return self.salary.min_salary
+
+    @property
+    def salary_max(self) -> Optional[float]:
+        return self.salary.max_salary
+
+    @property
+    def salary_currency(self) -> str:
+        return self.salary.currency
+
+    @property
+    def skills(self) -> List[str]:
+        return self.skills_required
+
+    def to_unified_dict(self) -> Dict[str, Any]:
+        """Returns job formatted exactly to Section 8 Unified Job Schema."""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "company": self.company.name if self.company else "",
+            "location": self.location,
+            "country": self.country,
+            "region": self.region,
+            "remote_type": self.remote_type,
+            "employment_type": self.employment_type,
+            "experience_level": self.experience_level,
+            "salary_min": self.salary_min,
+            "salary_max": self.salary_max,
+            "salary_currency": self.salary_currency,
+            "skills": self.skills,
+            "description": self.description,
+            "posted_at": self.posted_at.isoformat() if self.posted_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "application_url": self.apply_url,
+            "source": self.source,
+            "source_job_id": self.source_job_id or self.id,
+            "source_type": self.source_type,
+            "collected_at": self.collected_at.isoformat() if self.collected_at else None
+        }
 
 class UserProfile(BaseModel):
     target_category_ids: List[int] = Field(default_factory=list)

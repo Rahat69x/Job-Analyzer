@@ -39,12 +39,18 @@ class JobScorer:
         now = datetime.now(timezone.utc)
         
         # Check deadline
-        if deadline and deadline < now:
-            return 0.05
+        if deadline:
+            if deadline.tzinfo is None:
+                deadline = deadline.replace(tzinfo=timezone.utc)
+            if deadline < now:
+                return 0.05
             
         if not pub_date:
             return 0.50
             
+        if pub_date.tzinfo is None:
+            pub_date = pub_date.replace(tzinfo=timezone.utc)
+
         delta_days = max(0.0, (now - pub_date).total_seconds() / 86400.0)
         # Exponential decay with 7-day half life
         score = math.exp(-delta_days / 7.0)

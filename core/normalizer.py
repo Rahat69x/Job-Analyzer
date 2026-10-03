@@ -205,35 +205,72 @@ def classify_experience_level(exp: ExperienceRequirement) -> ExperienceLevel:
 def normalize_location(location_str: Optional[str]) -> Tuple[str, str, str]:
     """Extract (city, country, region) from location string."""
     if not location_str:
-        return "Dhaka", "Bangladesh", "Asia-Pacific"
+        return "Worldwide", "Worldwide", "Worldwide"
         
     loc = location_str.strip()
     lower = loc.lower()
     
     country_mappings = [
-        ("bangladesh", "Bangladesh"), ("dhaka", "Bangladesh"), ("chittagong", "Bangladesh"), ("sylhet", "Bangladesh"),
-        ("india", "India"), ("bangalore", "India"), ("bengaluru", "India"), ("delhi", "India"), ("mumbai", "India"), ("hyderabad", "India"),
-        ("united states", "United States"), ("usa", "United States"), ("us", "United States"), ("new york", "United States"), ("san francisco", "United States"), ("seattle", "United States"), ("austin", "United States"),
-        ("united kingdom", "United Kingdom"), ("uk", "United Kingdom"), ("london", "United Kingdom"),
-        ("germany", "Germany"), ("berlin", "Germany"), ("munich", "Germany"), ("frankfurt", "Germany"),
+        # Bangladesh
+        ("bangladesh", "Bangladesh"), ("dhaka", "Bangladesh"), ("chittagong", "Bangladesh"), 
+        ("sylhet", "Bangladesh"), ("khulna", "Bangladesh"), ("rajshahi", "Bangladesh"),
+        # India
+        ("india", "India"), ("bangalore", "India"), ("bengaluru", "India"), ("delhi", "India"), 
+        ("mumbai", "India"), ("hyderabad", "India"), ("pune", "India"), ("chennai", "India"), 
+        ("noida", "India"), ("gurgaon", "India"),
+        # United States
+        ("united states", "United States"), ("usa", "United States"), ("u.s.a.", "United States"), 
+        ("u.s.", "United States"), (r"\bus\b", "United States"), ("new york", "United States"), 
+        ("san francisco", "United States"), ("seattle", "United States"), ("austin", "United States"), 
+        ("california", "United States"), ("chicago", "United States"), ("boston", "United States"), 
+        ("los angeles", "United States"),
+        # United Kingdom
+        ("united kingdom", "United Kingdom"), ("uk", "United Kingdom"), ("london", "United Kingdom"), 
+        ("manchester", "United Kingdom"), ("edinburgh", "United Kingdom"), ("birmingham", "United Kingdom"),
+        # Germany
+        ("germany", "Germany"), ("deutschland", "Germany"), ("berlin", "Germany"), ("munich", "Germany"), 
+        ("münchen", "Germany"), ("frankfurt", "Germany"), ("hamburg", "Germany"), ("cologne", "Germany"), 
+        ("köln", "Germany"), ("stuttgart", "Germany"), ("düsseldorf", "Germany"), ("karlsruhe", "Germany"),
+        # Singapore
         ("singapore", "Singapore"),
-        ("japan", "Japan"), ("tokyo", "Japan"),
-        ("canada", "Canada"), ("toronto", "Canada"), ("vancouver", "Canada"),
-        ("australia", "Australia"), ("sydney", "Australia"), ("melbourne", "Australia"),
-        ("uae", "United Arab Emirates"), ("dubai", "United Arab Emirates"), ("abu dhabi", "United Arab Emirates"),
+        # Japan
+        ("japan", "Japan"), ("tokyo", "Japan"), ("osaka", "Japan"),
+        # Canada
+        ("canada", "Canada"), ("toronto", "Canada"), ("vancouver", "Canada"), ("montreal", "Canada"), ("ottawa", "Canada"),
+        # Australia
+        ("australia", "Australia"), ("sydney", "Australia"), ("melbourne", "Australia"), ("brisbane", "Australia"),
+        # UAE
+        ("united arab emirates", "United Arab Emirates"), ("uae", "United Arab Emirates"), ("dubai", "United Arab Emirates"), ("abu dhabi", "United Arab Emirates"),
+        # China
         ("china", "China"), ("beijing", "China"), ("shanghai", "China"), ("shenzhen", "China"),
-        ("netherlands", "Netherlands"), ("amsterdam", "Netherlands"),
+        # Netherlands
+        ("netherlands", "Netherlands"), ("amsterdam", "Netherlands"), ("rotterdam", "Netherlands"),
+        # Ireland
         ("ireland", "Ireland"), ("dublin", "Ireland"),
-        ("france", "France"), ("paris", "France"),
-        ("sweden", "Sweden"), ("stockholm", "Sweden"),
-        ("switzerland", "Switzerland"), ("zurich", "Switzerland"),
+        # France
+        ("france", "France"), ("paris", "France"), ("lyon", "France"),
+        # Sweden
+        ("sweden", "Sweden"), ("stockholm", "Sweden"), ("gothenburg", "Sweden"),
+        # Switzerland
+        ("switzerland", "Switzerland"), ("zurich", "Switzerland"), ("geneva", "Switzerland"),
+        # Qatar
         ("qatar", "Qatar"), ("doha", "Qatar"),
-        ("saudi arabia", "Saudi Arabia"), ("riyadh", "Saudi Arabia")
+        # Saudi Arabia
+        ("saudi arabia", "Saudi Arabia"), ("riyadh", "Saudi Arabia"), ("jeddah", "Saudi Arabia"),
+        # Other European
+        ("poland", "Poland"), ("warsaw", "Poland"), ("spain", "Spain"), ("madrid", "Spain"), 
+        ("barcelona", "Spain"), ("italy", "Italy"), ("rome", "Italy"), ("milan", "Italy"),
+        # Worldwide / Remote
+        ("worldwide", "Worldwide"), ("remote", "Worldwide"), ("anywhere", "Worldwide"), ("global", "Worldwide")
     ]
     
-    detected_country = "Bangladesh"
+    detected_country = "Worldwide"
     for pattern, c_name in country_mappings:
-        if re.search(r'\b' + re.escape(pattern) + r'\b', lower):
+        if pattern.startswith(r"\b"):
+            if re.search(pattern, lower):
+                detected_country = c_name
+                break
+        elif re.search(r'\b' + re.escape(pattern) + r'\b', lower):
             detected_country = c_name
             break
             

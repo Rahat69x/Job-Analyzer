@@ -9,9 +9,11 @@ from pydantic import BaseModel
 from core.models import UserProfile, ScoringWeights, ScoredJob, NormalizedJob
 from core.db import (
     init_db, upsert_jobs, set_job_status, get_tracked_jobs, get_market_analytics,
-    search_global_jobs, get_country_explorer_stats, get_connection, row_to_normalized_job,
+    search_global_jobs, search_global_jobs_with_diagnostics, get_country_explorer_stats, get_connection, row_to_normalized_job,
     get_job_by_id
 )
+from core.source_registry import source_registry
+from ingestion.pipeline import ingestion_pipeline
 from core.normalizer import EXCHANGE_RATES_TO_USD, evaluate_candidate_eligibility
 from core.timezone_engine import feasibility_engine, FlexibilityTier
 from core.apply_resolver import apply_resolver, ApplicationResolution
@@ -43,7 +45,7 @@ init_db()
 bdjobs_client = BDJobsClient(TAXONOMY_PATH)
 scorer = JobScorer()
 
-# Pre-populate global catalog and all curated companies in DB on boot
+# Pre-populate global catalog, curated companies, and live pipeline on boot
 try:
     initial_jobs = global_aggregator.fetch_all(limit_per_source=50)
     curated_jobs = CuratedCompaniesConnector().fetch_jobs(limit=200)
@@ -51,6 +53,11 @@ try:
     all_initial = (initial_jobs or []) + (curated_jobs or []) + (partner_jobs or [])
     if all_initial:
         upsert_jobs(all_initial)
+    conn = get_connection()
+    db_count = conn.cursor().execute("SELECT count(*) FROM jobs").fetchone()[0]
+    conn.close()
+    if db_count < 200:
+        ingestion_pipeline.run_pipeline(limit_per_source=25, max_workers=6)
 except Exception as e:
     pass
 
@@ -182,7 +189,29 @@ def evaluate_job_timezone_feasibility(
 
 # ==================== GLOBAL DISCOVERY ENDPOINTS ====================
 
+@app.get("/api/sources/health")
+def get_sources_health():
+    """
+    Developer & Admin Source Health Diagnostic Dashboard.
+    Reports real health status, jobs retrieved, deduplicated, and error messages
+    across all 70 registered sources grouped into the 7 official UI categories.
+    """
+    return source_registry.get_health_summary()
+
+@app.post("/api/ingest/run")
+def run_ingestion_job(
+    limit: int = Query(60, description="Limit per source"),
+    workers: int = Query(8, description="Worker threads")
+):
+    """
+    Triggers concurrent live ingestion pipeline across registered sources.
+    Validates, deduplicates, and saves genuine job openings to SQLite.
+    """
+    summary = ingestion_pipeline.run_pipeline(limit_per_source=limit, max_workers=workers)
+    return {"status": "success", "summary": summary}
+
 @app.get("/api/global/search")
+@app.get("/api/jobs/global")
 def search_jobs(
     q: Optional[str] = Query(None, description="Keywords: title, skills, or company"),
     category_id: Optional[int] = Query(None, description="BDJobs Category ID"),
@@ -195,6 +224,7 @@ def search_jobs(
     candidate_origin: str = Query("Bangladesh", description="Applicant home country"),
     skills: Optional[str] = Query(None, description="Comma-separated skills"),
     experience: float = Query(3.0, description="Applicant experience years"),
+    freshness_days: Optional[int] = Query(None, description="Freshness filter in days (1, 3, 7, 14, 30)"),
     refresh_live: bool = Query(False, description="Force refresh from live sources"),
     sort_by: str = Query("recent", description="Sort by: recent, salary_desc, salary_asc, deadline"),
     source: Optional[str] = Query(None, description="Source board e.g. Remote OK, Indeed, BDJobs"),
@@ -202,14 +232,15 @@ def search_jobs(
     max_salary: Optional[float] = Query(None, description="Maximum salary threshold"),
     salary_currency: str = Query("BDT", description="Salary currency (BDT or USD)"),
     salary_period: str = Query("Monthly", description="Salary period (Monthly or Annual)"),
-    limit: int = Query(500, description="Results limit")
+    limit: int = Query(1500, description="Results limit")
 ):
     """
     Comprehensive global multi-criteria search.
     Intelligently scores and evaluates candidate eligibility across all connected sources.
+    Returns full diagnostic funnel metrics (Section 18) when evaluated.
     """
     cat_id = category_id if isinstance(category_id, int) else None
-    limit_val = limit if isinstance(limit, int) else 500
+    limit_val = limit if isinstance(limit, int) else 1500
     q_val = q if isinstance(q, str) else None
     country_val = country if isinstance(country, str) else None
     workplace_val = workplace_type if isinstance(workplace_type, str) else None
@@ -240,7 +271,7 @@ def search_jobs(
             except Exception as e:
                 print(f"[SearchAPI] Error fetching live category: {e}")
 
-    results = search_global_jobs(
+    results, diagnostics = search_global_jobs_with_diagnostics(
         q=q_val,
         category_id=cat_id,
         country=country_val,
@@ -252,6 +283,7 @@ def search_jobs(
         candidate_origin=cand_origin_val,
         sort_by=sort_by_val,
         source=source_val,
+        freshness_days=freshness_days,
         min_salary=min_sal_val,
         max_salary=max_sal_val,
         salary_currency=sal_curr_val,
@@ -265,23 +297,24 @@ def search_jobs(
             live_jobs = global_aggregator.fetch_all(query=q, country=country, limit_per_source=25)
             if live_jobs:
                 upsert_jobs(live_jobs)
-                results = search_global_jobs(
-                    q=q,
-                    category_id=category_id,
-                    country=country,
-                    workplace_type=workplace_type,
-                    remote_policy=remote_policy,
-                    experience_level=experience_level,
-                    employment_type=employment_type,
-                    visa_sponsorship=visa_sponsorship,
-                    candidate_origin=candidate_origin,
-                    sort_by=sort_by,
-                    source=source,
-                    min_salary=min_salary,
-                    max_salary=max_salary,
-                    salary_currency=salary_currency,
-                    salary_period=salary_period,
-                    limit=limit
+                results, diagnostics = search_global_jobs_with_diagnostics(
+                    q=q_val,
+                    category_id=cat_id,
+                    country=country_val,
+                    workplace_type=workplace_val,
+                    remote_policy=remote_policy_val,
+                    experience_level=exp_lvl_val,
+                    employment_type=emp_type_val,
+                    visa_sponsorship=visa_val,
+                    candidate_origin=cand_origin_val,
+                    sort_by=sort_by_val,
+                    source=source_val,
+                    freshness_days=freshness_days,
+                    min_salary=min_sal_val,
+                    max_salary=max_sal_val,
+                    salary_currency=sal_curr_val,
+                    salary_period=sal_per_val,
+                    limit=limit_val
                 )
         except Exception:
             pass
@@ -313,6 +346,7 @@ def search_jobs(
         "sources_evaluated": sources_evaluated,
         "source_health": global_aggregator.get_source_health(),
         "unavailable_sources": global_aggregator.get_unavailable_sources(),
+        "search_diagnostics": diagnostics,
         "results": [r.model_dump() for r in ranked]
     }
 

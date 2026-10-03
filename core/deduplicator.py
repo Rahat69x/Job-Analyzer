@@ -1,23 +1,38 @@
+"""
+Intelligent Cross-Platform Job Deduplication
+Deduplicates postings appearing across multiple boards and ATS platforms
+while preserving complete source provenance and richest metadata.
+"""
+
 import re
 import hashlib
 from typing import List, Dict
 from core.models import NormalizedJob
 
-def clean_for_dedup(text: str) -> str:
-    """Normalize text for hash comparison."""
+def clean_company_name(text: str) -> str:
+    """Normalize company name by stripping legal entities and filler."""
     if not text:
         return ""
-    text = text.lower()
-    text = re.sub(r'[\(\)\[\],.\-_/:]', ' ', text)
-    # Remove common filler words & legal entity indicators
-    text = re.sub(r'\b(senior|junior|lead|principal|staff|intern|the|ltd|limited|llc|inc|corp|corporation|gmbh|co|pvt|technologies|solutions|group)\b', '', text)
-    return re.sub(r'\s+', ' ', text).strip()
+    t = text.lower()
+    t = re.sub(r'[\(\)\[\],.\-_/:]', ' ', t)
+    t = re.sub(r'\b(the|ltd|limited|llc|inc|corp|corporation|gmbh|co|pvt|technologies|solutions|group|holdings)\b', '', t)
+    return re.sub(r'\s+', ' ', t).strip()
+
+def clean_title(text: str) -> str:
+    """Normalize job title preserving seniority level, sorted for order invariance."""
+    if not text:
+        return ""
+    t = text.lower()
+    t = re.sub(r'[\(\)\[\],.\-_/:]', ' ', t)
+    tokens = [w for w in t.split() if w]
+    tokens.sort()
+    return " ".join(tokens)
 
 def compute_canonical_id(job: NormalizedJob) -> str:
     """Generate a reproducible canonical hash for cross-portal deduplication."""
-    norm_comp = clean_for_dedup(job.company.name)
-    norm_title = clean_for_dedup(job.title)
-    norm_loc = clean_for_dedup(job.country)
+    norm_comp = clean_company_name(job.company.name if job.company else "")
+    norm_title = clean_title(job.title)
+    norm_loc = clean_company_name(job.country or job.location)
     
     key = f"{norm_comp}::{norm_title}::{norm_loc}"
     return hashlib.md5(key.encode("utf-8")).hexdigest()[:16]
