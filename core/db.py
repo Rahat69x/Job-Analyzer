@@ -287,6 +287,17 @@ def row_to_normalized_job(row: sqlite3.Row, candidate_origin: str = "Bangladesh"
         alternate_sources=alt_sources
     )
 
+def get_job_by_id(job_id: str) -> Optional[NormalizedJob]:
+    """Retrieve a single NormalizedJob by ID from SQLite database."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return row_to_normalized_job(row)
+    return None
+
 def search_global_jobs(
     q: Optional[str] = None,
     category_id: Optional[int] = None,

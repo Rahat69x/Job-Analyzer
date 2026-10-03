@@ -473,6 +473,86 @@ function initEventListeners() {
   document.getElementById("btn-cancel-track").addEventListener("click", () => tModal.classList.remove("show"));
   document.getElementById("btn-save-track").addEventListener("click", handleSaveTrackStage);
 
+  // Apply Flow Modal
+  const aModal = document.getElementById("apply-flow-modal");
+  const btnCloseApply = document.getElementById("btn-close-apply-modal");
+  if (btnCloseApply) btnCloseApply.addEventListener("click", () => aModal.classList.remove("show"));
+  const btnCancelApply = document.getElementById("btn-cancel-apply");
+  if (btnCancelApply) btnCancelApply.addEventListener("click", () => aModal.classList.remove("show"));
+
+  const btnCopyPitch = document.getElementById("btn-copy-pitch");
+  if (btnCopyPitch) {
+    btnCopyPitch.addEventListener("click", () => {
+      const pitchText = document.getElementById("apply-preserved-pitch").value;
+      navigator.clipboard.writeText(pitchText).then(() => {
+        btnCopyPitch.textContent = "✓ Copied!";
+        setTimeout(() => { btnCopyPitch.textContent = "📋 Copy Pitch"; }, 2000);
+      });
+    });
+  }
+
+  const btnCopySkills = document.getElementById("btn-copy-skills");
+  if (btnCopySkills) {
+    btnCopySkills.addEventListener("click", () => {
+      if (currentApplyingJob && currentApplyingJob.skills_required) {
+        navigator.clipboard.writeText(currentApplyingJob.skills_required.join(", ")).then(() => {
+          btnCopySkills.textContent = "✓ Copied!";
+          setTimeout(() => { btnCopySkills.textContent = "Copy Skills"; }, 2000);
+        });
+      }
+    });
+  }
+
+  const btnMarkApplied = document.getElementById("btn-apply-mark-applied");
+  if (btnMarkApplied) {
+    btnMarkApplied.addEventListener("click", async () => {
+      if (!currentApplyingJob) return;
+      try {
+        await fetch("/api/global/tracker", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            job_id: currentApplyingJob.id,
+            status: "Applied",
+            recruiter_info: currentApplyingJob.company ? currentApplyingJob.company.name : "",
+            notes: "Applied via Universal Application Flow (" + (currentResolvedApply ? currentResolvedApply.platform_name : "Direct") + ")",
+            score: 0.90
+          })
+        });
+        btnMarkApplied.textContent = "✓ Saved as Applied!";
+        loadTrackedJobsCount();
+        setTimeout(() => { btnMarkApplied.textContent = "✓ Mark Applied"; }, 2500);
+      } catch (e) {
+        console.error("Tracker save error:", e);
+      }
+    });
+  }
+
+  const btnMarkPlanning = document.getElementById("btn-apply-mark-planning");
+  if (btnMarkPlanning) {
+    btnMarkPlanning.addEventListener("click", async () => {
+      if (!currentApplyingJob) return;
+      try {
+        await fetch("/api/global/tracker", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            job_id: currentApplyingJob.id,
+            status: "Planning to Apply",
+            recruiter_info: currentApplyingJob.company ? currentApplyingJob.company.name : "",
+            notes: "Plan to complete application on " + (currentResolvedApply ? currentResolvedApply.platform_name : "Company Portal"),
+            score: 0.85
+          })
+        });
+        btnMarkPlanning.textContent = "✓ Saved to Plan!";
+        loadTrackedJobsCount();
+        setTimeout(() => { btnMarkPlanning.textContent = "📌 Plan to Apply"; }, 2500);
+      } catch (e) {
+        console.error("Tracker save error:", e);
+      }
+    });
+  }
+
   // Remote Regions Bar
   document.querySelectorAll(".region-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -629,7 +709,7 @@ function renderJobsTable(results) {
     return `
       <tr>
         <td>
-          <div class="job-title">${escapeHtml(job.title)}</div>
+          <div class="job-title" style="cursor: pointer;" onclick="openApplyFlowModal('${job.id}')" title="Click to view application flow and details">${escapeHtml(job.title)}</div>
           <div class="job-skills">${(job.skills_required || []).slice(0, 4).map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join("")}</div>
           <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">Source: ${sourceLabel}</div>
         </td>
@@ -650,9 +730,9 @@ function renderJobsTable(results) {
           <div class="score-pill">${Math.round(score.final_score * 100)}%</div>
         </td>
         <td>
-          <a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="apply-btn-direct" title="Open original job application on ${escapeHtml(job.source)}">
+          <button type="button" class="apply-btn-direct" onclick="openApplyFlowModal('${job.id}')" title="Launch intelligent application assistant for ${escapeHtml(job.title)}">
             Apply Now ↗
-          </a>
+          </button>
         </td>
         <td>
           <button class="btn btn-secondary btn-sm" onclick="openTrackModal('${job.id}')">
@@ -742,12 +822,16 @@ async function loadRemoteJobsView(region = "Worldwide") {
       return;
     }
 
+    results.forEach(r => {
+      if (r.job && !loadedJobs.some(j => j.id === r.job.id)) loadedJobs.push(r.job);
+    });
+
     container.innerHTML = results.map(({ job, score }) => `
       <div class="job-card">
         <div>
           <div class="job-card-header">
             <div>
-              <div class="job-card-title">${escapeHtml(job.title)}</div>
+              <div class="job-card-title" style="cursor: pointer;" onclick="openApplyFlowModal('${job.id}')" title="Click to view details & application flow">${escapeHtml(job.title)}</div>
               <div class="job-card-company">${escapeHtml(job.company.name)} · <span style="color: var(--accent-indigo);">${job.source}</span></div>
             </div>
             <div class="score-pill">${Math.round(score.final_score * 100)}%</div>
@@ -766,9 +850,9 @@ async function loadRemoteJobsView(region = "Worldwide") {
             <strong>${job.salary.raw_text}</strong>
             <div style="font-size: 11px; color: var(--text-muted);">${escapeHtml(job.location)}</div>
           </div>
-          <a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="apply-btn-direct">
+          <button type="button" class="apply-btn-direct" onclick="openApplyFlowModal('${job.id}')" title="Launch application assistant for ${escapeHtml(job.title)}">
             Apply Now ↗
-          </a>
+          </button>
         </div>
       </div>
     `).join("");
@@ -883,12 +967,16 @@ async function loadRecommendedJobsView() {
       return;
     }
 
+    results.forEach(r => {
+      if (r.job && !loadedJobs.some(j => j.id === r.job.id)) loadedJobs.push(r.job);
+    });
+
     container.innerHTML = results.map(({ job, score }) => `
       <div class="job-card">
         <div>
           <div class="job-card-header">
             <div>
-              <div class="job-card-title">${escapeHtml(job.title)}</div>
+              <div class="job-card-title" style="cursor: pointer;" onclick="openApplyFlowModal('${job.id}')" title="Click to view details & application flow">${escapeHtml(job.title)}</div>
               <div class="job-card-company">${escapeHtml(job.company.name)} · <span>${escapeHtml(job.country)}</span></div>
             </div>
             <div class="score-pill">${Math.round(score.final_score * 100)}%</div>
@@ -904,9 +992,9 @@ async function loadRecommendedJobsView() {
           <div>
             <strong>${job.salary.raw_text}</strong>
           </div>
-          <a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="apply-btn-direct">
+          <button type="button" class="apply-btn-direct" onclick="openApplyFlowModal('${job.id}')" title="Launch application assistant for ${escapeHtml(job.title)}">
             Apply Now ↗
-          </a>
+          </button>
         </div>
       </div>
     `).join("");
@@ -1004,6 +1092,126 @@ async function handleSaveTrackStage() {
     alert("Could not update job stage: " + err);
   }
 }
+
+// ==================== UNIVERSAL APPLICATION & ATS RESOLVER FLOW ====================
+
+let currentApplyingJob = null;
+let currentResolvedApply = null;
+
+async function openApplyFlowModal(jobId) {
+  const job = loadedJobs.find(j => j.id === jobId) || null;
+  currentApplyingJob = job;
+
+  const modal = document.getElementById("apply-flow-modal");
+  if (!modal) return;
+
+  // Set initial placeholders
+  document.getElementById("apply-job-title").textContent = job ? job.title : "Job Application";
+  document.getElementById("apply-job-company").textContent = (job && job.company) ? job.company.name : "";
+  document.getElementById("apply-job-location").textContent = job ? (job.location || job.country) : "";
+  document.getElementById("apply-job-salary").textContent = (job && job.salary) ? job.salary.raw_text : "Disclosed on portal";
+  
+  const badgeContainer = document.getElementById("apply-type-badge-container");
+  badgeContainer.innerHTML = `<span class="badge badge-primary">ANALYZING DESTINATION...</span>`;
+  
+  const alertBox = document.getElementById("apply-alert-box");
+  alertBox.style.display = "none";
+  
+  const stepsList = document.getElementById("apply-steps-list");
+  stepsList.innerHTML = `<li style="color: var(--text-muted);">Detecting platform flow, ATS signatures, and authentication steps...</li>`;
+  
+  const skillsContainer = document.getElementById("apply-skills-tags");
+  const skills = (job && job.skills_required) ? job.skills_required : [];
+  skillsContainer.innerHTML = skills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join("");
+
+  document.getElementById("apply-preserved-pitch").value = "Drafting tailored application note based on role requirements...";
+  document.getElementById("apply-canonical-url-text").textContent = job ? job.apply_url : "Resolving canonical destination...";
+
+  const proceedBtn = document.getElementById("btn-proceed-application");
+  proceedBtn.href = job ? job.apply_url : "#";
+
+  modal.classList.add("show");
+
+  try {
+    const res = await fetch("/api/apply/resolve", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        job_id: jobId,
+        apply_url: job ? job.apply_url : "",
+        title: job ? job.title : "",
+        company: (job && job.company) ? job.company.name : "",
+        location: job ? (job.location || job.country) : "",
+        skills: skills,
+        source: job ? job.source : "Global"
+      })
+    });
+
+    if (!res.ok) throw new Error("Could not resolve application flow");
+    const data = await res.json();
+    currentResolvedApply = data;
+
+    // Platform Name & Title
+    document.getElementById("apply-platform-name").textContent = data.platform_name || "Official Platform";
+    document.getElementById("apply-canonical-url-text").textContent = data.canonical_url;
+    proceedBtn.href = data.canonical_url;
+
+    // Platform Icon
+    const iconEl = document.getElementById("apply-modal-platform-icon");
+    if (data.application_type === "EXTERNAL_ATS") {
+      iconEl.textContent = "⚙️";
+    } else if (data.application_type === "DIRECT_JOB_BOARD") {
+      iconEl.textContent = "⚡";
+    } else if (data.application_type === "QUICK_APPLY") {
+      iconEl.textContent = "✉️";
+    } else {
+      iconEl.textContent = "🏢";
+    }
+
+    // Type Badge
+    let typeClass = "badge-primary";
+    if (data.application_type === "EXTERNAL_ATS") typeClass = "badge-accent";
+    if (data.application_type === "QUICK_APPLY") typeClass = "badge-success";
+    badgeContainer.innerHTML = `<span class="badge ${typeClass}">${data.application_type.replace(/_/g, " ")}: ${data.platform_name.toUpperCase()}</span>`;
+
+    // Alert Banner (Auth, CAPTCHA, or BDJobs exclusion notice)
+    if (data.notice) {
+      alertBox.className = "apply-alert-banner alert-bdjobs-filtered";
+      document.getElementById("apply-alert-icon").textContent = "🛡️";
+      document.getElementById("apply-alert-text").textContent = data.notice;
+      alertBox.style.display = "flex";
+    } else if (data.auth_requirement === "AUTH_REQUIRED") {
+      alertBox.className = "apply-alert-banner alert-auth";
+      document.getElementById("apply-alert-icon").textContent = "🔐";
+      document.getElementById("apply-alert-text").textContent = data.auth_details || "Candidate sign-in or account registration required on this platform.";
+      alertBox.style.display = "flex";
+    } else if (data.auth_requirement === "CAPTCHA_CHECK") {
+      alertBox.className = "apply-alert-banner alert-captcha";
+      document.getElementById("apply-alert-icon").textContent = "🛡️";
+      document.getElementById("apply-alert-text").textContent = data.auth_details || "Security check/CAPTCHA required.";
+      alertBox.style.display = "flex";
+    } else {
+      alertBox.style.display = "none";
+    }
+
+    // Render Steps
+    stepsList.innerHTML = (data.steps || []).map(step => `<li>${escapeHtml(step)}</li>`).join("");
+
+    // Pitch & Preserved Data
+    if (data.preserved_payload && data.preserved_payload.tailored_pitch) {
+      document.getElementById("apply-preserved-pitch").value = data.preserved_payload.tailored_pitch;
+    }
+
+  } catch (err) {
+    console.error("Apply resolution error:", err);
+    badgeContainer.innerHTML = `<span class="badge badge-primary">DIRECT APPLICATION</span>`;
+    stepsList.innerHTML = `
+      <li>Open original job posting and review requirements.</li>
+      <li>Upload your CV and submit directly on the destination website.</li>
+    `;
+  }
+}
+
 
 // ==================== ALERTS VIEW ====================
 

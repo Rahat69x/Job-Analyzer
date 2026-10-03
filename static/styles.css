@@ -2064,3 +2064,148 @@ body {
   color: #93c5fd;
   line-height: 1.5;
 }
+
+/* ==================== UNIVERSAL APPLY & ATS RESOLVER MODAL ==================== */
+.apply-modal-window {
+  max-width: 640px !important;
+  width: 95% !important;
+  background: linear-gradient(145deg, rgba(23, 32, 54, 0.95) 0%, rgba(13, 20, 36, 0.98) 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.35) !important;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(99, 102, 241, 0.2) !important;
+}
+
+.platform-icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25));
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.apply-job-header-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.apply-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fde68a;
+}
+
+.apply-alert-banner.alert-auth {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fef08a;
+}
+
+.apply-alert-banner.alert-captcha {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: #a5f3fc;
+}
+
+.apply-alert-banner.alert-bdjobs-filtered {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+}
+
+.apply-section {
+  background: rgba(10, 15, 29, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+
+.apply-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.apply-steps-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step-counter;
+}
+
+.apply-steps-timeline li {
+  counter-increment: step-counter;
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.apply-steps-timeline li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid var(--accent-indigo);
+  color: #a5b4fc;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apply-canonical-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 15, 29, 0.5);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border-subtle);
+  overflow: hidden;
+}
+
+.canonical-url-link {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: #38bdf8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.btn-xs {
+  font-size: 10.5px !important;
+  padding: 3px 8px !important;
+  line-height: 1.2 !important;
+  border-radius: 4px !important;
+}

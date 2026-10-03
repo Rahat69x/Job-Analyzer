@@ -979,9 +979,110 @@ LIMIT 15;</code></pre>
         </div>
       </div>
     </div>
+
+    <!-- Universal Job Application & ATS Resolver Modal -->
+    <div id="apply-flow-modal" class="modal-backdrop">
+      <div class="modal-window apply-modal-window">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="apply-modal-platform-icon" class="platform-icon-badge">🌐</div>
+            <div>
+              <h3 id="apply-modal-title" style="margin: 0; font-size: 16.5px; font-weight: 700; color: #fff;">Application Flow Assistant</h3>
+              <p id="apply-modal-subtitle" style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">Intelligent ATS & Platform Flow Resolver</p>
+            </div>
+          </div>
+          <button id="btn-close-apply-modal" class="close-btn">&times;</button>
+        </div>
+
+        <div class="apply-modal-body" style="padding: 16px 20px;">
+          <!-- Job Summary Ribbon -->
+          <div class="apply-job-header-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h4 id="apply-job-title" style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px;">Role Title</h4>
+                <div style="font-size: 12.5px; color: #cbd5e1; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <strong id="apply-job-company">Company</strong>
+                  <span>·</span>
+                  <span id="apply-job-location">Location</span>
+                  <span>·</span>
+                  <span id="apply-job-salary" style="color: #6ee7b7; font-weight: 600;">Salary</span>
+                </div>
+              </div>
+              <div id="apply-type-badge-container">
+                <span id="apply-type-badge" class="badge badge-primary">EXTERNAL ATS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alert Notice Box (Auth Required / CAPTCHA / BDJobs Filtered) -->
+          <div id="apply-alert-box" class="apply-alert-banner" style="display: none;">
+            <div id="apply-alert-icon">🔐</div>
+            <div id="apply-alert-text">Platform authentication or manual candidate verification detected.</div>
+          </div>
+
+          <!-- Flow & Step-by-Step Instructions -->
+          <div class="apply-section">
+            <div class="apply-section-header">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+              <span>Application Workflow Guide (<span id="apply-platform-name">Platform</span>)</span>
+            </div>
+            <ol id="apply-steps-list" class="apply-steps-timeline">
+              <!-- Dynamically populated steps -->
+            </ol>
+          </div>
+
+          <!-- Preserved Information & Tailored Pitch Hub -->
+          <div class="apply-section">
+            <div class="apply-section-header" style="justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                <span>Preserved Application Data & Tailored Pitch</span>
+              </div>
+              <button type="button" id="btn-copy-pitch" class="btn btn-secondary btn-xs" style="padding: 3px 8px; font-size: 11px;">
+                📋 Copy Pitch
+              </button>
+            </div>
+            <textarea id="apply-preserved-pitch" class="paste-textarea" style="height: 90px; font-size: 11.5px; line-height: 1.5;" readonly></textarea>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+              <div id="apply-skills-tags" class="job-skills">
+                <!-- Skill tags -->
+              </div>
+              <button type="button" id="btn-copy-skills" class="btn btn-secondary btn-xs" style="padding: 3px 8px; font-size: 11px;">
+                Copy Skills
+              </button>
+            </div>
+          </div>
+
+          <!-- Destination URL Preview -->
+          <div class="apply-canonical-preview">
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Destination:</span>
+            <span id="apply-canonical-url-text" class="canonical-url-link">https://...</span>
+          </div>
+        </div>
+
+        <!-- Modal Actions Footer -->
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--border-subtle); background: rgba(15, 23, 42, 0.6);">
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-apply-mark-applied" class="btn btn-secondary btn-sm" title="Add to Tracker as Applied">
+              ✓ Mark Applied
+            </button>
+            <button id="btn-apply-mark-planning" class="btn btn-secondary btn-sm" title="Add to Tracker as Planning to Apply">
+              📌 Plan to Apply
+            </button>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button id="btn-cancel-apply" class="btn btn-secondary btn-sm">Close</button>
+            <a id="btn-proceed-application" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="font-weight: 600; padding: 8px 16px;">
+              Proceed to Application ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="/static/autocomplete.js?v=3.4.0"></script>
-  <script src="/static/app.js?v=3.4.0"></script>
+  <script src="/static/autocomplete.js?v=4.0.0"></script>
+  <script src="/static/app.js?v=4.0.0"></script>
 </body>
 </html>

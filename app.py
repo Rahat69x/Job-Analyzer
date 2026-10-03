@@ -9,10 +9,12 @@ from pydantic import BaseModel
 from core.models import UserProfile, ScoringWeights, ScoredJob, NormalizedJob
 from core.db import (
     init_db, upsert_jobs, set_job_status, get_tracked_jobs, get_market_analytics,
-    search_global_jobs, get_country_explorer_stats, get_connection, row_to_normalized_job
+    search_global_jobs, get_country_explorer_stats, get_connection, row_to_normalized_job,
+    get_job_by_id
 )
 from core.normalizer import EXCHANGE_RATES_TO_USD, evaluate_candidate_eligibility
 from core.timezone_engine import feasibility_engine, FlexibilityTier
+from core.apply_resolver import apply_resolver, ApplicationResolution
 from ingestion.bdjobs_client import BDJobsClient
 from ingestion.public_portals import fetch_sample_partner_jobs, fetch_all_partner_jobs
 from ingestion.linkedin_parser import parse_pasted_linkedin_text
@@ -82,6 +84,15 @@ class CreateAlertRequest(BaseModel):
     remote_only: bool = True
     international_only: bool = False
     experience_level: str = "Any"
+
+class ResolveApplyRequest(BaseModel):
+    job_id: str
+    apply_url: Optional[str] = None
+    title: Optional[str] = ""
+    company: Optional[str] = ""
+    location: Optional[str] = ""
+    skills: Optional[List[str]] = []
+    source: Optional[str] = "Global"
 
 class TimezoneFeasibilityRequest(BaseModel):
     candidate_timezone: str = "Asia/Dhaka"
@@ -566,6 +577,65 @@ def ingest_facebook_job(payload: FacebookIngestRequest):
     scored = scorer.score_job(job, profile)
     return scored.model_dump()
 
+
+@app.post("/api/apply/resolve", response_model=ApplicationResolution)
+def resolve_job_application(payload: ResolveApplyRequest):
+    """
+    Intelligently analyzes and resolves job application URLs for international platforms.
+    Detects ATS (Workday, Greenhouse, Lever, etc.), job boards (LinkedIn, Indeed, etc.),
+    company career sites, or quick/one-click applications.
+    Unwraps redirects, detects authentication barriers, preserves job info,
+    and strictly forbids routing international applications to BDJobs.
+    """
+    target_url = payload.apply_url
+    title = payload.title
+    company = payload.company
+    location = payload.location
+    skills = payload.skills
+    source = payload.source
+
+    # If job exists in DB, backfill any missing details
+    if payload.job_id:
+        existing = get_job_by_id(payload.job_id)
+        if existing:
+            target_url = target_url or existing.apply_url
+            title = title or existing.title
+            company = company or existing.company.name
+            location = location or (existing.location or existing.country)
+            skills = skills or existing.skills_required
+            source = source or existing.source
+
+    if not target_url:
+        raise HTTPException(status_code=400, detail="Apply URL or valid job_id required")
+
+    return apply_resolver.resolve_application(
+        job_id=payload.job_id,
+        apply_url=target_url,
+        job_title=title or "",
+        company_name=company or "",
+        location=location or "",
+        skills=skills or [],
+        job_source=source or "Global"
+    )
+
+@app.get("/api/apply/job/{job_id}", response_model=ApplicationResolution)
+def get_job_application_flow(job_id: str):
+    """
+    Returns the resolved application flow for any job ID in the system.
+    """
+    job = get_job_by_id(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found in catalog")
+
+    return apply_resolver.resolve_application(
+        job_id=job.id,
+        apply_url=job.apply_url,
+        job_title=job.title,
+        company_name=job.company.name,
+        location=job.location or job.country,
+        skills=job.skills_required,
+        job_source=job.source
+    )
 
 @app.get("/api/analytics")
 def get_analytics(category_id: Optional[int] = None):
