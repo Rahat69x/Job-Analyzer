@@ -755,28 +755,56 @@ if os.path.exists(FIGURES_DIR):
 def serve_root_styles():
     css_path = os.path.join(STATIC_DIR, "styles.css")
     if os.path.exists(css_path):
-        return FileResponse(css_path, media_type="text/css")
+        return FileResponse(
+            css_path,
+            media_type="text/css; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=86400",
+                "Access-Control-Allow-Origin": "*"
+            }
+        )
     raise HTTPException(status_code=404, detail="styles.css not found")
 
 @app.get("/app.js")
 def serve_root_app():
     js_path = os.path.join(STATIC_DIR, "app.js")
     if os.path.exists(js_path):
-        return FileResponse(js_path, media_type="application/javascript")
+        return FileResponse(
+            js_path,
+            media_type="application/javascript; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=86400",
+                "Access-Control-Allow-Origin": "*"
+            }
+        )
     raise HTTPException(status_code=404, detail="app.js not found")
 
 @app.get("/autocomplete.js")
 def serve_root_autocomplete():
     js_path = os.path.join(STATIC_DIR, "autocomplete.js")
     if os.path.exists(js_path):
-        return FileResponse(js_path, media_type="application/javascript")
+        return FileResponse(
+            js_path,
+            media_type="application/javascript; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=86400",
+                "Access-Control-Allow-Origin": "*"
+            }
+        )
     raise HTTPException(status_code=404, detail="autocomplete.js not found")
 
 @app.get("/bookmarklet.js")
 def serve_root_bookmarklet():
     js_path = os.path.join(STATIC_DIR, "bookmarklet.js")
     if os.path.exists(js_path):
-        return FileResponse(js_path, media_type="application/javascript")
+        return FileResponse(
+            js_path,
+            media_type="application/javascript; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=86400",
+                "Access-Control-Allow-Origin": "*"
+            }
+        )
     raise HTTPException(status_code=404, detail="bookmarklet.js not found")
 
 @app.get("/api/analytics/ai-market")
@@ -826,7 +854,14 @@ def download_analytics_asset(asset_type: str):
 def serve_dashboard():
     index_file = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_file):
-        return FileResponse(index_file)
+        return FileResponse(
+            index_file,
+            media_type="text/html; charset=utf-8",
+            headers={
+                "Cache-Control": "no-cache, must-revalidate",
+                "Access-Control-Allow-Origin": "*"
+            }
+        )
     return JSONResponse({"status": "AI Job Market Analytics API active."})
 
 @app.api_route("/healthz", methods=["GET", "HEAD"])
