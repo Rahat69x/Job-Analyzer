@@ -1427,7 +1427,7 @@ async function loadTaxonomy() {
     const specCount = (currentTaxonomy.categories || []).filter(c => c.type === "Special Skilled").length;
 
     const tabFunc = document.getElementById("tab-functional");
-    if (tabFunc) tabFunc.textContent = `Functional Roles (${funcCount || 31})`;
+    if (tabFunc) tabFunc.textContent = `Functional Categories (${funcCount || 31})`;
 
     const tabSpec = document.getElementById("tab-special");
     if (tabSpec) tabSpec.textContent = `Special Skilled (${specCount || 33})`;
