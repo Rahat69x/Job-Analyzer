@@ -25,7 +25,17 @@ from ingestion.aggregator import global_aggregator
 from ingestion.global_connectors import CuratedCompaniesConnector
 from scoring.scorer import JobScorer
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="AI Job Market Analytics & Global Career Intelligence", version="4.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TAXONOMY_PATH = os.path.join(BASE_DIR, "data", "taxonomy.json")
@@ -742,6 +752,35 @@ if os.path.exists(STATIC_DIR):
 
 if os.path.exists(FIGURES_DIR):
     app.mount("/reports/figures", StaticFiles(directory=FIGURES_DIR), name="figures")
+
+# Direct root asset endpoints for cross-platform hosting parity
+@app.get("/styles.css")
+def serve_root_styles():
+    css_path = os.path.join(STATIC_DIR, "styles.css")
+    if os.path.exists(css_path):
+        return FileResponse(css_path, media_type="text/css")
+    raise HTTPException(status_code=404, detail="styles.css not found")
+
+@app.get("/app.js")
+def serve_root_app():
+    js_path = os.path.join(STATIC_DIR, "app.js")
+    if os.path.exists(js_path):
+        return FileResponse(js_path, media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="app.js not found")
+
+@app.get("/autocomplete.js")
+def serve_root_autocomplete():
+    js_path = os.path.join(STATIC_DIR, "autocomplete.js")
+    if os.path.exists(js_path):
+        return FileResponse(js_path, media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="autocomplete.js not found")
+
+@app.get("/bookmarklet.js")
+def serve_root_bookmarklet():
+    js_path = os.path.join(STATIC_DIR, "bookmarklet.js")
+    if os.path.exists(js_path):
+        return FileResponse(js_path, media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="bookmarklet.js not found")
 
 @app.get("/api/analytics/ai-market")
 def get_ai_market_analytics():

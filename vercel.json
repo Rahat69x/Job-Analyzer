@@ -1,0 +1,70 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*).css",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/static/index.html"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "/static/styles.css"
+    },
+    {
+      "source": "/app.js",
+      "destination": "/static/app.js"
+    },
+    {
+      "source": "/autocomplete.js",
+      "destination": "/static/autocomplete.js"
+    },
+    {
+      "source": "/bookmarklet.js",
+      "destination": "/static/bookmarklet.js"
+    },
+    {
+      "source": "/static/(.*)",
+      "destination": "/static/$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "https://job-analyzer-s3wi.onrender.com/api/$1"
+    },
+    {
+      "source": "/reports/(.*)",
+      "destination": "/reports/$1"
+    },
+    {
+      "source": "/healthz",
+      "destination": "https://job-analyzer-s3wi.onrender.com/healthz"
+    }
+  ]
+}
