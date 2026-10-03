@@ -446,18 +446,23 @@ function initEventListeners() {
     if (el) el.addEventListener("change", () => loadJobs());
   });
 
-  // Category Tabs (Functional vs Special vs Global)
-  document.getElementById("tab-functional").addEventListener("click", () => switchTab("Functional"));
-  document.getElementById("tab-special").addEventListener("click", () => switchTab("Special Skilled"));
+  // Category Tabs (Functional vs Special vs Global) - guarded if taxonomy card is not present
+  const tabFunc = document.getElementById("tab-functional");
+  if (tabFunc) tabFunc.addEventListener("click", () => switchTab("Functional"));
+  const tabSpec = document.getElementById("tab-special");
+  if (tabSpec) tabSpec.addEventListener("click", () => switchTab("Special Skilled"));
   const tabGlobal = document.getElementById("tab-global-sources");
   if (tabGlobal) {
     tabGlobal.addEventListener("click", () => switchTab("Global"));
   }
 
   // Category Search
-  document.getElementById("category-search").addEventListener("input", (e) => {
-    renderCategoryChips(e.target.value);
-  });
+  const catSearch = document.getElementById("category-search");
+  if (catSearch) {
+    catSearch.addEventListener("input", (e) => {
+      renderCategoryChips(e.target.value);
+    });
+  }
 
   // Refresh Button
   document.getElementById("btn-refresh").addEventListener("click", () => loadJobs(true));
@@ -1427,7 +1432,7 @@ async function loadTaxonomy() {
     const specCount = (currentTaxonomy.categories || []).filter(c => c.type === "Special Skilled").length;
 
     const tabFunc = document.getElementById("tab-functional");
-    if (tabFunc) tabFunc.textContent = `Functional Categories (${funcCount || 31})`;
+    if (tabFunc) tabFunc.textContent = `Functional Roles (${funcCount || 31})`;
 
     const tabSpec = document.getElementById("tab-special");
     if (tabSpec) tabSpec.textContent = `Special Skilled (${specCount || 33})`;
@@ -1445,8 +1450,10 @@ function switchTab(tabName) {
   currentTab = tabName;
   activeCompanyFilter = null;
 
-  document.getElementById("tab-functional").classList.toggle("active", tabName === "Functional");
-  document.getElementById("tab-special").classList.toggle("active", tabName === "Special Skilled");
+  const tabFunc = document.getElementById("tab-functional");
+  if (tabFunc) tabFunc.classList.toggle("active", tabName === "Functional");
+  const tabSpec = document.getElementById("tab-special");
+  if (tabSpec) tabSpec.classList.toggle("active", tabName === "Special Skilled");
   const tabGlobal = document.getElementById("tab-global-sources");
   if (tabGlobal) tabGlobal.classList.toggle("active", tabName === "Global");
   
