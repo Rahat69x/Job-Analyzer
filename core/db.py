@@ -484,10 +484,6 @@ def search_global_jobs_with_diagnostics(
         conditions.append("experience_level = ?")
         params.append(experience_level)
 
-    if employment_type and employment_type.lower() not in ["all", "any"]:
-        conditions.append("employment_type = ?")
-        params.append(employment_type)
-
     if visa_sponsorship is True:
         conditions.append("visa_sponsorship = 1")
 

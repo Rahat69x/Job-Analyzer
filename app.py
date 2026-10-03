@@ -229,7 +229,6 @@ def search_jobs(
     workplace_type: Optional[str] = Query(None, description="Remote, Hybrid, On-site"),
     remote_policy: Optional[str] = Query(None, description="Worldwide, Regional, Country-Restricted"),
     experience_level: Optional[str] = Query(None, description="Internship, Entry Level, Junior, Mid Level, Senior, Lead"),
-    employment_type: Optional[str] = Query(None, description="Full-time, Part-time, Contract, Freelance, Internship"),
     visa_sponsorship: Optional[bool] = Query(None, description="True if visa sponsorship required"),
     candidate_origin: str = Query("Bangladesh", description="Applicant home country"),
     skills: Optional[str] = Query(None, description="Comma-separated skills"),
@@ -256,7 +255,6 @@ def search_jobs(
     workplace_val = workplace_type if isinstance(workplace_type, str) else None
     remote_policy_val = remote_policy if isinstance(remote_policy, str) else None
     exp_lvl_val = experience_level if isinstance(experience_level, str) else None
-    emp_type_val = employment_type if isinstance(employment_type, str) else None
     visa_val = visa_sponsorship if isinstance(visa_sponsorship, bool) else None
     cand_origin_val = candidate_origin if isinstance(candidate_origin, str) else "Bangladesh"
     sort_by_val = sort_by if isinstance(sort_by, str) else "recent"
@@ -288,7 +286,6 @@ def search_jobs(
         workplace_type=workplace_val,
         remote_policy=remote_policy_val,
         experience_level=exp_lvl_val,
-        employment_type=emp_type_val,
         visa_sponsorship=visa_val,
         candidate_origin=cand_origin_val,
         sort_by=sort_by_val,
