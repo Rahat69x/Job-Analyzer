@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Analyzer — Global Job Discovery & Remote Job Platform</title>
-  <meta name="description" content="Discover, filter, and apply to top opportunities from Bangladesh and major international job markets worldwide with intelligent remote and candidate eligibility detection.">
+  <title>AI Job Market Analytics — Global Career Intelligence & Job Discovery</title>
+  <meta name="description" content="Empirical analytics and global job discovery across Data Science, AI, Machine Learning, and tech roles. Analyze in-demand skills, salaries, and remote work trends.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/styles.css?v=3.4.0">
+  <link rel="stylesheet" href="/static/styles.css?v=4.0.0">
 </head>
 <body>
   <div class="app-container">
     <!-- Header -->
     <header class="app-header">
       <div class="logo-group">
-        <div class="logo-badge">JA</div>
+        <div class="logo-badge">AI</div>
         <div class="app-title">
-          <h1>Job Analyzer</h1>
-          <p>Global Job Discovery & Remote Job Platform</p>
+          <h1>AI Job Market Analytics</h1>
+          <p>Global Intelligence, AI/Data Science Trends & Job Discovery Platform</p>
         </div>
       </div>
       <div class="header-actions">
@@ -134,6 +134,11 @@
       <button id="nav-tab-companies" class="nav-tab">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
         Featured Companies (<span id="companies-count">72</span>)
+      </button>
+      <button id="nav-tab-ai-analytics" class="nav-tab ai-special-tab">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        AI Market Analytics
+        <span class="ai-tab-badge">v4.0</span>
       </button>
     </nav>
 
@@ -496,6 +501,372 @@
             <tr><td>Bangladeshi Taka</td><td>BDT (Tk.)</td><td>0.0083</td><td>Tk. 12,000,000 (~1 Crore BDT)</td><td>12,000,000 BDT</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- VIEW 9: AI JOB MARKET ANALYTICS (PORTFOLIO-GRADE RESEARCH & DASHBOARD) -->
+    <div id="view-ai-analytics" class="view-panel">
+      <!-- Executive Header Banner -->
+      <div class="glass-card ai-hero-card">
+        <div class="ai-hero-inner">
+          <div class="ai-hero-text">
+            <div class="ai-badge-row">
+              <span class="badge badge-primary">PORTFOLIO CAPSTONE</span>
+              <span class="badge badge-accent">REAL DATASET: 34,979 POSTINGS</span>
+              <span class="badge badge-success">71,913 SALARY BENCHMARKS</span>
+            </div>
+            <h2 class="ai-main-title">AI Job Market Analytics</h2>
+            <p class="ai-main-desc">
+              Empirical investigation into Artificial Intelligence, Data Science, and Machine Learning hiring trends, required skill stacks, compensation benchmarks, and remote flexibility based on real-world market datasets (2020–2025).
+            </p>
+          </div>
+          <!-- Download & Deliverables Hub -->
+          <div class="ai-deliverables-box">
+            <div class="deliverables-title">Project Deliverables</div>
+            <div class="deliverables-grid">
+              <a href="/api/analytics/download/notebook" class="btn btn-primary btn-sm" download="job_market_analysis.ipynb" title="Download Fully Executed Jupyter Notebook">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Jupyter Notebook (.ipynb)
+              </a>
+              <a href="/api/analytics/download/powerbi" class="btn btn-secondary btn-sm" download="dashboard.pbix" title="Download Power BI Dashboard Template">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Power BI Model (.pbix)
+              </a>
+              <a href="/api/analytics/download/sql" class="btn btn-secondary btn-sm" download="job_market_queries.sql" title="Download Production SQL Queries">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                SQL Queries (.sql)
+              </a>
+              <a href="/api/analytics/download/csv" class="btn btn-secondary btn-sm" download="ai_job_postings_cleaned.csv" title="Download Cleaned Job Postings Dataset">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Cleaned Data (.csv)
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Metrics Ribbon -->
+        <div class="ai-kpi-ribbon">
+          <div class="ai-kpi-item">
+            <div class="ai-kpi-val" id="ai-kpi-jobs">34,979</div>
+            <div class="ai-kpi-lbl">Total Postings Analyzed</div>
+          </div>
+          <div class="ai-kpi-item">
+            <div class="ai-kpi-val" id="ai-kpi-salaries">71,913</div>
+            <div class="ai-kpi-lbl">Verified Salary Records</div>
+          </div>
+          <div class="ai-kpi-item">
+            <div class="ai-kpi-val" id="ai-kpi-median-salary">$138,750</div>
+            <div class="ai-kpi-lbl">Median Annual USD (~1.66 Cr ৳)</div>
+          </div>
+          <div class="ai-kpi-item">
+            <div class="ai-kpi-val" id="ai-kpi-remote-share">11.8%</div>
+            <div class="ai-kpi-lbl">100% Fully Remote Share</div>
+          </div>
+          <div class="ai-kpi-item">
+            <div class="ai-kpi-val" id="ai-kpi-companies">18,758</div>
+            <div class="ai-kpi-lbl">Hiring Employers</div>
+          </div>
+          <div class="ai-kpi-item">
+            <div class="ai-kpi-val" id="ai-kpi-countries">145+</div>
+            <div class="ai-kpi-lbl">Global Countries</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Quick-jump subnav -->
+      <div class="ai-subnav">
+        <a href="#section-roles" class="ai-subnav-link active">1. Role Demand</a>
+        <a href="#section-skills" class="ai-subnav-link">2. Technical Skills</a>
+        <a href="#section-salaries" class="ai-subnav-link">3. Compensation Dynamics</a>
+        <a href="#section-remote-trend" class="ai-subnav-link">4. Remote & Velocity</a>
+        <a href="#section-questions" class="ai-subnav-link">5. Core Research Insights</a>
+        <a href="#section-powerbi" class="ai-subnav-link">6. Power BI & SQL Architecture</a>
+      </div>
+
+      <!-- Section 1: In-Demand AI & Data Roles -->
+      <div id="section-roles" class="glass-card ai-section-card">
+        <div class="section-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          1. Role Demand & Hiring Distribution
+        </div>
+        <p class="section-subtitle">
+          Over 85% of global AI & Data hiring requisitions focus on the foundational triad: <strong>Data Engineers (31.0%)</strong>, <strong>Data Analysts (28.4%)</strong>, and <strong>Data Scientists (25.6%)</strong>. Machine Learning Engineers and AI Engineers represent highly-compensated specialized branches.
+        </p>
+
+        <div class="ai-split-grid">
+          <div class="ai-table-panel">
+            <h4 class="panel-heading">Role Distribution Ranking</h4>
+            <div id="ai-roles-table-container">
+              <table class="jobs-table">
+                <thead>
+                  <tr><th>Role Title</th><th>Openings Count</th><th>Market Share (%)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Data Engineer</strong></td><td>10,852</td><td><div class="bar-progress"><div class="bar-fill" style="width: 31%;"></div><span>31.0%</span></div></td></tr>
+                  <tr><td><strong>Data Analyst</strong></td><td>9,939</td><td><div class="bar-progress"><div class="bar-fill" style="width: 28.4%;"></div><span>28.4%</span></div></td></tr>
+                  <tr><td><strong>Data Scientist</strong></td><td>8,966</td><td><div class="bar-progress"><div class="bar-fill" style="width: 25.6%;"></div><span>25.6%</span></div></td></tr>
+                  <tr><td><strong>Software Engineer (Data/AI)</strong></td><td>1,698</td><td><div class="bar-progress"><div class="bar-fill" style="width: 4.8%;"></div><span>4.8%</span></div></td></tr>
+                  <tr><td><strong>Business Analyst</strong></td><td>1,488</td><td><div class="bar-progress"><div class="bar-fill" style="width: 4.2%;"></div><span>4.2%</span></div></td></tr>
+                  <tr><td><strong>Machine Learning Engineer</strong></td><td>848</td><td><div class="bar-progress"><div class="bar-fill" style="width: 2.4%;"></div><span>2.4%</span></div></td></tr>
+                  <tr><td><strong>BI Analyst</strong></td><td>656</td><td><div class="bar-progress"><div class="bar-fill" style="width: 1.9%;"></div><span>1.9%</span></div></td></tr>
+                  <tr><td><strong>Cloud Engineer</strong></td><td>456</td><td><div class="bar-progress"><div class="bar-fill" style="width: 1.3%;"></div><span>1.3%</span></div></td></tr>
+                  <tr><td><strong>AI Engineer</strong></td><td>70</td><td><div class="bar-progress"><div class="bar-fill" style="width: 0.2%;"></div><span>0.2%</span></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Hiring Volume by AI/Data Role (300 DPI Chart)</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig1_top_ai_roles.png" alt="Top AI Roles" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 1: Requisitions distribution across standardized AI & Data titles (Luke Barousse 2023 dataset, N=34,979).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Skills Analysis -->
+      <div id="section-skills" class="glass-card ai-section-card">
+        <div class="section-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+          2. Skills Analysis: The Technical Currency of Modern AI
+        </div>
+        <p class="section-subtitle">
+          Evaluation of 161,793 normalized skill extractions. <strong>SQL (50.5%)</strong> and <strong>Python (49.9%)</strong> are the dual pillars required in 1 out of every 2 requisitions worldwide.
+        </p>
+
+        <div class="ai-split-grid">
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Overall Technical Skills Demand</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig2_top_skills_overall.png" alt="Top Skills Overall" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 2: Top 15 technical skills requested in data postings (Frequency & Penetration Rate).</div>
+            </div>
+          </div>
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Skill Penetration Heatmap Across Roles</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig3_skills_by_role_heatmap.png" alt="Skills by Role Heatmap" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 3: Cross-tabulation of skill penetration (%) across Data Scientists, ML Engineers, Data Analysts, and Engineers.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <h4 class="panel-heading">Bundled Tech Stacks & Skill Co-occurrence</h4>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+            Employers rarely hire for isolated skills. The visualization below reveals which skills are most frequently requested together on the exact same requisition.
+          </p>
+          <div class="figure-frame" style="max-width: 900px; margin: 0 auto;">
+            <img src="/reports/figures/fig9_skill_cooccurrence.png" alt="Skill Co-occurrence" class="report-figure-img" loading="lazy">
+            <div class="figure-caption">Figure 4: Top co-occurring technical skill pairs (Python + SQL leads with 11,601 joint mentions).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Salary Analysis -->
+      <div id="section-salaries" class="glass-card ai-section-card">
+        <div class="section-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          3. Salary & Compensation Dynamics
+        </div>
+        <p class="section-subtitle">
+          Empirical compensation benchmarks from 71,913 verified salary observations across global tech employers (ai-jobs.net, 2020–2025). All values standardized to Annual USD ($).
+        </p>
+
+        <div class="ai-split-grid">
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Annual Compensation Distribution</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig4_salary_distribution.png" alt="Salary Distribution" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 5: Right-skewed distribution of AI & Data salaries (Median: $138,750, Mean: $151,161).</div>
+            </div>
+          </div>
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Seniority Multipliers & Career Progression</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig5_salary_by_experience.png" alt="Salary by Experience" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 6: Boxplot of annual compensation across Entry Level, Mid Level, Senior, and Lead/Executive tiers.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="salary-tier-table-wrapper" style="margin-top: 20px;">
+          <h4 class="panel-heading">Compensation Benchmarks by Seniority Level (USD & BDT Equivalent)</h4>
+          <table class="jobs-table">
+            <thead>
+              <tr><th>Seniority Tier</th><th>Benchmark Count</th><th>Mean Salary (USD)</th><th>Median Salary (USD)</th><th>Std Dev</th><th>BDT Equivalent (1 USD = 120 BDT)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Entry Level</strong></td><td>2,836</td><td>$98,017</td><td><strong>$90,188</strong></td><td>$46,903</td><td>৳10,822,560 (~1.08 Crore BDT)</td></tr>
+              <tr><td><strong>Mid Level</strong></td><td>14,028</td><td>$136,267</td><td><strong>$136,250</strong></td><td>$58,419</td><td>৳16,350,000 (~1.64 Crore BDT)</td></tr>
+              <tr><td><strong>Senior</strong></td><td>52,654</td><td>$167,808</td><td><strong>$167,800</strong></td><td>$67,314</td><td>৳20,136,000 (~2.01 Crore BDT)</td></tr>
+              <tr><td><strong>Lead / Executive</strong></td><td>2,395</td><td>$202,080</td><td><strong>$202,000</strong></td><td>$78,945</td><td>৳24,240,000 (~2.42 Crore BDT)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 4: Remote Work & Hiring Trends -->
+      <div id="section-remote-trend" class="glass-card ai-section-card">
+        <div class="section-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          4. Remote Work Dynamics & Hiring Velocity
+        </div>
+        <p class="section-subtitle">
+          Realities of post-pandemic tech work models and monthly seasonal hiring cycles across 2023.
+        </p>
+
+        <div class="ai-split-grid">
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Workplace Model Breakdown</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig7_remote_work_share.png" alt="Remote Work Share" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 7: 11.8% of positions are fully remote; Data Engineers enjoy the highest remote share at 14.4%.</div>
+            </div>
+          </div>
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Monthly Hiring Velocity (2023)</h4>
+            <div class="figure-frame">
+              <img src="/reports/figures/fig8_monthly_hiring_trends.png" alt="Monthly Hiring Velocity" class="report-figure-img" loading="lazy">
+              <div class="figure-caption">Figure 8: Hiring peaks in Q1 (Jan: 3,727) and late Q2 (Jun: 3,340) as enterprise hiring budgets cycle.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Core Research Questions Answered -->
+      <div id="section-questions" class="glass-card ai-section-card">
+        <div class="section-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          5. Empirical Answers to Core Research Questions (Section 9)
+        </div>
+        <p class="section-subtitle">
+          Every statement below is strictly grounded in empirical analysis of 34,979 real job postings and 71,913 verified salary observations.
+        </p>
+
+        <div class="ai-qa-grid">
+          <div class="ai-qa-card">
+            <div class="qa-badge">QUESTION 1</div>
+            <h4 class="qa-title">Which AI/data roles appear most frequently?</h4>
+            <p class="qa-answer">
+              <strong>Data Engineer (31.02%)</strong>, <strong>Data Analyst (28.41%)</strong>, and <strong>Data Scientist (25.63%)</strong> comprise <strong>85.06%</strong> of all job postings. Data infrastructure and analytics dominate the job market over pure modeling. Dedicated <strong>Machine Learning Engineers (2.42%)</strong> and <strong>AI Engineers (0.20%)</strong> represent specialized high-growth niches.
+            </p>
+          </div>
+
+          <div class="ai-qa-card">
+            <div class="qa-badge">QUESTION 2</div>
+            <h4 class="qa-title">Which skills are most demanded?</h4>
+            <p class="qa-answer">
+              <strong>SQL (50.46%)</strong> and <strong>Python (49.90%)</strong> are the undisputed core requirements for any AI/data professional, appearing in half of all requisitions. They are followed by cloud providers <strong>AWS (19.05%)</strong> and <strong>Azure (17.64%)</strong>, and BI tools <strong>Tableau (15.95%)</strong> and <strong>Power BI (15.10%)</strong>.
+            </p>
+          </div>
+
+          <div class="ai-qa-card">
+            <div class="qa-badge">QUESTION 3</div>
+            <h4 class="qa-title">Which locations have the most opportunities?</h4>
+            <p class="qa-answer">
+              The <strong>United States (23.13%)</strong> represents the largest single geographical market (8,092 postings), followed by <strong>India (8.55%)</strong>, <strong>United Kingdom (6.53%)</strong>, <strong>France (6.32%)</strong>, and <strong>Germany (4.01%)</strong>. Significant remote hubs also hire globally across Southeast Asia and South Asia / Bangladesh.
+            </p>
+          </div>
+
+          <div class="ai-qa-card">
+            <div class="qa-badge">QUESTION 4</div>
+            <h4 class="qa-title">How does experience relate to salary?</h4>
+            <p class="qa-answer">
+              Seniority demonstrates a steep, consistent multiplier on annual compensation:
+              <br>• <strong>Entry Level</strong>: Median <strong>$90,188</strong> (Mean $98,017)
+              <br>• <strong>Mid Level</strong>: Median <strong>$136,250</strong> (+51% over Entry)
+              <br>• <strong>Senior</strong>: Median <strong>$167,800</strong> (+86% over Entry)
+              <br>• <strong>Lead / Executive</strong>: Median <strong>$202,000</strong> (+124% over Entry)
+            </p>
+          </div>
+
+          <div class="ai-qa-card">
+            <div class="qa-badge">QUESTION 5</div>
+            <h4 class="qa-title">Which skills commonly appear together?</h4>
+            <p class="qa-answer">
+              <strong>Python + SQL</strong> is the single most prevalent co-occurring pair, appearing jointly in <strong>11,601 job postings</strong>. Other common clusters include <strong>Python + AWS</strong> and <strong>Python + Spark</strong> (Data Engineering/Cloud), <strong>SQL + Tableau / Power BI</strong> (BI Analytics), and <strong>Python + PyTorch / TensorFlow</strong> (Deep Learning).
+            </p>
+          </div>
+
+          <div class="ai-qa-card">
+            <div class="qa-badge">QUESTION 6</div>
+            <h4 class="qa-title">How common are remote roles?</h4>
+            <p class="qa-answer">
+              <strong>11.79%</strong> of all postings are advertised as <strong>100% Fully Remote</strong>, with Data Engineers enjoying the highest remote flexibility (<strong>14.44%</strong>) and Data Scientists at <strong>11.74%</strong>. The remaining <strong>88.21%</strong> remain On-site or Hybrid due to enterprise security and governance considerations.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Power BI & SQL Architecture -->
+      <div id="section-powerbi" class="glass-card ai-section-card">
+        <div class="section-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+          6. Power BI Model & Relational SQL Architecture
+        </div>
+        <p class="section-subtitle">
+          Enterprise analytics architecture featuring a Kimball Star Schema, 18 optimized DAX measures, and 10 production SQL queries tested across PostgreSQL and SQLite.
+        </p>
+
+        <div class="ai-split-grid">
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Power BI Star Schema & DAX Measures</h4>
+            <div class="code-preview-box">
+              <pre><code>// Primary DAX Measures included in powerbi/DAX_Measures.dax
+Total Jobs = COUNTROWS('Fact_JobPostings')
+
+Remote Job % = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Fact_JobPostings'), 'Fact_JobPostings'[work_model] = "Remote"),
+    [Total Jobs],
+    0
+)
+
+Avg Salary USD = AVERAGE('Fact_JobPostings'[salary_usd])
+
+Skill Penetration % = 
+DIVIDE(
+    DISTINCTCOUNT('Fact_JobPostings'[job_id]),
+    CALCULATE(DISTINCTCOUNT('Fact_JobPostings'[job_id]), ALL('Dim_Skills')),
+    0
+)</code></pre>
+            </div>
+            <div style="margin-top: 10px; display: flex; gap: 8px;">
+              <a href="/api/analytics/download/dax" class="btn btn-secondary btn-sm" download="DAX_Measures.dax">Download DAX Measures (.dax)</a>
+              <a href="/api/analytics/download/powerbi" class="btn btn-primary btn-sm" download="dashboard.pbix">Download Power BI Model (.pbix)</a>
+            </div>
+          </div>
+
+          <div class="ai-chart-panel">
+            <h4 class="panel-heading">Production SQL Query Suite</h4>
+            <div class="code-preview-box">
+              <pre><code>-- Query 1: Top Demanded Job Titles (Market Share & Remote Ratio)
+SELECT 
+    standardized_title,
+    COUNT(*) AS total_postings,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM ai_jobs), 2) AS market_share_pct,
+    ROUND(SUM(CASE WHEN work_model = 'Remote' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS remote_pct
+FROM ai_jobs
+GROUP BY standardized_title
+ORDER BY total_postings DESC;
+
+-- Query 2: Top 15 Technical Skills Overall
+SELECT 
+    s.skill_name,
+    COUNT(s.job_id) AS demand_frequency,
+    ROUND(COUNT(s.job_id) * 100.0 / (SELECT COUNT(*) FROM ai_jobs), 2) AS penetration_pct
+FROM job_skills s
+GROUP BY s.skill_name
+ORDER BY demand_frequency DESC
+LIMIT 15;</code></pre>
+            </div>
+            <div style="margin-top: 10px;">
+              <a href="/api/analytics/download/sql" class="btn btn-primary btn-sm" download="job_market_queries.sql">Download All 10 SQL Queries (.sql)</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

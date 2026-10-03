@@ -21,7 +21,7 @@ from ingestion.aggregator import global_aggregator
 from ingestion.global_connectors import CuratedCompaniesConnector
 from scoring.scorer import JobScorer
 
-app = FastAPI(title="Job Analyzer - Global Job Discovery & Remote Job Platform", version="3.4.0")
+app = FastAPI(title="AI Job Market Analytics & Global Career Intelligence", version="4.0.0")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TAXONOMY_PATH = os.path.join(BASE_DIR, "data", "taxonomy.json")
@@ -29,6 +29,12 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 ALERTS_PATH = os.path.join(BASE_DIR, "data", "alerts.json")
 JOB_ROLES_PATH = os.path.join(BASE_DIR, "data", "job_roles.json")
 COMPANIES_PATH = os.path.join(BASE_DIR, "data", "companies.json")
+REPORTS_DIR = os.path.join(BASE_DIR, "reports")
+FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
+NOTEBOOKS_DIR = os.path.join(BASE_DIR, "notebooks")
+SQL_DIR = os.path.join(BASE_DIR, "sql")
+POWERBI_DIR = os.path.join(BASE_DIR, "powerbi")
+INSIGHTS_PATH = os.path.join(REPORTS_DIR, "market_insights.json")
 
 # Initialize database, client & scorer
 init_db()
@@ -626,16 +632,62 @@ def list_companies(
     }
 
 
-# Serve static files
+# Serve static files and analytical figures
 if os.path.exists(STATIC_DIR):
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+if os.path.exists(FIGURES_DIR):
+    app.mount("/reports/figures", StaticFiles(directory=FIGURES_DIR), name="figures")
+
+@app.get("/api/analytics/ai-market")
+def get_ai_market_analytics():
+    """
+    Returns empirical AI/Data Science job market statistics:
+    role distributions, skill rankings, salary benchmarks, remote work prevalence,
+    co-occurrences, and answered research questions.
+    """
+    if os.path.exists(INSIGHTS_PATH):
+        try:
+            with open(INSIGHTS_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            pass
+    return {"status": "loading", "message": "Market insights computing or unavailable"}
+
+@app.get("/api/analytics/download/{asset_type}")
+def download_analytics_asset(asset_type: str):
+    """
+    Serves core project deliverables:
+    - 'notebook': Jupyter Notebook (.ipynb)
+    - 'sql': SQL queries suite (.sql)
+    - 'powerbi': Power BI template (.pbix)
+    - 'dax': Power BI DAX measures (.dax)
+    - 'csv': Cleaned analytical dataset (.csv)
+    - 'salaries_csv': Cleaned salary benchmarks (.csv)
+    """
+    asset_map = {
+        "notebook": (os.path.join(NOTEBOOKS_DIR, "job_market_analysis.ipynb"), "job_market_analysis.ipynb", "application/x-ipynb+json"),
+        "sql": (os.path.join(SQL_DIR, "job_market_queries.sql"), "job_market_queries.sql", "text/plain"),
+        "powerbi": (os.path.join(POWERBI_DIR, "dashboard.pbix"), "dashboard.pbix", "application/octet-stream"),
+        "dax": (os.path.join(POWERBI_DIR, "DAX_Measures.dax"), "DAX_Measures.dax", "text/plain"),
+        "csv": (os.path.join(BASE_DIR, "data", "processed", "ai_job_postings_cleaned.csv"), "ai_job_postings_cleaned.csv", "text/csv"),
+        "salaries_csv": (os.path.join(BASE_DIR, "data", "processed", "ai_salaries_cleaned.csv"), "ai_salaries_cleaned.csv", "text/csv")
+    }
+    if asset_type not in asset_map:
+        raise HTTPException(status_code=404, detail="Asset type not found")
+    
+    file_path, filename, media_type = asset_map[asset_type]
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail=f"File {filename} not generated yet")
+    
+    return FileResponse(file_path, media_type=media_type, filename=filename)
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def serve_dashboard():
     index_file = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
-    return JSONResponse({"status": "Global Job Discovery API active."})
+    return JSONResponse({"status": "AI Job Market Analytics API active."})
 
 @app.api_route("/healthz", methods=["GET", "HEAD"])
 def healthz():

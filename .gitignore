@@ -27,7 +27,17 @@ scratch/
 # Gemini / Antigravity IDE artifacts
 .gemini/
 .agents/
+.agent/
+.gsd/
 .planning/
+GSD-STYLE.md
+PROJECT_RULES.md
+model_capabilities.yaml
+adapters/
+scripts/
+
+# Local batch files
+*.bat
 
 # Logs
 *.log

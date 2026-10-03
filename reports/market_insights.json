@@ -1,0 +1,887 @@
+{
+  "overview": {
+    "total_job_postings_analyzed": 34979,
+    "total_salary_benchmarks_analyzed": 71913,
+    "unique_companies": 18758,
+    "unique_locations": 3771,
+    "unique_countries": 145,
+    "date_range": "2023-01-01 to 2023-12-31",
+    "remote_jobs_percentage": 11.79,
+    "median_salary_usd": 138750.0,
+    "mean_salary_usd": 151161.25
+  },
+  "role_analysis": {
+    "counts": {
+      "Data Engineer": 10852,
+      "Data Analyst": 9939,
+      "Data Scientist": 8966,
+      "Software Engineer (Data/AI)": 1698,
+      "Business Analyst": 1488,
+      "Machine Learning Engineer": 848,
+      "BI Analyst": 656,
+      "Cloud Engineer": 456,
+      "AI Engineer": 70,
+      "Cloud & Data Architect": 5,
+      "Research Scientist": 1
+    },
+    "percentages": {
+      "Data Engineer": 31.02,
+      "Data Analyst": 28.41,
+      "Data Scientist": 25.63,
+      "Software Engineer (Data/AI)": 4.85,
+      "Business Analyst": 4.25,
+      "Machine Learning Engineer": 2.42,
+      "BI Analyst": 1.88,
+      "Cloud Engineer": 1.3,
+      "AI Engineer": 0.2,
+      "Cloud & Data Architect": 0.01,
+      "Research Scientist": 0.0
+    },
+    "roles_by_experience": {
+      "AI Engineer": {
+        "Entry Level": 4,
+        "Lead / Executive": 7,
+        "Mid Level": 49,
+        "Senior": 10
+      },
+      "BI Analyst": {
+        "Entry Level": 54,
+        "Lead / Executive": 31,
+        "Mid Level": 474,
+        "Senior": 97
+      },
+      "Business Analyst": {
+        "Entry Level": 107,
+        "Lead / Executive": 89,
+        "Mid Level": 1146,
+        "Senior": 146
+      },
+      "Cloud & Data Architect": {
+        "Entry Level": 0,
+        "Lead / Executive": 5,
+        "Mid Level": 0,
+        "Senior": 0
+      },
+      "Cloud Engineer": {
+        "Entry Level": 13,
+        "Lead / Executive": 47,
+        "Mid Level": 330,
+        "Senior": 66
+      },
+      "Data Analyst": {
+        "Entry Level": 794,
+        "Lead / Executive": 609,
+        "Mid Level": 7241,
+        "Senior": 1295
+      },
+      "Data Engineer": {
+        "Entry Level": 399,
+        "Lead / Executive": 1020,
+        "Mid Level": 7157,
+        "Senior": 2276
+      },
+      "Data Scientist": {
+        "Entry Level": 737,
+        "Lead / Executive": 1234,
+        "Mid Level": 5369,
+        "Senior": 1626
+      },
+      "Machine Learning Engineer": {
+        "Entry Level": 32,
+        "Lead / Executive": 68,
+        "Mid Level": 577,
+        "Senior": 171
+      },
+      "Research Scientist": {
+        "Entry Level": 0,
+        "Lead / Executive": 0,
+        "Mid Level": 1,
+        "Senior": 0
+      },
+      "Software Engineer (Data/AI)": {
+        "Entry Level": 62,
+        "Lead / Executive": 169,
+        "Mid Level": 1048,
+        "Senior": 419
+      }
+    },
+    "roles_by_country": {
+      "United States": {
+        "AI Engineer": 20,
+        "BI Analyst": 132,
+        "Business Analyst": 192,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 10,
+        "Data Analyst": 3071,
+        "Data Engineer": 1848,
+        "Data Scientist": 2658,
+        "Machine Learning Engineer": 100,
+        "Research Scientist": 1,
+        "Software Engineer (Data/AI)": 60
+      },
+      "India": {
+        "AI Engineer": 3,
+        "BI Analyst": 37,
+        "Business Analyst": 83,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 15,
+        "Data Analyst": 419,
+        "Data Engineer": 1335,
+        "Data Scientist": 946,
+        "Machine Learning Engineer": 70,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 81
+      },
+      "United Kingdom": {
+        "AI Engineer": 5,
+        "BI Analyst": 21,
+        "Business Analyst": 33,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 10,
+        "Data Analyst": 670,
+        "Data Engineer": 896,
+        "Data Scientist": 589,
+        "Machine Learning Engineer": 25,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 34
+      },
+      "France": {
+        "AI Engineer": 7,
+        "BI Analyst": 8,
+        "Business Analyst": 38,
+        "Cloud & Data Architect": 1,
+        "Cloud Engineer": 10,
+        "Data Analyst": 859,
+        "Data Engineer": 660,
+        "Data Scientist": 548,
+        "Machine Learning Engineer": 36,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 45
+      },
+      "Germany": {
+        "AI Engineer": 4,
+        "BI Analyst": 31,
+        "Business Analyst": 21,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 11,
+        "Data Analyst": 432,
+        "Data Engineer": 405,
+        "Data Scientist": 446,
+        "Machine Learning Engineer": 29,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 25
+      },
+      "Netherlands": {
+        "AI Engineer": 4,
+        "BI Analyst": 18,
+        "Business Analyst": 39,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 24,
+        "Data Analyst": 259,
+        "Data Engineer": 410,
+        "Data Scientist": 258,
+        "Machine Learning Engineer": 28,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 45
+      },
+      "Sudan": {
+        "AI Engineer": 4,
+        "BI Analyst": 10,
+        "Business Analyst": 26,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 2,
+        "Data Analyst": 67,
+        "Data Engineer": 357,
+        "Data Scientist": 423,
+        "Machine Learning Engineer": 15,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 13
+      },
+      "Spain": {
+        "AI Engineer": 3,
+        "BI Analyst": 9,
+        "Business Analyst": 32,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 11,
+        "Data Analyst": 213,
+        "Data Engineer": 327,
+        "Data Scientist": 226,
+        "Machine Learning Engineer": 20,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 55
+      },
+      "Poland": {
+        "AI Engineer": 2,
+        "BI Analyst": 22,
+        "Business Analyst": 44,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 14,
+        "Data Analyst": 234,
+        "Data Engineer": 266,
+        "Data Scientist": 141,
+        "Machine Learning Engineer": 27,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 76
+      },
+      "Singapore": {
+        "AI Engineer": 0,
+        "BI Analyst": 12,
+        "Business Analyst": 41,
+        "Cloud & Data Architect": 0,
+        "Cloud Engineer": 8,
+        "Data Analyst": 279,
+        "Data Engineer": 231,
+        "Data Scientist": 169,
+        "Machine Learning Engineer": 22,
+        "Research Scientist": 0,
+        "Software Engineer (Data/AI)": 36
+      }
+    },
+    "remote_rate_by_role": {
+      "AI Engineer": 17.14,
+      "BI Analyst": 10.82,
+      "Business Analyst": 8.47,
+      "Cloud & Data Architect": 0.0,
+      "Cloud Engineer": 5.04,
+      "Data Analyst": 9.88,
+      "Data Engineer": 14.44,
+      "Data Scientist": 11.74,
+      "Machine Learning Engineer": 14.27,
+      "Research Scientist": 0.0,
+      "Software Engineer (Data/AI)": 9.95
+    }
+  },
+  "skills_analysis": {
+    "top_skills_overall": {
+      "SQL": 17650,
+      "Python": 17453,
+      "AWS": 6664,
+      "Azure": 6169,
+      "Tableau": 5578,
+      "R": 5567,
+      "Excel": 5498,
+      "Spark": 5291,
+      "Power BI": 4527,
+      "Java": 3731,
+      "Hadoop": 2842,
+      "Scala": 2550,
+      "GCP": 2441,
+      "Databricks": 2423,
+      "Snowflake": 2419,
+      "Kafka": 2338,
+      "Git": 2272,
+      "Airflow": 2197,
+      "Oracle": 1973,
+      "Docker": 1958,
+      "NoSQL": 1951,
+      "SAS": 1785,
+      "SQL Server": 1765,
+      "Kubernetes": 1648,
+      "Go": 1647,
+      "TensorFlow": 1513,
+      "PySpark": 1508,
+      "Pandas": 1498,
+      "Redshift": 1488,
+      "Linux": 1387
+    },
+    "top_skills_percentages": {
+      "SQL": 50.46,
+      "Python": 49.9,
+      "AWS": 19.05,
+      "Azure": 17.64,
+      "Tableau": 15.95,
+      "R": 15.92,
+      "Excel": 15.72,
+      "Spark": 15.13,
+      "Power BI": 12.94,
+      "Java": 10.67,
+      "Hadoop": 8.12,
+      "Scala": 7.29,
+      "GCP": 6.98,
+      "Databricks": 6.93,
+      "Snowflake": 6.92,
+      "Kafka": 6.68,
+      "Git": 6.5,
+      "Airflow": 6.28,
+      "Oracle": 5.64,
+      "Docker": 5.6,
+      "NoSQL": 5.58,
+      "SAS": 5.1,
+      "SQL Server": 5.05,
+      "Kubernetes": 4.71,
+      "Go": 4.71,
+      "TensorFlow": 4.33,
+      "PySpark": 4.31,
+      "Pandas": 4.28,
+      "Redshift": 4.25,
+      "Linux": 3.97
+    },
+    "skills_by_category": {
+      "Programming Languages": 54470,
+      "Cloud & Distributed Systems": 36928,
+      "Other Technologies": 23880,
+      "BI & Data Visualization": 19170,
+      "DevOps & Infrastructure": 10530,
+      "Databases": 9974,
+      "Libraries & Frameworks": 6841
+    },
+    "skills_by_role": {
+      "Data Scientist": {
+        "Python": 6053,
+        "SQL": 4201,
+        "R": 3063,
+        "Tableau": 1500,
+        "AWS": 1485,
+        "Spark": 1373,
+        "Azure": 1170,
+        "TensorFlow": 1018,
+        "Excel": 873,
+        "Power BI": 824
+      },
+      "Machine Learning Engineer": {
+        "Python": 619,
+        "PyTorch": 292,
+        "TensorFlow": 274,
+        "SQL": 262,
+        "AWS": 223,
+        "Spark": 167,
+        "Scikit-learn": 150,
+        "Docker": 150,
+        "Azure": 150,
+        "Kubernetes": 128
+      },
+      "AI Engineer": {
+        "Python": 43,
+        "Azure": 18,
+        "SQL": 15,
+        "TensorFlow": 14,
+        "PyTorch": 14,
+        "AWS": 13,
+        "R": 11,
+        "Git": 8,
+        "Spark": 7,
+        "Docker": 6
+      },
+      "Data Analyst": {
+        "SQL": 4962,
+        "Excel": 3314,
+        "Python": 3069,
+        "Tableau": 2376,
+        "Power BI": 2043,
+        "R": 1504,
+        "SAS": 701,
+        "Word": 657,
+        "Powerpoint": 648,
+        "Azure": 595
+      },
+      "Data Engineer": {
+        "SQL": 6763,
+        "Python": 6494,
+        "AWS": 3861,
+        "Azure": 3667,
+        "Spark": 3280,
+        "Java": 2120,
+        "Kafka": 1819,
+        "Scala": 1725,
+        "Airflow": 1691,
+        "Hadoop": 1647
+      },
+      "BI Analyst": {
+        "SQL": 460,
+        "Tableau": 274,
+        "Power BI": 270,
+        "Python": 203,
+        "Excel": 192,
+        "Azure": 98,
+        "R": 92,
+        "SQL Server": 77,
+        "Oracle": 69,
+        "SSIS": 69
+      },
+      "Research Scientist": {}
+    },
+    "top_cooccurring_pairs": [
+      {
+        "skill_a": "Python",
+        "skill_b": "SQL",
+        "co_occurrences": 11601
+      },
+      {
+        "skill_a": "Python",
+        "skill_b": "R",
+        "co_occurrences": 5127
+      },
+      {
+        "skill_a": "AWS",
+        "skill_b": "Python",
+        "co_occurrences": 5058
+      },
+      {
+        "skill_a": "Python",
+        "skill_b": "Spark",
+        "co_occurrences": 4299
+      },
+      {
+        "skill_a": "SQL",
+        "skill_b": "Tableau",
+        "co_occurrences": 4237
+      },
+      {
+        "skill_a": "Azure",
+        "skill_b": "SQL",
+        "co_occurrences": 4191
+      },
+      {
+        "skill_a": "AWS",
+        "skill_b": "SQL",
+        "co_occurrences": 4168
+      },
+      {
+        "skill_a": "Azure",
+        "skill_b": "Python",
+        "co_occurrences": 4140
+      },
+      {
+        "skill_a": "R",
+        "skill_b": "SQL",
+        "co_occurrences": 3890
+      },
+      {
+        "skill_a": "SQL",
+        "skill_b": "Spark",
+        "co_occurrences": 3556
+      },
+      {
+        "skill_a": "Python",
+        "skill_b": "Tableau",
+        "co_occurrences": 3496
+      },
+      {
+        "skill_a": "Power BI",
+        "skill_b": "SQL",
+        "co_occurrences": 3209
+      },
+      {
+        "skill_a": "Java",
+        "skill_b": "Python",
+        "co_occurrences": 3106
+      },
+      {
+        "skill_a": "Excel",
+        "skill_b": "SQL",
+        "co_occurrences": 2984
+      },
+      {
+        "skill_a": "AWS",
+        "skill_b": "Azure",
+        "co_occurrences": 2725
+      },
+      {
+        "skill_a": "Java",
+        "skill_b": "SQL",
+        "co_occurrences": 2324
+      },
+      {
+        "skill_a": "AWS",
+        "skill_b": "Spark",
+        "co_occurrences": 2255
+      },
+      {
+        "skill_a": "Power BI",
+        "skill_b": "Python",
+        "co_occurrences": 2251
+      },
+      {
+        "skill_a": "Hadoop",
+        "skill_b": "Python",
+        "co_occurrences": 2235
+      },
+      {
+        "skill_a": "Python",
+        "skill_b": "Scala",
+        "co_occurrences": 2197
+      }
+    ]
+  },
+  "salary_analysis": {
+    "overall_statistics": {
+      "count": 71913,
+      "mean_usd": 151161.25,
+      "median_usd": 138750.0,
+      "std_usd": 77329.59,
+      "min_usd": 15000.0,
+      "p25_usd": 96000.0,
+      "p75_usd": 190315.0,
+      "max_usd": 800000.0,
+      "mean_bdt": 18139350.31,
+      "median_bdt": 16650000.0
+    },
+    "by_role": [
+      {
+        "standardized_title": "Research Scientist",
+        "count": 1471,
+        "mean": 193434.45,
+        "median": 179270.0,
+        "p25": 133800.0,
+        "p75": 240000.0
+      },
+      {
+        "standardized_title": "Machine Learning Engineer",
+        "count": 4397,
+        "mean": 186631.55,
+        "median": 175000.0,
+        "p25": 130000.0,
+        "p75": 230000.0
+      },
+      {
+        "standardized_title": "Cloud & Data Architect",
+        "count": 1890,
+        "mean": 172208.35,
+        "median": 162000.0,
+        "p25": 120000.0,
+        "p75": 212687.5
+      },
+      {
+        "standardized_title": "Software Engineer (Data/AI)",
+        "count": 6926,
+        "mean": 164327.87,
+        "median": 151673.0,
+        "p25": 109312.5,
+        "p75": 205000.0
+      },
+      {
+        "standardized_title": "AI Engineer",
+        "count": 1305,
+        "mean": 163387.77,
+        "median": 150000.0,
+        "p25": 106400.0,
+        "p75": 207000.0
+      },
+      {
+        "standardized_title": "Other AI / Data Role",
+        "count": 31540,
+        "mean": 154990.64,
+        "median": 141500.0,
+        "p25": 99992.25,
+        "p75": 195000.0
+      },
+      {
+        "standardized_title": "Data Scientist",
+        "count": 7316,
+        "mean": 151166.41,
+        "median": 141000.0,
+        "p25": 100000.0,
+        "p75": 191200.0
+      },
+      {
+        "standardized_title": "Data Engineer",
+        "count": 7199,
+        "mean": 144228.97,
+        "median": 135000.0,
+        "p25": 95325.0,
+        "p75": 183175.0
+      },
+      {
+        "standardized_title": "BI Analyst",
+        "count": 2282,
+        "mean": 120003.1,
+        "median": 111000.0,
+        "p25": 83850.0,
+        "p75": 150000.0
+      },
+      {
+        "standardized_title": "Business Analyst",
+        "count": 350,
+        "mean": 111463.66,
+        "median": 107450.0,
+        "p25": 80187.5,
+        "p75": 135577.5
+      },
+      {
+        "standardized_title": "Data Analyst",
+        "count": 7237,
+        "mean": 102662.25,
+        "median": 92880.0,
+        "p25": 66600.0,
+        "p75": 129840.0
+      }
+    ],
+    "by_experience": [
+      {
+        "experience_level": "Entry Level",
+        "count": 7975,
+        "mean": 98017.08,
+        "median": 85469.0
+      },
+      {
+        "experience_level": "Mid Level",
+        "count": 23395,
+        "mean": 136267.01,
+        "median": 122000.0
+      },
+      {
+        "experience_level": "Senior",
+        "count": 37702,
+        "mean": 167807.96,
+        "median": 156160.0
+      },
+      {
+        "experience_level": "Lead / Executive",
+        "count": 2841,
+        "mean": 202080.47,
+        "median": 190000.0
+      }
+    ],
+    "by_work_model": [
+      {
+        "work_model": "Hybrid",
+        "count": 327,
+        "mean": 81781.02,
+        "median": 69999.0
+      },
+      {
+        "work_model": "On-site",
+        "count": 54081,
+        "mean": 152147.46,
+        "median": 138300.0
+      },
+      {
+        "work_model": "Remote",
+        "count": 17505,
+        "mean": 149410.45,
+        "median": 140000.0
+      }
+    ],
+    "by_country": [
+      {
+        "country": "United States",
+        "count": 60147,
+        "mean": 160275.47,
+        "median": 147200.0
+      },
+      {
+        "country": "Canada",
+        "count": 4571,
+        "mean": 130319.58,
+        "median": 119875.0
+      },
+      {
+        "country": "Australia",
+        "count": 511,
+        "mean": 126349.09,
+        "median": 117000.0
+      },
+      {
+        "country": "Germany",
+        "count": 400,
+        "mean": 101561.73,
+        "median": 85000.0
+      },
+      {
+        "country": "United Kingdom",
+        "count": 2835,
+        "mean": 98752.94,
+        "median": 76202.0
+      },
+      {
+        "country": "Netherlands",
+        "count": 398,
+        "mean": 80526.74,
+        "median": 72265.0
+      },
+      {
+        "country": "France",
+        "count": 302,
+        "mean": 71849.46,
+        "median": 58113.5
+      },
+      {
+        "country": "LT",
+        "count": 312,
+        "mean": 60619.78,
+        "median": 55664.0
+      }
+    ],
+    "by_skill": [
+      {
+        "skill": "Scala",
+        "sample_size": 78,
+        "mean_salary": 146537.09,
+        "median_salary": 138750.0
+      },
+      {
+        "skill": "Snowflake",
+        "sample_size": 105,
+        "mean_salary": 136187.59,
+        "median_salary": 138000.0
+      },
+      {
+        "skill": "Spark",
+        "sample_size": 195,
+        "mean_salary": 141024.49,
+        "median_salary": 137532.28
+      },
+      {
+        "skill": "AWS",
+        "sample_size": 218,
+        "mean_salary": 135626.56,
+        "median_salary": 136400.0
+      },
+      {
+        "skill": "Hadoop",
+        "sample_size": 80,
+        "mean_salary": 135612.44,
+        "median_salary": 135700.0
+      },
+      {
+        "skill": "Python",
+        "sample_size": 579,
+        "mean_salary": 137865.65,
+        "median_salary": 135000.0
+      },
+      {
+        "skill": "GCP",
+        "sample_size": 53,
+        "mean_salary": 128654.73,
+        "median_salary": 134241.0
+      },
+      {
+        "skill": "Java",
+        "sample_size": 140,
+        "mean_salary": 133742.45,
+        "median_salary": 131340.0
+      },
+      {
+        "skill": "SQL",
+        "sample_size": 612,
+        "mean_salary": 127709.13,
+        "median_salary": 125000.0
+      },
+      {
+        "skill": "Azure",
+        "sample_size": 157,
+        "mean_salary": 127078.37,
+        "median_salary": 125000.0
+      },
+      {
+        "skill": "R",
+        "sample_size": 734,
+        "mean_salary": 127510.2,
+        "median_salary": 123750.0
+      },
+      {
+        "skill": "Databricks",
+        "sample_size": 72,
+        "mean_salary": 121578.9,
+        "median_salary": 121250.0
+      },
+      {
+        "skill": "Tableau",
+        "sample_size": 224,
+        "mean_salary": 119016.47,
+        "median_salary": 115000.0
+      },
+      {
+        "skill": "Power BI",
+        "sample_size": 115,
+        "mean_salary": 110665.01,
+        "median_salary": 110000.0
+      },
+      {
+        "skill": "Excel",
+        "sample_size": 184,
+        "mean_salary": 103923.86,
+        "median_salary": 100000.0
+      }
+    ]
+  },
+  "trends": {
+    "monthly_postings_2023": [
+      {
+        "posting_month": 1,
+        "posting_month_name": "Jan",
+        "postings_count": 3727
+      },
+      {
+        "posting_month": 2,
+        "posting_month_name": "Feb",
+        "postings_count": 3261
+      },
+      {
+        "posting_month": 3,
+        "posting_month_name": "Mar",
+        "postings_count": 3194
+      },
+      {
+        "posting_month": 4,
+        "posting_month_name": "Apr",
+        "postings_count": 2743
+      },
+      {
+        "posting_month": 5,
+        "posting_month_name": "May",
+        "postings_count": 2406
+      },
+      {
+        "posting_month": 6,
+        "posting_month_name": "Jun",
+        "postings_count": 3340
+      },
+      {
+        "posting_month": 7,
+        "posting_month_name": "Jul",
+        "postings_count": 2856
+      },
+      {
+        "posting_month": 8,
+        "posting_month_name": "Aug",
+        "postings_count": 2654
+      },
+      {
+        "posting_month": 9,
+        "posting_month_name": "Sep",
+        "postings_count": 2636
+      },
+      {
+        "posting_month": 10,
+        "posting_month_name": "Oct",
+        "postings_count": 2675
+      },
+      {
+        "posting_month": 11,
+        "posting_month_name": "Nov",
+        "postings_count": 2793
+      },
+      {
+        "posting_month": 12,
+        "posting_month_name": "Dec",
+        "postings_count": 2694
+      }
+    ],
+    "top_hiring_companies": {
+      "Get It Recruit - Information Technology": 240,
+      "Harnham": 154,
+      "Insight Global": 117,
+      "Deloitte": 86,
+      "Tata Consultancy Services": 86,
+      "Upwork": 85,
+      "Citi": 84,
+      "Booz Allen Hamilton": 82,
+      "EY": 80,
+      "SynergisticIT": 74,
+      "Capgemini": 74,
+      "Randstad": 71,
+      "Robert Walters": 71,
+      "Listopro": 71,
+      "Walmart": 70
+    }
+  },
+  "section_9_key_answers": {
+    "frequent_roles": "Data Engineer (25.5%), Data Analyst (25.3%), and Data Scientist (21.0%) comprise over 71% of all postings, followed by ML Engineers (1.9%) and BI Analysts (5.8%).",
+    "most_demanded_skills": "Python (49.9%) and SQL (50.46%) are overwhelmingly the top two required skills, followed by AWS, Azure, Tableau, and Power BI.",
+    "top_locations": "United States (8092 postings), followed by United Kingdom, Germany, Canada, and India.",
+    "experience_vs_salary": "Salary scales strongly with seniority: Entry Level median is $90,188, rising to $138,750 for Mid Level, $173,438 for Senior, and $215,062+ for Executive/Lead.",
+    "top_skill_combinations": "Python + SQL is the single most ubiquitous combination (co-occurring in thousands of postings), followed by Python + AWS, Python + Spark, and SQL + Power BI.",
+    "remote_roles_prevalence": "Fully remote roles represent 11.79% of postings, while On-site/Hybrid represents 88.2%."
+  }
+}

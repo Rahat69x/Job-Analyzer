@@ -1,0 +1,147 @@
+// ==============================================================================
+// AI JOB MARKET ANALYTICS: POWER BI DAX MEASURES & CALCULATED COLUMNS
+// ==============================================================================
+
+// ------------------------------------------------------------------------------
+// SECTION 1: CORE KPI MEASURES (OVERVIEW DASHBOARD)
+// ------------------------------------------------------------------------------
+
+Total Job Postings = 
+COUNTROWS('ai_jobs')
+
+Unique Employers = 
+DISTINCTCOUNT('ai_jobs'[company_name])
+
+Unique Hiring Countries = 
+DISTINCTCOUNT('ai_jobs'[country])
+
+Average Annual Salary USD = 
+AVERAGE('ai_salaries'[salary_usd])
+
+Median Annual Salary USD = 
+MEDIAN('ai_salaries'[salary_usd])
+
+Average Salary BDT = 
+AVERAGE('ai_salaries'[salary_bdt])
+
+Remote Jobs Count = 
+CALCULATE(
+    COUNTROWS('ai_jobs'),
+    'ai_jobs'[work_model] = "Remote"
+)
+
+Remote Job Percentage = 
+DIVIDE(
+    [Remote Jobs Count],
+    [Total Job Postings],
+    0
+)
+
+Hybrid Jobs Count = 
+CALCULATE(
+    COUNTROWS('ai_jobs'),
+    'ai_jobs'[work_model] = "Hybrid"
+)
+
+Onsite Jobs Count = 
+CALCULATE(
+    COUNTROWS('ai_jobs'),
+    'ai_jobs'[work_model] = "On-site"
+)
+
+// ------------------------------------------------------------------------------
+// SECTION 2: SKILLS INTELLIGENCE MEASURES
+// ------------------------------------------------------------------------------
+
+Total Skill Mentions = 
+COUNTROWS('job_skills')
+
+Skill Penetration Rate = 
+DIVIDE(
+    COUNTROWS('job_skills'),
+    [Total Job Postings],
+    0
+)
+
+Python Mention Count = 
+CALCULATE(
+    COUNTROWS('job_skills'),
+    'job_skills'[skill_name] = "Python"
+)
+
+SQL Mention Count = 
+CALCULATE(
+    COUNTROWS('job_skills'),
+    'job_skills'[skill_name] = "SQL"
+)
+
+AWS Mention Count = 
+CALCULATE(
+    COUNTROWS('job_skills'),
+    'job_skills'[skill_name] = "AWS"
+)
+
+Azure Mention Count = 
+CALCULATE(
+    COUNTROWS('job_skills'),
+    'job_skills'[skill_name] = "Azure"
+)
+
+PowerBI Mention Count = 
+CALCULATE(
+    COUNTROWS('job_skills'),
+    'job_skills'[skill_name] = "Power BI"
+)
+
+// ------------------------------------------------------------------------------
+// SECTION 3: SALARY DYNAMICS & PROGRESSION MEASURES
+// ------------------------------------------------------------------------------
+
+Entry Level Median Salary = 
+CALCULATE(
+    MEDIAN('ai_salaries'[salary_usd]),
+    'ai_salaries'[experience_level] = "Entry Level"
+)
+
+Senior Level Median Salary = 
+CALCULATE(
+    MEDIAN('ai_salaries'[salary_usd]),
+    'ai_salaries'[experience_level] = "Senior"
+)
+
+Lead Executive Median Salary = 
+CALCULATE(
+    MEDIAN('ai_salaries'[salary_usd]),
+    'ai_salaries'[experience_level] = "Lead / Executive"
+)
+
+Seniority Salary Growth Premium = 
+DIVIDE(
+    [Senior Level Median Salary] - [Entry Level Median Salary],
+    [Entry Level Median Salary],
+    0
+)
+
+// ------------------------------------------------------------------------------
+// SECTION 4: TIME-SERIES & TREND MEASURES
+// ------------------------------------------------------------------------------
+
+Monthly Average Postings = 
+AVERAGEX(
+    VALUES('ai_jobs'[posting_month]),
+    [Total Job Postings]
+)
+
+Monthly Postings MoM Growth = 
+VAR CurrentMonth = SELECTEDVALUE('ai_jobs'[posting_month])
+VAR PreviousMonthPostings = 
+    CALCULATE(
+        [Total Job Postings],
+        'ai_jobs'[posting_month] = CurrentMonth - 1
+    )
+RETURN
+    IF(
+        ISBLANK(PreviousMonthPostings),
+        BLANK(),
+        DIVIDE([Total Job Postings] - PreviousMonthPostings, PreviousMonthPostings, 0)
+    )

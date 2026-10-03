@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initEventListeners() {
-  // Navigation Tabs (7 views)
+  // Navigation Tabs (9 views)
   const navTabs = [
     { id: "nav-tab-explorer", view: "view-explorer", onOpen: null },
     { id: "nav-tab-remote", view: "view-remote", onOpen: loadRemoteJobsView },
@@ -255,7 +255,9 @@ function initEventListeners() {
     { id: "nav-tab-recommended", view: "view-recommended", onOpen: loadRecommendedJobsView },
     { id: "nav-tab-tracker", view: "view-tracker", onOpen: loadTrackedJobsView },
     { id: "nav-tab-alerts", view: "view-alerts", onOpen: loadAlertsView },
-    { id: "nav-tab-analytics", view: "view-analytics", onOpen: loadMarketAnalytics }
+    { id: "nav-tab-analytics", view: "view-analytics", onOpen: loadMarketAnalytics },
+    { id: "nav-tab-companies", view: "view-companies", onOpen: loadCompaniesView },
+    { id: "nav-tab-ai-analytics", view: "view-ai-analytics", onOpen: loadAiMarketAnalyticsView }
   ];
 
   navTabs.forEach(tab => {
@@ -488,8 +490,8 @@ function initEventListeners() {
 }
 
 function switchView(tabId, viewId) {
-  const tabs = ["nav-tab-explorer", "nav-tab-remote", "nav-tab-country", "nav-tab-recommended", "nav-tab-tracker", "nav-tab-alerts", "nav-tab-analytics", "nav-tab-companies"];
-  const views = ["view-explorer", "view-remote", "view-country", "view-recommended", "view-tracker", "view-alerts", "view-analytics", "view-companies"];
+  const tabs = ["nav-tab-explorer", "nav-tab-remote", "nav-tab-country", "nav-tab-recommended", "nav-tab-tracker", "nav-tab-alerts", "nav-tab-analytics", "nav-tab-companies", "nav-tab-ai-analytics"];
+  const views = ["view-explorer", "view-remote", "view-country", "view-recommended", "view-tracker", "view-alerts", "view-analytics", "view-companies", "view-ai-analytics"];
   
   tabs.forEach(t => {
     const el = document.getElementById(t);
@@ -1076,6 +1078,49 @@ async function loadMarketAnalytics() {
     document.getElementById("stat-median-salary").textContent = `${(data.median_salary_bdt || 0).toLocaleString()} BDT`;
   } catch (err) {
     console.error("Error loading analytics:", err);
+  }
+}
+
+// ==================== AI JOB MARKET ANALYTICS (v4.0) ====================
+
+async function loadAiMarketAnalyticsView() {
+  try {
+    // Setup smooth scrolling for subnav links
+    document.querySelectorAll(".ai-subnav-link").forEach(link => {
+      if (!link.dataset.bound) {
+        link.dataset.bound = "true";
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute("href");
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+            document.querySelectorAll(".ai-subnav-link").forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+          }
+        });
+      }
+    });
+
+    const res = await fetch("/api/analytics/ai-market");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data || !data.overview) return;
+
+    const ov = data.overview;
+    const setTxt = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setTxt("ai-kpi-jobs", Number(ov.total_job_postings_analyzed || 34979).toLocaleString());
+    setTxt("ai-kpi-salaries", Number(ov.total_salary_benchmarks_analyzed || 71913).toLocaleString());
+    setTxt("ai-kpi-median-salary", `$${Number(ov.median_salary_usd || 138750).toLocaleString()}`);
+    setTxt("ai-kpi-remote-share", `${Number(ov.remote_jobs_percentage || 11.79).toFixed(1)}%`);
+    setTxt("ai-kpi-companies", Number(ov.unique_companies || 18758).toLocaleString());
+    setTxt("ai-kpi-countries", `${ov.unique_countries || 145}+`);
+  } catch (err) {
+    console.error("Error loading AI market analytics:", err);
   }
 }
 
